@@ -28,6 +28,9 @@ public class PlayerInput : MonoBehaviour
 	bool m_jumpInput;
     public bool JumpInput { get { return m_jumpInput; } set { m_jumpInput = value; } }
 
+	bool m_holdingJumpInput;
+    public bool HoldingJumpInput { get { return m_holdingJumpInput; } set { m_holdingJumpInput = value; } }
+
 
 
     // Update is called once per frame
@@ -35,6 +38,7 @@ public class PlayerInput : MonoBehaviour
     {
 		if(inputEnabled)
 		{
+
 			m_mouseH = Input.GetAxisRaw("Mouse X");
 			m_mouseV = Input.GetAxisRaw("Mouse Y");
 
@@ -42,9 +46,19 @@ public class PlayerInput : MonoBehaviour
 			m_v = Input.GetAxisRaw("Vertical");
 
 			m_shootInput = Input.GetMouseButton(0);
-			m_jumpInput = Input.GetKey(KeyCode.Space);
-			m_dashInput = Input.GetKey(KeyCode.LeftShift);
+			m_jumpInput = Input.GetKeyDown(KeyCode.Space);
+			m_dashInput = Input.GetKeyDown(KeyCode.LeftShift);
 
+			m_holdingJumpInput = Input.GetKey(KeyCode.Space);
+
+
+		/*
+			if(Input.GetKeyDown(KeyCode.Space))
+				m_jumpInput = true;
+			else if(Input.GetKeyUp(KeyCode.Space))
+				m_jumpInput = false;
+		 */
+		
 		/*
 			Debug.Log("Horizontal: " + m_h);
 			Debug.Log("Vertical: " + m_v);
@@ -58,11 +72,17 @@ public class PlayerInput : MonoBehaviour
 		}
     }
 
-	public bool IsMoving()
+	public bool NoInput()
 	{
 		if(m_h == 0 && m_v == 0)
-			return false;
+			return true;
 
-		return true;
+		return false;
 	}
+
+	public Vector3 PlayerDirection()
+	{
+		return new Vector3(m_h,0f,m_v).normalized;
+	}
+
 }

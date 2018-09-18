@@ -6,6 +6,14 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
+	public enum CameraType
+	{
+		SmoothFollow,
+		SnapCamera
+	};
+
+	public CameraType cameraType;
+
 	public Transform target;
 	public Transform yawTransform;
 	public float sensitivity = 1f;
@@ -24,6 +32,7 @@ public class CameraController : MonoBehaviour
 
 	Vector3 smoothRefVelocity;
 
+	Vector3 m_offset;
 
     // Use this for initialization
     void Start()
@@ -40,18 +49,29 @@ public class CameraController : MonoBehaviour
 		m_camera = FindObjectOfType<Camera>();
 	}
 
+	void LateUpdate()
+	{
+		if(cameraType == CameraType.SnapCamera)
+			UpdateCamPosition();
+	}
+
 	void FixedUpdate()
 	{
 		UpdateCamRotation();
-		UpdateCamPosition();
+
+		if(cameraType == CameraType.SmoothFollow)
+			UpdateCamPosition();
 	}
 
     void UpdateCamPosition()
     {
-		//m_offset = target.position - transform.position;
-        //Vector3 desiredPos = transform.position + m_offset;
+		m_offset = target.position - transform.position;
+        Vector3 desiredPos = transform.position + m_offset;
 
-		transform.position = Vector3.SmoothDamp(transform.position, target.position, ref smoothRefVelocity, followDelay * (m_playerInput.IsMoving() ? 1f : followMultiplierWhenStationary));
+		if(cameraType == CameraType.SmoothFollow)
+			transform.position = Vector3.SmoothDamp(transform.position, target.position, ref smoothRefVelocity, followDelay * (m_playerInput.NoInput() ? 1f : followMultiplierWhenStationary));
+		else
+			transform.position = target.position;
 
     }
 
@@ -63,14 +83,22 @@ public class CameraController : MonoBehaviour
 
 		m_yaw = Mathf.Clamp(m_yaw,lookAngle.x, lookAngle.y);
 
-		Debug.Log("angle x: " +lookAngle.x);
-		Debug.Log("angle y: " +lookAngle.y);
-		Debug.Log("yaw: " +m_yaw);
+		//Debug.Log("angle x: " +lookAngle.x);
+		//Debug.Log("angle y: " +lookAngle.y);
+		//Debug.Log("yaw: " +m_yaw);
 
 		Quaternion desiredPitchRotation = Quaternion.Euler(new Vector3(0f,m_pitch,0f));
 		Quaternion desiredYawRotation = Quaternion.Euler(new Vector3(m_yaw,0f,0f));
 
-		transform.rotation = Quaternion.Slerp(transform.rotation, desiredPitchRotation , Time.deltaTime * smoothRotSpeed);
-		yawTransform.localRotation = Quaternion.Slerp(yawTransform.localRotation, desiredYawRotation, Time.deltaTime * smoothRotSpeed);
+		if(cameraType == CameraType.SmoothFollow)
+		{
+			transform.rotation = Quaternion.Slerp(transform.rotation, desiredPitchRotation , Time.deltaTime * smoothRotSpeed);
+			yawTransform.localRotation = Quaternion.Slerp(yawTransform.localRotation, desiredYawRotation, Time.deltaTime * smoothRotSpeed);
+		}
+		else
+		{
+			transform.rotation = desiredPitchRotation;
+			yawTransform.localRotation = desiredYawRotation;
+		}
     }
 }
