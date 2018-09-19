@@ -62,11 +62,11 @@ public class PlayerMovement : MonoBehaviour
 		CheckIfGrounded();
 		PlayerDash();
 		PlayerJump();
-		CalculateMovePosition();
     }
 
 	void FixedUpdate()
 	{
+		CalculateMovePosition();
 		m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector));
 		//m_rigid.velocity = m_moveVector;
 		UpdateRotation();
@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
 
 		float moveMagnitude = m_currentMoveDir.magnitude;
 
-		//Debug.Log(moveMagnitude);
+		Debug.Log(moveMagnitude);
 
 		m_moveDir = Vector3.Lerp(m_moveDir, m_currentMoveDir, Time.deltaTime * turnSpeed);
 				
@@ -170,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
 		if(m_moveVector != Vector3.zero)
 		{
 			m_lastMoveDir = m_moveVector;
-			Debug.Log(m_lastMoveDir);
+			//Debug.Log(m_lastMoveDir);
 		}
 	}
 
