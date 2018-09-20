@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 	public float gravityMultiplier = 2f;
 	public float lowFallMultiplier = 3f;
 	public LayerMask groundLayerMask;
-
+	//public int wallLayerMask = 1 << 9;
 
 
     
@@ -67,8 +67,10 @@ public class PlayerMovement : MonoBehaviour
 	void FixedUpdate()
 	{
 		CalculateMovePosition();
-		m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector));
-		//m_rigid.velocity = m_moveVector;
+
+		if(m_playerInput.InputEnabled)
+			m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector));
+		
 		UpdateRotation();
 	}
 
@@ -89,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if(Physics.Raycast(ray,out hit,0.6f,groundLayerMask))
 		{
+			m_playerInput.InputEnabled = true;
 			m_isGrounded = true;
 		}
 		else
@@ -118,7 +121,6 @@ public class PlayerMovement : MonoBehaviour
 			{
 				m_isGrounded = false;
 				m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse);
-				//m_rigid.velocity += Vector3.up * jumpPower;
 			}
 		}
 		else
@@ -131,14 +133,6 @@ public class PlayerMovement : MonoBehaviour
 			{
 				m_rigid.velocity +=  Physics.gravity * gravityMultiplier * Time.deltaTime;
 			}
-
-			/*
-
-			if(m_playerInput.NoInput())
-			{
-				m_rigid.AddForce(m_lastMoveDir * 40f, ForceMode.Acceleration);
-			}
-			 */
 		}
 		
 	}
@@ -152,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
 
 		float moveMagnitude = m_currentMoveDir.magnitude;
 
-		Debug.Log(moveMagnitude);
+		//Debug.Log(moveMagnitude);
 
 		m_moveDir = Vector3.Lerp(m_moveDir, m_currentMoveDir, Time.deltaTime * turnSpeed);
 				
@@ -171,6 +165,36 @@ public class PlayerMovement : MonoBehaviour
 		{
 			m_lastMoveDir = m_moveVector;
 			//Debug.Log(m_lastMoveDir);
+		}
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		if(other.gameObject.layer == LayerMask.NameToLayer("Wall") && !m_isGrounded)
+		{
+			Debug.Log("HitEnter");
+			m_playerInput.InputEnabled = false;
+		}
+	}
+
+	/*
+		void OnCollisionStay(Collision other)
+		{
+			if(other.gameObject.layer == LayerMask.NameToLayer("Wall") && !m_isGrounded)
+			{
+				Debug.Log("HitStay");
+				m_rigid.velocity += Physics.gravity * lowFallMultiplier * 2f * Time.deltaTime;
+			}
+		}
+	*/
+
+	
+	void OnCollisionExit(Collision other)
+	{
+		if(other.gameObject.layer == LayerMask.NameToLayer("Wall"))
+		{
+			Debug.Log("HitExit");
+			m_playerInput.InputEnabled = true;
 		}
 	}
 
