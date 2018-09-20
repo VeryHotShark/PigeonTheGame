@@ -9,8 +9,7 @@ public class MovingPlatform : MonoBehaviour
 	public enum MoveType
 	{
 		PingPong,
-		Horizontal,
-		Vertical
+		Loop
 	}
 
 	public MoveType moveType;
