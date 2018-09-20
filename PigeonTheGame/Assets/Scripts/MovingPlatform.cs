@@ -41,10 +41,12 @@ public class MovingPlatform : MonoBehaviour
 		{
 			m_currentWaypoint = transform.position;
 			m_currentWaypointIndex++;
-		}
-		else
-		{
-			Array.Reverse(waypoints);
+
+			if(m_currentWaypointIndex == waypoints.Length - 1)
+			{
+				Array.Reverse(waypoints);
+				m_currentWaypointIndex = 0;
+			}
 		}
 
 		m_targetWaypoint = waypoints[m_currentWaypointIndex].position;
