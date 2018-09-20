@@ -161,6 +161,8 @@ public class PlayerMovement : MonoBehaviour
 
 		m_moveVector = m_moveDir * moveSpeed * m_smoothFactor * Time.deltaTime ;
 
+		Debug.Log(m_moveVector);
+
 		if(m_moveVector != Vector3.zero)
 		{
 			m_lastMoveDir = m_moveVector;

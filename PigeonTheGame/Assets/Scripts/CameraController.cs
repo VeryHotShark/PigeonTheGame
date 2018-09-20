@@ -37,6 +37,9 @@ public class CameraController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+
 		GetComponents();
 
 		lookAngle.x -= Mathf.Abs(m_camera.transform.eulerAngles.x);

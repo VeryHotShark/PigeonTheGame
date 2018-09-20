@@ -36,16 +36,30 @@ public class MovingPlatform : MonoBehaviour
     // Update is called once per frame
     void GetNextWaypoint()
     {
-		if(m_currentWaypointIndex < waypoints.Length - 1 )
-		{
-			m_currentWaypoint = transform.position;
-			m_currentWaypointIndex++;
+		m_currentWaypoint = transform.position;
 
-			if(m_currentWaypointIndex == waypoints.Length - 1)
+		switch(moveType)
+		{
+			case MoveType.PingPong:
 			{
-				Array.Reverse(waypoints);
-				m_currentWaypointIndex = 0;
+				if(m_currentWaypointIndex < waypoints.Length - 1 )
+				{
+					m_currentWaypointIndex++;
+
+					if(m_currentWaypointIndex == waypoints.Length - 1)
+					{
+						Array.Reverse(waypoints);
+						m_currentWaypointIndex = 0;
+					}
+				}
 			}
+			break;
+
+			case MoveType.Loop:
+			{
+				m_currentWaypointIndex = (m_currentWaypointIndex + 1) % waypoints.Length;
+			}
+			break;
 		}
 
 		m_targetWaypoint = waypoints[m_currentWaypointIndex].position;
@@ -73,6 +87,18 @@ public class MovingPlatform : MonoBehaviour
 
 		//m_currentWaypoint = m_targetWaypoint;
 		MoveToNextWaypoint();
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		if(other.gameObject.CompareTag("Player"))
+			other.gameObject.transform.parent = transform;
+	}
+
+	void OnCollisionExit(Collision other)
+	{
+		if(other.gameObject.CompareTag("Player"))
+			other.gameObject.transform.parent = null;
 	}
 
 }
