@@ -14,9 +14,11 @@ public class MovingPlatform : MonoBehaviour
 
 	public MoveType moveType;
 
-	public Transform[] waypoints;
+	public WaypointNetwork waypoints;
 
 	public float moveDuration;
+
+	public float waitDuration = 0f;
 
 	//Vector3 m_startPos;
 	Vector3 m_targetWaypoint;
@@ -28,8 +30,8 @@ public class MovingPlatform : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		waypoints[0].position = transform.position;
-		m_currentWaypoint = waypoints[0].position;
+		waypoints.waypointsArray[0].position = transform.position;
+		m_currentWaypoint = waypoints.waypointsArray[0].position;
 		MoveToNextWaypoint();
     }
 
@@ -42,13 +44,13 @@ public class MovingPlatform : MonoBehaviour
 		{
 			case MoveType.PingPong:
 			{
-				if(m_currentWaypointIndex < waypoints.Length - 1 )
+				if(m_currentWaypointIndex < waypoints.waypointsArray.Length - 1 )
 				{
 					m_currentWaypointIndex++;
 
-					if(m_currentWaypointIndex == waypoints.Length - 1)
+					if(m_currentWaypointIndex == waypoints.waypointsArray.Length - 1)
 					{
-						Array.Reverse(waypoints);
+						Array.Reverse(waypoints.waypointsArray);
 						m_currentWaypointIndex = 0;
 					}
 				}
@@ -57,12 +59,12 @@ public class MovingPlatform : MonoBehaviour
 
 			case MoveType.Loop:
 			{
-				m_currentWaypointIndex = (m_currentWaypointIndex + 1) % waypoints.Length;
+				m_currentWaypointIndex = (m_currentWaypointIndex + 1) % waypoints.waypointsArray.Length;
 			}
 			break;
 		}
 
-		m_targetWaypoint = waypoints[m_currentWaypointIndex].position;
+		m_targetWaypoint = waypoints.waypointsArray[m_currentWaypointIndex].position;
 
     }
 
@@ -84,6 +86,9 @@ public class MovingPlatform : MonoBehaviour
 
 			yield return null;
 		}
+
+		if(waitDuration > 0)
+			yield return new WaitForSeconds(waitDuration);
 
 		//m_currentWaypoint = m_targetWaypoint;
 		MoveToNextWaypoint();
