@@ -14,7 +14,7 @@ public class PlayerHealth : Health
 	{
 		if(Input.GetKeyDown(KeyCode.Return))
 		{
-			base.TakeDamage();
+			base.TakeDamage(1);
 			Debug.Log("Damage");
 		}
 	}

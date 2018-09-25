@@ -20,8 +20,16 @@ public class Projectile : MonoBehaviour
 		m_rigid = GetComponent<Rigidbody>();
 	}
 
-    void Update()
+    void OnCollisionEnter(Collision other)
     {
+        Health otherHealth = other.gameObject.GetComponent<Health>();
+
+        if(otherHealth != null)
+        {
+            otherHealth.TakeDamage(1);
+            Destroy(gameObject);
+        }
+
 
     }
 }

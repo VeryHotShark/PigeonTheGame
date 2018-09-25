@@ -15,9 +15,9 @@ public abstract class Health : MonoBehaviour
 	}
 
     // Use this for initialization
-    public virtual void TakeDamage()
+    public virtual void TakeDamage(int damage)
 	{
-		m_health--;
+		m_health -= damage;
 
 		if(m_health <= 0)
 			Die();
