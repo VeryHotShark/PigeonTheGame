@@ -70,6 +70,9 @@ public class CameraController : MonoBehaviour
 
     void UpdateCamPosition()
     {
+		if(target == null)
+			return;
+
 		m_offset = target.position - transform.position;
         Vector3 desiredPos = transform.position + m_offset;
 

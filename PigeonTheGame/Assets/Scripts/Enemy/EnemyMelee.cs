@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class EnemyMelee : Enemy
 {
 
+	bool m_isAttacking;
+
     // Use this for initialization
     void Start()
     {
@@ -26,15 +28,28 @@ public class EnemyMelee : Enemy
 			return;
 		}
 
-		if(Vector3.Distance(m_playerTransform.position, transform.position) < attackRange)
+		if(!m_playerHealth.IsDead())
 		{
-			currentState = State.Attack;
-		}
-		else
-		{
-			currentState = State.Chase;
+			if(Vector3.Distance(m_playerTransform.position, transform.position) < attackRange)
+			{
+				if(!m_isAttacking)
+				{
+					FaceTarget();
+					StartCoroutine(AttackTarget());
+				}
+			}
+			else
+			{
+				currentState = State.Chase;
+			}
 		}
     }
+
+	void FaceTarget()
+	{
+		Quaternion lookRotation = Quaternion.LookRotation((m_playerTransform.position - transform.position).normalized);
+		transform.rotation = lookRotation;
+	}
 
 	IEnumerator UpdatePath()
 	{
@@ -55,6 +70,19 @@ public class EnemyMelee : Enemy
 		}
 
 
+	}
+
+	IEnumerator AttackTarget()
+	{
+		currentState = State.Attack;
+		m_isAttacking = true;
+
+		while(!m_playerHealth.IsDead())
+		{
+			m_playerHealth.TakeDamage(1);
+			Debug.Log("HIT");
+			yield return new WaitForSeconds(attackRate);
+		}
 	}
 
 	void OnDrawGizmos()

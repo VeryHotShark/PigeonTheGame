@@ -25,6 +25,7 @@ public abstract class Enemy : MonoBehaviour
 	protected Transform m_playerTransform;
 	protected EnemyHealth m_health;
 	protected NavMeshAgent m_agent;
+	protected Animator m_anim;
 
 	// Use this for initialization
 	public virtual void Init ()
@@ -37,6 +38,7 @@ public abstract class Enemy : MonoBehaviour
 	{
 		m_agent = GetComponent<NavMeshAgent>();
 		m_health = GetComponent<EnemyHealth>();
+		m_anim = GetComponent<Animator>();
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
 		m_playerTransform = m_playerHealth.gameObject.transform;
 	}
