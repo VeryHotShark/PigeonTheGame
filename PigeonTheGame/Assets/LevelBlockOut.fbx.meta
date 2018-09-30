@@ -146,6 +146,7 @@ ModelImporter:
     2300084: Cylinder.007
     2300086: Cylinder.008
     2300088: Cylinder.009
+    2300090: //RootNode
     3300000: Cube.001
     3300002: Stairs (1)_0
     3300004: Stairs_0
@@ -191,6 +192,7 @@ ModelImporter:
     3300084: Cylinder.007
     3300086: Cylinder.008
     3300088: Cylinder.009
+    3300090: //RootNode
     4300000: Cube.001
     4300002: Stairs (1)_0
     4300004: Stairs_0
@@ -281,6 +283,7 @@ ModelImporter:
     6400084: Cylinder.007
     6400086: Cylinder.008
     6400088: Cylinder.009
+    6400090: //RootNode
     10800000: Lamp
     2186277476908879412: ImportLogs
   externalObjects: {}

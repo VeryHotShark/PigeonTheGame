@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
 
+    // Input variables and their properties
+
     bool m_inputEnabled = true;
     public bool InputEnabled { get { return m_inputEnabled; } set { m_inputEnabled = value;} }
 
@@ -40,8 +42,10 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_inputEnabled)
+        if (m_inputEnabled) 
         {
+            // Get our player input and assign them to corresponding variables
+
             m_h = Input.GetAxisRaw("Horizontal");
             m_v = Input.GetAxisRaw("Vertical");
 
@@ -54,32 +58,28 @@ public class PlayerInput : MonoBehaviour
 
 		if(m_mouseEnabled)
 		{			
+            // Get our mouse input and assign them to corresponding variables
+
             m_mouseH = Input.GetAxisRaw("Mouse X");
             m_mouseV = Input.GetAxisRaw("Mouse Y");
 
 		}
 
+        /*
+            // DEBUG
 
-            /*
-                if(Input.GetKeyDown(KeyCode.Space))
-                    m_jumpInput = true;
-                else if(Input.GetKeyUp(KeyCode.Space))
-                    m_jumpInput = false;
-             */
+            Debug.Log("Horizontal: " + m_h);
+            Debug.Log("Vertical: " + m_v);
+            Debug.Log("Mouse Horizontal: " + m_mouseH);
+            Debug.Log("Mouse Vertical: " + m_mouseV);
 
-            /*
-                Debug.Log("Horizontal: " + m_h);
-                Debug.Log("Vertical: " + m_v);
-                Debug.Log("Mouse Horizontal: " + m_mouseH);
-                Debug.Log("Mouse Vertical: " + m_mouseV);
-
-                Debug.Log("Dash Input: " + m_dashInput);
-                Debug.Log("Jump Input: " + m_jumpInput);
-                Debug.Log("Shoot Input: " + m_shootInput);
-             */
+            Debug.Log("Dash Input: " + m_dashInput);
+            Debug.Log("Jump Input: " + m_jumpInput);
+            Debug.Log("Shoot Input: " + m_shootInput);
+            */
     }
 
-    public bool NoInput()
+    public bool NoInput() // Checks if there is any player input
     {
         if (m_h == 0 && m_v == 0)
             return true;
@@ -87,7 +87,7 @@ public class PlayerInput : MonoBehaviour
         return false;
     }
 
-    public Vector3 PlayerDirection()
+    public Vector3 PlayerDirection() // return the current player direction
     {
         return new Vector3(m_h, 0f, m_v).normalized;
     }

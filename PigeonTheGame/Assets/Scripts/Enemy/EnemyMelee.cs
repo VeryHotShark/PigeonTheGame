@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class EnemyMelee : Enemy
 {
 
-	bool m_isAttacking;
-
     // Use this for initialization
     void Start()
     {
@@ -45,12 +43,6 @@ public class EnemyMelee : Enemy
 		}
     }
 
-	void FaceTarget()
-	{
-		Quaternion lookRotation = Quaternion.LookRotation((m_playerTransform.position - transform.position).normalized);
-		transform.rotation = lookRotation;
-	}
-
 	IEnumerator UpdatePath()
 	{
 		float refreshRate = 0.25f;
@@ -77,16 +69,14 @@ public class EnemyMelee : Enemy
 		currentState = State.Attack;
 		m_isAttacking = true;
 
-		while(!m_playerHealth.IsDead())
+		while(!m_playerHealth.IsDead() && Vector3.Distance(m_playerTransform.position, transform.position) < attackRange)
 		{
 			m_playerHealth.TakeDamage(1);
 			Debug.Log("HIT");
 			yield return new WaitForSeconds(attackRate);
 		}
+
+		m_isAttacking = false;
 	}
 
-	void OnDrawGizmos()
-	{
-		Gizmos.DrawWireSphere(transform.position, base.attackRange);
-	}
 }

@@ -5,12 +5,16 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
+    int m_damage;
+
     private Rigidbody m_rigid;
 
+
     // Use this for initialization
-    public void OnProjectileSpawn(Vector3 dir, float force)
+    public void OnProjectileSpawn(Vector3 dir, float force, int damage)
     {
 		GetComponents();
+        m_damage = damage;
 		m_rigid.AddForce(dir * force, ForceMode.Impulse);
 		Destroy(gameObject, 3f);
     }
@@ -26,10 +30,8 @@ public class Projectile : MonoBehaviour
 
         if(otherHealth != null)
         {
-            otherHealth.TakeDamage(1);
+            otherHealth.TakeDamage(m_damage);
             Destroy(gameObject);
         }
-
-
     }
 }

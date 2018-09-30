@@ -17,6 +17,9 @@ public class PlayerHealth : Health
 			base.TakeDamage(1);
 			Debug.Log("Damage");
 		}
+
+		if(transform.position.y < -10f)
+			transform.position = Vector3.zero;
 	}
 
 }

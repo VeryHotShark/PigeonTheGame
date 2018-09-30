@@ -11,19 +11,22 @@ public abstract class Enemy : MonoBehaviour
 		Patrol,
 		Chase,
 		Attack,
-		Idle
+		Idle,
+		Moving
 	}
 
 	protected State currentState = State.Idle;
 
 	public float moveSpeed = 5f;
+	public int attackPower = 1;
 	public float attackRange = 1f;
 	public float attackRate = 3f;
 	public float stopDistance = 1.5f;
 
+	public EnemyHealth m_health;
+	protected bool m_isAttacking;
 	protected PlayerHealth m_playerHealth;
 	protected Transform m_playerTransform;
-	protected EnemyHealth m_health;
 	protected NavMeshAgent m_agent;
 	protected Animator m_anim;
 
@@ -46,5 +49,17 @@ public abstract class Enemy : MonoBehaviour
 	public virtual void SetNavMeshAgent()
 	{
 		m_agent.speed = moveSpeed;
+	}
+
+	
+    public virtual void FaceTarget()
+    {
+        Quaternion lookRotation = Quaternion.LookRotation((m_playerTransform.position - transform.position).normalized);
+        transform.rotation = lookRotation;
+    }
+
+	public virtual void OnDrawGizmos()
+	{
+		Gizmos.DrawWireSphere(transform.position, attackRange);
 	}
 }

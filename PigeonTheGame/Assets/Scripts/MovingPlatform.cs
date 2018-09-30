@@ -9,7 +9,8 @@ public class MovingPlatform : MonoBehaviour
 	public enum MoveType
 	{
 		PingPong,
-		Loop
+		Loop,
+		Static
 	}
 
 	public MoveType moveType;
@@ -39,9 +40,14 @@ public class MovingPlatform : MonoBehaviour
     void Start()
     {
 		m_rigid = GetComponent<Rigidbody>();
-		waypoints.waypointsArray[0].position = transform.position;
-		m_currentWaypoint = waypoints.waypointsArray[0].position;
-		MoveToNextWaypoint();
+		if(waypoints != null)
+		{
+			waypoints.waypointsArray[0].position = transform.position;
+			m_currentWaypoint = waypoints.waypointsArray[0].position;
+		}
+
+		if(moveType != MoveType.Static)
+			MoveToNextWaypoint();
 
     }
 

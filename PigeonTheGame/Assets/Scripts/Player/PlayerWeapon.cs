@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerWeapon : MonoBehaviour
 {
 
+	public int damage = 1;
+
 	public Transform spawnPoint;
 
 	public Projectile projectile;
@@ -32,7 +34,7 @@ public class PlayerWeapon : MonoBehaviour
 		if(m_playerInput.ShootInput)	
 		{
 			Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile;
-			obj.OnProjectileSpawn(m_cameraController.GetCamera.transform.forward, force);
+			obj.OnProjectileSpawn(m_cameraController.GetCamera.transform.forward, force, damage);
 		}
 	}
 }
