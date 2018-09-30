@@ -40,12 +40,18 @@ public class EnemyRange : Enemy
         if (!m_playerHealth.IsDead())
         {
             FaceTarget();
-
-            if (Vector3.Distance(m_playerTransform.position, transform.position) < attackRange)
+            
+            if(Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom)
             {
-
+                m_agent.ResetPath();
+                currentState = State.Chase;
+                m_agent.destination = m_playerTransform.position;
+            }
+            else if (Vector3.Distance(m_playerTransform.position, transform.position) <= attackRange)
+            {
                 if (currentState != State.Moving && currentState != State.Attack)
                 {
+                    m_agent.ResetPath();
                     StartCoroutine(MoveToTargetPos());
                 }
             }
@@ -87,6 +93,17 @@ public class EnemyRange : Enemy
         {
             randomPosOnNavMesh = hit.position;
             m_agent.SetDestination(randomPosOnNavMesh);
+        }
+        else
+        {
+            while(NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas) == false)
+            {
+                NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas);
+                randomPosOnNavMesh = hit.position;
+                m_agent.SetDestination(randomPosOnNavMesh);
+
+                yield return null;
+            }
         }
 
         GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
