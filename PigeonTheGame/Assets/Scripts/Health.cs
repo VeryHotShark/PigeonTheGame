@@ -20,9 +20,6 @@ public abstract class Health : MonoBehaviour
     public virtual void TakeDamage(int damage)
 	{
 		m_health -= damage;
-
-		if(m_health <= 0)
-			Die();
 	}
   
 	public virtual void Die()

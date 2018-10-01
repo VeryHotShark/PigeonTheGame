@@ -5,10 +5,32 @@ using UnityEngine;
 public class PlayerHealth : Health
 {
 
+	PlayerMovement m_playerMovement;
+
 	public void Start()
 	{
 		base.Init();
+		m_playerMovement = GetComponent<PlayerMovement>();
 	}
+
+	public override void TakeDamage(int damage)
+	{
+		CameraShake.isShaking = true;
+		base.TakeDamage(damage);
+
+		if(m_health <= 0)
+			Respawn();
+	}
+
+	void Respawn()
+	{
+		transform.position = CheckpointManager.instance.m_currentCheckpoint.transform.position;
+		m_playerMovement.Rigid.velocity = Vector3.zero;
+		m_playerMovement.LastMoveVector = Vector3.zero;
+
+		m_health = base.startHealth;
+	}
+
 
 	public void Update()
 	{
@@ -18,8 +40,12 @@ public class PlayerHealth : Health
 			Debug.Log("Damage");
 		}
 
-		if(transform.position.y < -10f)
-			transform.position = Vector3.zero;
+		if(transform.position.y < -10f || base.IsDead())
+		{
+			transform.position = CheckpointManager.instance.m_currentCheckpoint.transform.position;
+			m_playerMovement.Rigid.velocity = Vector3.zero;
+			m_playerMovement.LastMoveVector = Vector3.zero;
+		}
 	}
 
 }

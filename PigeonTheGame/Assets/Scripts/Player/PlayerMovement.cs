@@ -43,6 +43,32 @@ public class PlayerMovement : MonoBehaviour
 
     bool m_isGrounded;
 
+    public Rigidbody Rigid
+    {
+        get
+        {
+            return m_rigid;
+        }
+
+        set
+        {
+            m_rigid = value;
+        }
+    }
+
+    public Vector3 LastMoveVector
+    {
+        get
+        {
+            return m_lastMoveDir;
+        }
+
+        set
+        {
+            m_lastMoveDir = value;
+        }
+    }
+
     void Start()
     {
         GetComponents();

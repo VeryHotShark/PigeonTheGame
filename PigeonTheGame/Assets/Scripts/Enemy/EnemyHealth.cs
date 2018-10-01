@@ -15,6 +15,14 @@ public class EnemyHealth : Health
 		OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount;
     }
 
+    public override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+
+        if(m_health <= 0)
+			Die();
+    }
+
     public override void Die()
     {
         if (OnEnemyDeath != null)
