@@ -51,6 +51,47 @@ ModelImporter:
     100090: Cylinder.007
     100092: Cylinder.008
     100094: Cylinder.009
+    100096: Circle.000
+    100098: Circle.002
+    100100: Circle.003
+    100102: Circle.004
+    100104: Circle.005
+    100106: Circle.006
+    100108: Circle.007
+    100110: Circle.008
+    100112: Circle.009
+    100114: Circle.010
+    100116: Circle.011
+    100118: Circle.012
+    100120: Cube.000
+    100122: Cube.031
+    100124: Cube.032
+    100126: Cube.033
+    100128: Cube.034
+    100130: Cube.035
+    100132: Cube.036
+    100134: Cube.037
+    100136: Cube.038
+    100138: Cube.039
+    100140: Cube.040
+    100142: Cube.041
+    100144: Cube.042
+    100146: Cube.043
+    100148: Cube.044
+    100150: Cube.045
+    100152: Cube.046
+    100154: Cube.047
+    100156: dresser
+    100158: dresser.001
+    100160: dresser.002
+    100162: dresser.003
+    100164: dresser.004
+    100166: dresser.005
+    100168: flowerpot
+    100170: torch
+    100172: torch.001
+    100174: torch.002
+    100176: torch.003
     400000: Camera
     400002: Cube.001
     400004: Lamp
@@ -99,6 +140,47 @@ ModelImporter:
     400090: Cylinder.007
     400092: Cylinder.008
     400094: Cylinder.009
+    400096: Circle.000
+    400098: Circle.002
+    400100: Circle.003
+    400102: Circle.004
+    400104: Circle.005
+    400106: Circle.006
+    400108: Circle.007
+    400110: Circle.008
+    400112: Circle.009
+    400114: Circle.010
+    400116: Circle.011
+    400118: Circle.012
+    400120: Cube.000
+    400122: Cube.031
+    400124: Cube.032
+    400126: Cube.033
+    400128: Cube.034
+    400130: Cube.035
+    400132: Cube.036
+    400134: Cube.037
+    400136: Cube.038
+    400138: Cube.039
+    400140: Cube.040
+    400142: Cube.041
+    400144: Cube.042
+    400146: Cube.043
+    400148: Cube.044
+    400150: Cube.045
+    400152: Cube.046
+    400154: Cube.047
+    400156: dresser
+    400158: dresser.001
+    400160: dresser.002
+    400162: dresser.003
+    400164: dresser.004
+    400166: dresser.005
+    400168: flowerpot
+    400170: torch
+    400172: torch.001
+    400174: torch.002
+    400176: torch.003
     2000000: Camera
     2100000: Default_Prototype
     2300000: Cube.001
@@ -147,6 +229,47 @@ ModelImporter:
     2300086: Cylinder.008
     2300088: Cylinder.009
     2300090: //RootNode
+    2300092: Circle.000
+    2300094: Circle.002
+    2300096: Circle.003
+    2300098: Circle.004
+    2300100: Circle.005
+    2300102: Circle.006
+    2300104: Circle.007
+    2300106: Circle.008
+    2300108: Circle.009
+    2300110: Circle.010
+    2300112: Circle.011
+    2300114: Circle.012
+    2300116: Cube.000
+    2300118: Cube.031
+    2300120: Cube.032
+    2300122: Cube.033
+    2300124: Cube.034
+    2300126: Cube.035
+    2300128: Cube.036
+    2300130: Cube.037
+    2300132: Cube.038
+    2300134: Cube.039
+    2300136: Cube.040
+    2300138: Cube.041
+    2300140: Cube.042
+    2300142: Cube.043
+    2300144: Cube.044
+    2300146: Cube.045
+    2300148: Cube.046
+    2300150: Cube.047
+    2300152: dresser
+    2300154: dresser.001
+    2300156: dresser.002
+    2300158: dresser.003
+    2300160: dresser.004
+    2300162: dresser.005
+    2300164: flowerpot
+    2300166: torch
+    2300168: torch.001
+    2300170: torch.002
+    2300172: torch.003
     3300000: Cube.001
     3300002: Stairs (1)_0
     3300004: Stairs_0
@@ -193,6 +316,47 @@ ModelImporter:
     3300086: Cylinder.008
     3300088: Cylinder.009
     3300090: //RootNode
+    3300092: Circle.000
+    3300094: Circle.002
+    3300096: Circle.003
+    3300098: Circle.004
+    3300100: Circle.005
+    3300102: Circle.006
+    3300104: Circle.007
+    3300106: Circle.008
+    3300108: Circle.009
+    3300110: Circle.010
+    3300112: Circle.011
+    3300114: Circle.012
+    3300116: Cube.000
+    3300118: Cube.031
+    3300120: Cube.032
+    3300122: Cube.033
+    3300124: Cube.034
+    3300126: Cube.035
+    3300128: Cube.036
+    3300130: Cube.037
+    3300132: Cube.038
+    3300134: Cube.039
+    3300136: Cube.040
+    3300138: Cube.041
+    3300140: Cube.042
+    3300142: Cube.043
+    3300144: Cube.044
+    3300146: Cube.045
+    3300148: Cube.046
+    3300150: Cube.047
+    3300152: dresser
+    3300154: dresser.001
+    3300156: dresser.002
+    3300158: dresser.003
+    3300160: dresser.004
+    3300162: dresser.005
+    3300164: flowerpot
+    3300166: torch
+    3300168: torch.001
+    3300170: torch.002
+    3300172: torch.003
     4300000: Cube.001
     4300002: Stairs (1)_0
     4300004: Stairs_0
@@ -238,6 +402,47 @@ ModelImporter:
     4300084: Cube.002
     4300086: Cube
     4300088: Circle
+    4300090: Circle.012
+    4300092: Circle.011
+    4300094: Circle.010
+    4300096: Circle.009
+    4300098: Circle.008
+    4300100: Circle.007
+    4300102: Circle.006
+    4300104: Cube.047
+    4300106: Cube.046
+    4300108: Cube.045
+    4300110: Cube.044
+    4300112: Cube.043
+    4300114: Cube.042
+    4300116: Circle.003
+    4300118: Circle.002
+    4300120: Circle.000
+    4300122: torch.003
+    4300124: torch.002
+    4300126: torch.001
+    4300128: Cube.037
+    4300130: Cube.036
+    4300132: Cube.035
+    4300134: Cube.034
+    4300136: Cube.033
+    4300138: Cube.032
+    4300140: Cube.031
+    4300142: dresser.005
+    4300144: dresser.004
+    4300146: dresser.003
+    4300148: dresser.002
+    4300150: dresser.001
+    4300152: flowerpot
+    4300154: dresser
+    4300156: Cube.041
+    4300158: Cube.040
+    4300160: Cube.039
+    4300162: Cube.038
+    4300164: torch
+    4300166: Circle.004
+    4300168: Cube.000
+    4300170: Circle.005
     6400000: Cube.001
     6400002: Stairs (1)_0
     6400004: Stairs_0
@@ -284,6 +489,47 @@ ModelImporter:
     6400086: Cylinder.008
     6400088: Cylinder.009
     6400090: //RootNode
+    6400092: Circle.000
+    6400094: Circle.002
+    6400096: Circle.003
+    6400098: Circle.004
+    6400100: Circle.005
+    6400102: Circle.006
+    6400104: Circle.007
+    6400106: Circle.008
+    6400108: Circle.009
+    6400110: Circle.010
+    6400112: Circle.011
+    6400114: Circle.012
+    6400116: Cube.000
+    6400118: Cube.031
+    6400120: Cube.032
+    6400122: Cube.033
+    6400124: Cube.034
+    6400126: Cube.035
+    6400128: Cube.036
+    6400130: Cube.037
+    6400132: Cube.038
+    6400134: Cube.039
+    6400136: Cube.040
+    6400138: Cube.041
+    6400140: Cube.042
+    6400142: Cube.043
+    6400144: Cube.044
+    6400146: Cube.045
+    6400148: Cube.046
+    6400150: Cube.047
+    6400152: dresser
+    6400154: dresser.001
+    6400156: dresser.002
+    6400158: dresser.003
+    6400160: dresser.004
+    6400162: dresser.005
+    6400164: flowerpot
+    6400166: torch
+    6400168: torch.001
+    6400170: torch.002
+    6400172: torch.003
     10800000: Lamp
     2186277476908879412: ImportLogs
   externalObjects: {}
