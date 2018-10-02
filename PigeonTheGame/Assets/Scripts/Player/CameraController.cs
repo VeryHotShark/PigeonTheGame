@@ -44,6 +44,8 @@ public class CameraController : MonoBehaviour
 
 		GetComponents();
 
+		transform.position = target.position;
+
 		// WE SUBSTRACT INIT CAMERA ROTATION FROM MIN-MAX ANGLE
 
 		lookAngle.x -= Mathf.Abs(m_camera.transform.eulerAngles.x);

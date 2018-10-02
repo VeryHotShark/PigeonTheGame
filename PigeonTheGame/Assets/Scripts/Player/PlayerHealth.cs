@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerHealth : Health
 {
 
+	public event System.Action<int> OnPlayerLoseHealth;
+
 	PlayerMovement m_playerMovement;
 
 	public void Start()
@@ -17,6 +19,9 @@ public class PlayerHealth : Health
 	{
 		CameraShake.isShaking = true;
 		base.TakeDamage(damage);
+
+		if(OnPlayerLoseHealth != null)
+			OnPlayerLoseHealth(m_health);
 
 		if(m_health <= 0)
 			Respawn();
