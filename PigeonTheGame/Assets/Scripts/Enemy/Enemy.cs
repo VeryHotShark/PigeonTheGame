@@ -23,7 +23,7 @@ public abstract class Enemy : MonoBehaviour
 	public float attackRate = 3f;
 	public float stopDistance = 1.5f;
 
-	public EnemyHealth m_health;
+	protected EnemyHealth m_health;
 	protected bool m_isAttacking;
 	protected PlayerHealth m_playerHealth;
 	protected Transform m_playerTransform;

@@ -15,6 +15,7 @@ public class PlayerWeapon : MonoBehaviour
 	public float projectileLife = 1f;
 
 	public float spreadPower = 1f;
+	public float zoomSpreadPower = 2f;
 	public float force;
 
 	PlayerInput m_playerInput;
@@ -55,7 +56,7 @@ public class PlayerWeapon : MonoBehaviour
 				{
 					if(spawnPoint != spawnPoints[0])
 					{
-						Vector3 randomHitPoint = hit.point + Random.insideUnitSphere * spreadPower;
+						Vector3 randomHitPoint = (hit.point + Random.insideUnitSphere * (m_playerInput.ZoomInput ? zoomSpreadPower : spreadPower )) + Vector3.up * 0.5f;
 
 						shootDir = (randomHitPoint - spawnPoint.position).normalized;
 					}

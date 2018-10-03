@@ -52,7 +52,7 @@ public class EnemyRange : Enemy
                 if (currentState != State.Moving && currentState != State.Attack)
                 {
                     m_agent.ResetPath();
-                    StartCoroutine(MoveToTargetPos());
+                    StartCoroutine(MoveToRandomPos());
                 }
             }
             else
@@ -68,14 +68,13 @@ public class EnemyRange : Enemy
     IEnumerator AttackTarget()
     {
         currentState = State.Attack;
-        m_isAttacking = true;
 
         yield return new WaitForSeconds(0.1f);
         m_enemyWeapon.ShootProjectile();
 
     }
 
-    IEnumerator MoveToTargetPos()
+    IEnumerator MoveToRandomPos()
     {
         Debug.Log("HElLO");
 

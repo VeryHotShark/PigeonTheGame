@@ -23,6 +23,20 @@ public class CameraController : MonoBehaviour
 	public float followDelay = 0.5f;
 	public float followMultiplierWhenStationary = 2f;
 
+	public Transform crosshair;
+
+	[Header("Zoom Variables")]
+
+	public Transform zoomTransform;
+	public float zoomSpeed ;
+	public bool changeFOV;
+	public float zoomFOV = 30f;
+	public float zoomCrosshairScale = 1f;
+
+	float m_initFOV;
+	Vector3 m_cameraStartPos;
+	Vector3 m_crosshairInitScale;
+	Vector3 m_zoomCrosshairScale;
 
 	PlayerInput m_playerInput;
 	Camera m_camera;
@@ -36,8 +50,6 @@ public class CameraController : MonoBehaviour
 
 	Vector3 m_offset;
 
-	Vector3 m_cameraStartPos;
-
     // Use this for initialization
     void Start()
     {
@@ -47,7 +59,11 @@ public class CameraController : MonoBehaviour
 		GetComponents();
 
 		transform.position = target.position;
-		m_cameraStartPos = m_camera.transform.position;
+		m_cameraStartPos = m_camera.transform.localPosition;
+
+		m_initFOV = m_camera.fieldOfView;
+		m_crosshairInitScale = crosshair.localScale;
+		m_zoomCrosshairScale = Vector3.one * zoomCrosshairScale;
 
 		// WE SUBSTRACT INIT CAMERA ROTATION FROM MIN-MAX ANGLE
 
@@ -79,6 +95,8 @@ public class CameraController : MonoBehaviour
     {
 		if(target == null) // IF THERE IS NO TARGET , RETURN
 			return;
+
+		ZoomCamera();
 
 		m_offset = target.position - transform.position; // offset between player and our position
         Vector3 desiredPos = transform.position + m_offset; // desired position that we want to be
@@ -132,11 +150,24 @@ public class CameraController : MonoBehaviour
 	{
 		if(m_playerInput.ZoomInput)
 		{
-
+			m_camera.transform.localPosition = Vector3.Lerp(m_camera.transform.localPosition, zoomTransform.localPosition, zoomSpeed * Time.deltaTime);
+			m_camera.fieldOfView = Mathf.Lerp(m_camera.fieldOfView, zoomFOV, zoomSpeed * Time.deltaTime);
+			crosshair.localScale = Vector3.Lerp(crosshair.localScale, m_zoomCrosshairScale, zoomSpeed * Time.deltaTime);
 		}
 		else
 		{
-			
+			if(Vector3.Distance(m_camera.transform.localPosition,m_cameraStartPos) > 0.01f )
+			{
+				m_camera.transform.localPosition = Vector3.Lerp(m_camera.transform.localPosition, m_cameraStartPos, zoomSpeed * Time.deltaTime);
+				m_camera.fieldOfView = Mathf.Lerp(m_camera.fieldOfView, m_initFOV, zoomSpeed * Time.deltaTime);
+				crosshair.localScale = Vector3.Lerp(crosshair.localScale, m_crosshairInitScale, zoomSpeed * Time.deltaTime);
+			}
+			else
+			{
+				m_camera.transform.localPosition = m_cameraStartPos;
+				m_camera.fieldOfView = m_initFOV;
+				crosshair.localScale = m_crosshairInitScale;
+			}
 		}
 	}
 }

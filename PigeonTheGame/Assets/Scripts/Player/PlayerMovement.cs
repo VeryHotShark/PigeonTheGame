@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Player Movement")]
     public float moveSpeed;
+    public float aimMoveSpeed;
     public float smoothTime;
     public float turnSpeed;
     public float dashPower = 5f;
@@ -72,6 +73,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         GetComponents();
+
+        aimMoveSpeed = moveSpeed / 2f;
     }
 
     void GetComponents()
@@ -160,7 +163,7 @@ public class PlayerMovement : MonoBehaviour
             m_smoothFactor = Mathf.SmoothDamp(m_smoothFactor, moveMagnitude, ref m_smoothVelocityRef, smoothTime); // we calculate smoothFactor based on moveMagnitude
         }
 
-        m_moveVector = m_moveDir * moveSpeed * m_smoothFactor * Time.deltaTime; // here we calculate our final moveVector
+        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor * Time.deltaTime; // here we calculate our final moveVector
 
         //Debug.Log(m_moveVector);
 
