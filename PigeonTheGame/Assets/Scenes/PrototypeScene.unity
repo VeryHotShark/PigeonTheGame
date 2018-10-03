@@ -445,6 +445,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 282840814}
+  - {fileID: 1823038444}
   m_Father: {fileID: 362493948}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1583,6 +1584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  projectileLife: 3
   spawnPoint: {fileID: 929797420}
   projectile: {fileID: 114875321109015342, guid: 27e31d66c5f491545aceb5a09488948e,
     type: 2}
@@ -3277,6 +3279,7 @@ MonoBehaviour:
   - {fileID: 1710120393}
   projectile: {fileID: 114875321109015342, guid: 27e31d66c5f491545aceb5a09488948e,
     type: 2}
+  projectileLife: 0.2
   spreadPower: 2
   force: 100
 --- !u!114 &920178429
@@ -4793,6 +4796,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  projectileLife: 3
   spawnPoint: {fileID: 630253917}
   projectile: {fileID: 114875321109015342, guid: 27e31d66c5f491545aceb5a09488948e,
     type: 2}
@@ -5953,6 +5957,34 @@ Transform:
   m_Father: {fileID: 1446281981}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
+--- !u!1 &1823038443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1823038444}
+  m_Layer: 0
+  m_Name: CameraZoomPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1823038444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1823038443}
+  m_LocalRotation: {x: 0.11579972, y: -0, z: -0, w: 0.9932726}
+  m_LocalPosition: {x: 1.28, y: 1.63, z: -1.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 95260867}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 13.3, y: 0, z: 0}
 --- !u!1 &1828520534
 GameObject:
   m_ObjectHideFlags: 0

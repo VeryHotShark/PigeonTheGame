@@ -12,6 +12,8 @@ public class PlayerWeapon : MonoBehaviour
 	public Transform[] spawnPoints;
 
 	public Projectile projectile;
+	public float projectileLife = 1f;
+
 	public float spreadPower = 1f;
 	public float force;
 
@@ -60,7 +62,7 @@ public class PlayerWeapon : MonoBehaviour
 
 					Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile;
 					
-					obj.OnProjectileSpawn(shootDir, force, damage);
+					obj.OnProjectileSpawn(shootDir, force, damage, projectileLife);
 				}
 			}
 
@@ -69,8 +71,4 @@ public class PlayerWeapon : MonoBehaviour
 
 	}
 
-	void OnDrawGizmos()
-	{
-
-	}
 }

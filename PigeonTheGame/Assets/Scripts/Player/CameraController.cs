@@ -36,6 +36,8 @@ public class CameraController : MonoBehaviour
 
 	Vector3 m_offset;
 
+	Vector3 m_cameraStartPos;
+
     // Use this for initialization
     void Start()
     {
@@ -45,6 +47,7 @@ public class CameraController : MonoBehaviour
 		GetComponents();
 
 		transform.position = target.position;
+		m_cameraStartPos = m_camera.transform.position;
 
 		// WE SUBSTRACT INIT CAMERA ROTATION FROM MIN-MAX ANGLE
 
@@ -87,6 +90,8 @@ public class CameraController : MonoBehaviour
 
     }
 
+
+
     // Update is called once per frame
     void UpdateCamRotation()
     {
@@ -122,4 +127,16 @@ public class CameraController : MonoBehaviour
 			yawTransform.localRotation = desiredYawRotation;
 		}
     }
+
+	void ZoomCamera()
+	{
+		if(m_playerInput.ZoomInput)
+		{
+
+		}
+		else
+		{
+			
+		}
+	}
 }

@@ -11,12 +11,12 @@ public class Projectile : MonoBehaviour
 
 
     // Use this for initialization
-    public void OnProjectileSpawn(Vector3 dir, float force, int damage)
+    public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime)
     {
 		GetComponents();
         m_damage = damage;
 		m_rigid.AddForce(dir * force, ForceMode.Impulse);
-		Destroy(gameObject, 3f);
+		Destroy(gameObject, lifeTime);
     }
 
 	void GetComponents()

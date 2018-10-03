@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyWeapon : MonoBehaviour
 {
 	public int damage;
+    public float projectileLife = 3f;
 
     public Transform spawnPoint;
 
@@ -15,6 +16,6 @@ public class EnemyWeapon : MonoBehaviour
     public void ShootProjectile()
     {
         Projectile obj = Instantiate(projectile, spawnPoint.position, spawnPoint.rotation) as Projectile;
-        obj.OnProjectileSpawn(transform.forward, force, damage);
+        obj.OnProjectileSpawn(transform.forward, force, damage, projectileLife);
     }
 }

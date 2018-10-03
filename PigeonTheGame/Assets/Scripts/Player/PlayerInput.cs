@@ -28,6 +28,9 @@ public class PlayerInput : MonoBehaviour
     bool m_shootInput;
     public bool ShootInput { get { return m_shootInput; } set { m_shootInput = value; } }
 
+    bool m_zoomInput;
+    public bool ZoomInput { get { return m_zoomInput; } set { m_zoomInput = value; } }
+
     bool m_dashInput;
     public bool DashInput { get { return m_dashInput; } set { m_dashInput = value; } }
 
@@ -53,6 +56,7 @@ public class PlayerInput : MonoBehaviour
             m_jumpInput = Input.GetKeyDown(KeyCode.Space);
             m_dashInput = Input.GetKeyDown(KeyCode.LeftShift);
 
+            m_zoomInput = Input.GetMouseButton(1);
             m_holdingJumpInput = Input.GetKey(KeyCode.Space);
         }
 
