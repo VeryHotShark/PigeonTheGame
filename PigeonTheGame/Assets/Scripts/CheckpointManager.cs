@@ -28,6 +28,6 @@ public class CheckpointManager : MonoBehaviour
 		{
 			checkpoints.Add(door.transform.position);
 		}
-		
+
     }
 }

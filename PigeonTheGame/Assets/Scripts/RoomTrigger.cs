@@ -9,6 +9,7 @@ public class RoomTrigger : MonoBehaviour
     {
         RoomEnter,
         RoomExit,
+        Checkpoint
     }
 
     public TriggerType type;

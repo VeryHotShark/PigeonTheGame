@@ -27,7 +27,10 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayerMask;
     //public int wallLayerMask = 1 << 9;
 
+    [Space]
+    [Header("Player VFX")]
 
+    public ParticleSystem smokeParticle;
 
     Rigidbody m_rigid;
     PlayerInput m_playerInput;
@@ -91,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
         CheckIfGrounded();
         PlayerDash();
         PlayerJump();
+        SmokeTrail();
     }
 
     void FixedUpdate()
@@ -141,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
 
     void CalculateMovePosition()
     {
+
 		// Calculate our horizontal and vertical direction using current Camera rotation so our movement is always Camera rotation dependent;
 
         Vector3 vDir = m_playerInput.V * m_CameraController.transform.forward;
@@ -199,6 +204,18 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+    }
+
+    void SmokeTrail()
+    {
+        var emission = smokeParticle.emission;
+
+        if(m_playerInput.NoInput())
+        {
+            emission.rateOverTime = 0f;
+        }
+        else
+            emission.rateOverTime = 50f;
     }
 
 
