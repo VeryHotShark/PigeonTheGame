@@ -5,6 +5,17 @@ using UnityEngine;
 public class CameraShake : MonoBehaviour
 {
 
+	public enum ShakeType
+	{
+		Pos,
+		Rot,
+		PosRot
+	}
+
+	public static ShakeType shakeType = ShakeType.Pos;
+
+	// Camera Shake with rotation
+
 	public float shakeDuration;
 	public float power;
 

@@ -83,6 +83,8 @@ public class PlayerWeapon : MonoBehaviour
 		{
 			SpawnVFX();
 
+			//CameraShake.isShaking = true;
+
 			// RECOIL
 			
 			playerWeapon.transform.localPosition -= transform.InverseTransformDirection(playerWeapon.transform.forward) * kickPower;
