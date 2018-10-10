@@ -24,12 +24,14 @@ public class CameraShake : MonoBehaviour
 
 	float initialDuration;
 	Vector3 initialPosition;
+	Quaternion initialRotation;
 
     // Use this for initialization
     void Start()
     {
 		initialDuration = shakeDuration;
 		initialPosition = transform.localPosition;
+		initialRotation = transform.localRotation;
     }
 
     // Update is called once per frame
@@ -37,7 +39,19 @@ public class CameraShake : MonoBehaviour
     {
 		if(shakeDuration > 0f && isShaking)
 		{
-			transform.localPosition = initialPosition + Random.insideUnitSphere * power * Time.deltaTime;
+			switch(shakeType)
+			{
+				case ShakeType.Pos :
+					transform.localPosition = initialPosition + Random.insideUnitSphere * power * Time.deltaTime;
+					break;
+				case ShakeType.Rot :
+					transform.localRotation = Quaternion.LookRotation((Random.insideUnitSphere - transform.localPosition).normalized * power * Time.deltaTime);
+					break;
+
+			}
+
+
+
 			shakeDuration -= Time.deltaTime;
 		}
 		else if(shakeDuration < 0f)
@@ -45,6 +59,7 @@ public class CameraShake : MonoBehaviour
 			isShaking = false;
 			shakeDuration = initialDuration;
 			transform.localPosition = initialPosition;
+			transform.localRotation = initialRotation;
 		}
     }
 }

@@ -83,6 +83,7 @@ public class PlayerWeapon : MonoBehaviour
 		{
 			SpawnVFX();
 
+			//CameraShake.shakeType = CameraShake.ShakeType.Rot;
 			//CameraShake.isShaking = true;
 
 			// RECOIL
