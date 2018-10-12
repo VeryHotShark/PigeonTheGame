@@ -28,7 +28,14 @@ public class EnemyMelee : Enemy
 
 		if(!m_playerHealth.IsDead())
 		{
-			if(Vector3.Distance(m_playerTransform.position, transform.position) < attackRange)
+
+			if(!RoomManager.instance.PlayerInRoom)
+			{
+				currentState = State.Patrol;
+				
+			}
+
+			if(Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && RoomManager.instance.PlayerInRoom)
 			{
 				if(!m_isAttacking)
 				{

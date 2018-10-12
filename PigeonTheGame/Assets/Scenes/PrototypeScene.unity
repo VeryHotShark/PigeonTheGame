@@ -141,7 +141,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1460050}
   m_LocalRotation: {x: -0.50000006, y: -0.49999994, z: -0.49999997, w: 0.50000006}
-  m_LocalPosition: {x: -0, y: 0.05964337, z: 1.1772442}
+  m_LocalPosition: {x: 0, y: 0.05964337, z: 0.92424417}
   m_LocalScale: {x: 2.9737895, y: 2.9737895, z: 1}
   m_Children: []
   m_Father: {fileID: 192600412}
@@ -770,7 +770,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 123.5
+      value: 98.2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6548,7 +6548,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 98.986916
+      value: 73.68691
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6864,7 +6864,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 339549709}
   m_LocalRotation: {x: -0.00000013767878, y: 0.7071068, z: 0.70710677, w: 0.00000013767877}
-  m_LocalPosition: {x: -0.00025089367, y: 0.07357015, z: 1.4785657}
+  m_LocalPosition: {x: -0.00025089367, y: 0.07357015, z: 1.263}
   m_LocalScale: {x: 2.1657565, y: 2.1657565, z: 0.26765302}
   m_Children: []
   m_Father: {fileID: 192600412}
@@ -6950,7 +6950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &340938215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6962,6 +6962,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639c0232be3807a4cbf170b630aacb64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveType: 0
   moveSpeed: 5
   attackPower: 1
   attackRange: 40.89
@@ -7063,7 +7065,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 340938214}
   m_LocalRotation: {x: -0, y: -0.9791874, z: -0, w: 0.20295826}
-  m_LocalPosition: {x: 0.9, y: 6.78, z: 85.9}
+  m_LocalPosition: {x: 6.6999993, y: 6.78, z: 142.02}
   m_LocalScale: {x: 1.5000007, y: 1.5, z: 1.5000007}
   m_Children:
   - {fileID: 929797420}
@@ -7549,7 +7551,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 424797383}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0013540041, y: 0.60968274, z: 1.2436366}
+  m_LocalPosition: {x: -0.0013540041, y: 0.60968274, z: 0.925}
   m_LocalScale: {x: 0.42035073, y: 0.42035073, z: 15.697869}
   m_Children: []
   m_Father: {fileID: 192600412}
@@ -8135,7 +8137,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 544760993}
   m_LocalRotation: {x: -0, y: -0.99997437, z: -0, w: -0.0071592014}
-  m_LocalPosition: {x: -0.68, y: 11.57, z: 94.64}
+  m_LocalPosition: {x: -0.68, y: 11.7, z: 70.25}
   m_LocalScale: {x: 1.5000007, y: 1.5, z: 1.5000007}
   m_Children:
   - {fileID: 1953094083}
@@ -8158,7 +8160,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1953094083}
   projectile: {fileID: 114875321109015342, guid: 27e31d66c5f491545aceb5a09488948e,
     type: 2}
-  force: 70
+  force: 40
 --- !u!114 &544760996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8170,14 +8172,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e91a24cd1fc7d89489bc406da03ba0c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveType: 0
   moveSpeed: 0
   attackPower: 1
   attackRange: 70
-  attackRate: 3
+  attackRate: 1
   stopDistance: 1.5
   projectileAmount: 5
   projectileAmountVariation: 2
-  shootInterval: 1
   waitTime: 0
 --- !u!114 &544760997
 MonoBehaviour:
@@ -8717,7 +8720,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 134.01099
+      value: 108.71098
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -9393,7 +9396,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 111.321724
+      value: 86.02172
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -9456,7 +9459,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 109.4
+      value: 84.1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -10010,6 +10013,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ec273dea541f04f84a34df14cc9259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveType: 0
   moveSpeed: 10
   attackPower: 1
   attackRange: 2
@@ -11472,6 +11477,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70963670b3e831d4695213ed547c8691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveType: 0
   moveSpeed: 5
   attackPower: 1
   attackRange: 25
@@ -11479,7 +11486,6 @@ MonoBehaviour:
   stopDistance: 1.5
   projectileAmount: 5
   projectileAmountVariation: 0
-  shootInterval: 1
   waitTime: 5
 --- !u!1 &1064480245
 GameObject:
@@ -12993,7 +12999,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 134.1
+      value: 108.8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -14676,7 +14682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1531758740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14705,6 +14711,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639c0232be3807a4cbf170b630aacb64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveType: 0
   moveSpeed: 5
   attackPower: 1
   attackRange: 40.89
@@ -14806,7 +14814,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1531758739}
   m_LocalRotation: {x: -0, y: -0.9989949, z: -0, w: 0.04482419}
-  m_LocalPosition: {x: -14.9, y: 6.78, z: 69.6}
+  m_LocalPosition: {x: -9.1, y: 6.78, z: 140.8}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 630253917}
@@ -15936,7 +15944,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 121.6
+      value: 96.299995
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -16485,6 +16493,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ec273dea541f04f84a34df14cc9259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveType: 0
   moveSpeed: 10
   attackPower: 1
   attackRange: 2
@@ -17547,7 +17557,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 99.06
+      value: 73.759995
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f3b66e0de0bdd80478467d7eb4b69e41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -18155,7 +18165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &2083007453
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -18219,7 +18229,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2083007452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.24, y: -0.48, z: -3.75}
+  m_LocalPosition: {x: -0.2, y: 6.3, z: 104}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

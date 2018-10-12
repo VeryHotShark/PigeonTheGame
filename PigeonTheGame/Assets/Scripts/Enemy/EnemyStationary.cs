@@ -7,7 +7,6 @@ public class EnemyStationary : Enemy
 
     public int projectileAmount = 5;
 	public int projectileAmountVariation = 2;
-    public float shootInterval;
     public float waitTime;
 
     bool m_duringRoutine;
@@ -58,7 +57,7 @@ public class EnemyStationary : Enemy
 		{
 			m_enemyWeapon.ShootProjectile();
 			amountToShoot--;
-			yield return new WaitForSeconds(shootInterval);
+			yield return new WaitForSeconds(attackRate);
 		}
 
 		yield return StartCoroutine(WaitIdle());
