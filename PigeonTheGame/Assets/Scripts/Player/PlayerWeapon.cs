@@ -35,6 +35,7 @@ public class PlayerWeapon : MonoBehaviour
 
 	bool returning;
 
+	[Header("Shooting Variables")]
 	[Space]
 
 	public Transform[] spawnPoints;
@@ -79,6 +80,8 @@ public class PlayerWeapon : MonoBehaviour
 		if(returning == false)
 			LookAtCameraDir();
 
+		// IF PLAYER PRESS SHOOT INPUT
+
 		if(m_playerInput.ShootInput)	
 		{
 			SpawnVFX();
@@ -95,26 +98,28 @@ public class PlayerWeapon : MonoBehaviour
 			if(OnPlayerShoot != null)
 				OnPlayerShoot();
 
+			// CAST RAY TO CHECK IF WE HIT SOMETHING 
+
 			Ray ray = new Ray(m_camera.transform.position, m_camera.transform.forward);
 			RaycastHit hit;
 			bool hitSomething = Physics.Raycast(ray, out hit,100f, layerMask, QueryTriggerInteraction.Collide);
 
-			if(hitSomething)
+			if(hitSomething) // If we did
 			{
-				Vector3 shootDir = (hit.point - m_middleSpawnPoint.position).normalized;
+				Vector3 shootDir = (hit.point - m_middleSpawnPoint.position).normalized; // we calculate the shoot dir by substracting our spawn position from the point we hit
 
-				foreach(Transform spawnPoint in spawnPoints)
+				foreach(Transform spawnPoint in spawnPoints) // foreach spawn point in our spawnpoints array
 				{
-					if(spawnPoint != spawnPoints[0])
+					if(spawnPoint != spawnPoints[0]) // if its not middle spawnPoint
 					{
-						Vector3 randomHitPoint = (hit.point + Random.insideUnitSphere * (m_playerInput.ZoomInput ? zoomSpreadPower : spreadPower )) + Vector3.up * 0.5f;
+						Vector3 randomHitPoint = (hit.point + Random.insideUnitSphere * (m_playerInput.ZoomInput ? zoomSpreadPower : spreadPower )) + Vector3.up * 0.5f; // We add to point we hit random point that is inside sphere with radius of 1 so it will not shoot directly in middle 
 
-						shootDir = (randomHitPoint - spawnPoint.position).normalized;
+						shootDir = (randomHitPoint - spawnPoint.position).normalized; // and now it will be our shootDireciton
 					}
 
-					Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile;
+					Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile; // we spawn projectile
 					
-					obj.OnProjectileSpawn(shootDir, force, damage, projectileLife);
+					obj.OnProjectileSpawn(shootDir, force, damage, projectileLife, transform.gameObject); // and we give it that direction ,force, damage etc
 				}
 			}
 
@@ -139,15 +144,6 @@ public class PlayerWeapon : MonoBehaviour
 
 			rotationWhenShot = Mathf.SmoothDamp(rotationWhenShot, 0f, ref rotationVelocity, rotationReturnTime);
 			weaponPivot.localEulerAngles = rotationBeforeShot - transform.InverseTransformDirection(weaponPivot.right) * rotationWhenShot;
-
-			/*
-			
-				if(playerWeapon.transform.localPosition != weaponPosWhenShot || weaponPivot.localEulerAngles != rotationBeforeShot)
-					returning = true;
-				else
-					returning = false;
-			
-			 */
 			
 		}
 	}

@@ -31,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player VFX")]
 
     public ParticleSystem smokeParticle;
+    public TrailRenderer dashVFX;
+
+
+    // PRIVATE VARIABLES
 
     Rigidbody m_rigid;
     PlayerInput m_playerInput;
@@ -47,37 +51,27 @@ public class PlayerMovement : MonoBehaviour
 
     bool m_isGrounded;
 
+
+    // ANIMATOR
+
+    Animator m_anim;
+
+    // Convert our animator variablesw to Hashes so it more performent
+
+    int m_directionXHash = Animator.StringToHash("X");
+    int m_directionYHash = Animator.StringToHash("Y");
+
     public Rigidbody Rigid
-    {
-        get
-        {
-            return m_rigid;
-        }
+    { get { return m_rigid; } set { m_rigid = value; } }
 
-        set
-        {
-            m_rigid = value;
-        }
-    }
-
-    public Vector3 LastMoveVector
-    {
-        get
-        {
-            return m_lastMoveDir;
-        }
-
-        set
-        {
-            m_lastMoveDir = value;
-        }
-    }
+    public Vector3 LastMoveVector { get { return m_lastMoveDir; } set { m_lastMoveDir = value; } }
 
     void Start()
     {
         GetComponents();
 
-        aimMoveSpeed = moveSpeed / 2f;
+        aimMoveSpeed = moveSpeed / 2f; // speed is slower 2 times when aiming TODO change to variable
+        dashVFX.emitting = false;
     }
 
     void GetComponents()
@@ -85,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         m_playerInput = GetComponent<PlayerInput>();
         m_rigid = GetComponent<Rigidbody>();
         m_CameraController = FindObjectOfType<CameraController>();
+        m_anim = GetComponentInChildren<Animator>();
 
     }
 
@@ -102,23 +97,25 @@ public class PlayerMovement : MonoBehaviour
         CalculateMovePosition();
 
         if (m_playerInput.InputEnabled)
-            m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector));
+            m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
 
         UpdateRotation();
     }
 
     void UpdateRotation()
     {
-        Quaternion desiredRot = m_CameraController.transform.rotation;
+        Quaternion desiredRot = m_CameraController.transform.rotation; // our player desired rot is cam rot
 
-        if (!snapToCamera)
-            desiredRot = Quaternion.Slerp(transform.rotation, m_CameraController.transform.rotation, smoothRotateSpeed * Time.fixedDeltaTime);
+        if (!snapToCamera) // smooth our rotation if bool is false
+            desiredRot = Quaternion.Slerp(transform.rotation, m_CameraController.transform.rotation, smoothRotateSpeed * Time.fixedDeltaTime); 
 
-        m_rigid.MoveRotation(desiredRot);
+        m_rigid.MoveRotation(desiredRot); // actually rotate our player
     }
 
     void CheckIfGrounded()
     {
+        // Cast ray downwards to check if we are on ground
+
         Ray ray = new Ray(transform.position, Vector3.down);
         RaycastHit hit;
 
@@ -135,12 +132,23 @@ public class PlayerMovement : MonoBehaviour
 
     void PlayerDash()
     {
+        // If player press shift we add force to player
+
         if (m_playerInput.DashInput)
         {
+            StartCoroutine(StopDashVFX());
+
             m_rigid.AddForce(m_moveDir * dashPower, ForceMode.Impulse);
             //Debug.Log("Dash Used :" + moveDir);
             // Or you can do different way for example moving exactly 2 meters in some direction by Translate or lerping
         }
+    }
+
+    IEnumerator StopDashVFX()
+    {
+        dashVFX.emitting = true;
+        yield return new WaitForSeconds(0.5f);
+        dashVFX.emitting = false;
     }
 
     void CalculateMovePosition()
@@ -177,6 +185,13 @@ public class PlayerMovement : MonoBehaviour
             m_lastMoveDir = m_moveVector; // we assign that direction to our lastMoveDir variable (we will use that variable to move our player in mid-air)
             //Debug.Log(m_lastMoveDir);
         }
+
+        // Convert our m_moveDir to local space so our animations will play correctly in local space
+        Vector3 localMoveDir = transform.InverseTransformVector(m_moveDir);
+
+        // Set our float in animator based on our move DIr
+        m_anim.SetFloat(m_directionXHash, localMoveDir.x);
+        m_anim.SetFloat(m_directionYHash, localMoveDir.z);
     }
 
     void PlayerJump()
@@ -210,12 +225,12 @@ public class PlayerMovement : MonoBehaviour
     {
         var emission = smokeParticle.emission;
 
-        if(m_playerInput.NoInput())
+        if(m_playerInput.NoInput()) // if there is no input
         {
-            emission.rateOverTime = 0f;
+            emission.rateOverTime = 0f; // we emite no smoke
         }
         else
-            emission.rateOverTime = 50f;
+            emission.rateOverTime = 50f; // else our emission is 50f
     }
 
 

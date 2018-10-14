@@ -57,15 +57,19 @@ public class CameraController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		GetComponents();
+		Init();
+    }
+
+	void Init()
+	{
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-
-		GetComponents();
 
 		transform.position = target.position;
 		m_cameraStartPos = m_camera.transform.localPosition;
 
-		PlayerWeapon.OnPlayerShoot += ZoomCrosshair;
+		PlayerWeapon.OnPlayerShoot += ZoomCrosshair; // we zoom our crosshair when playter shoot
 
 		m_initFOV = m_camera.fieldOfView;
 		m_crosshairInitScale = crosshair.localScale;
@@ -75,7 +79,7 @@ public class CameraController : MonoBehaviour
 
 		lookAngle.x -= Mathf.Abs(m_camera.transform.eulerAngles.x);
 		lookAngle.y -= Mathf.Abs(m_camera.transform.eulerAngles.x);
-    }
+	}
 
 	void GetComponents()
 	{
@@ -122,10 +126,10 @@ public class CameraController : MonoBehaviour
     {
 		// Calculate our yaw and pitch variable based on mouse input
 
-		m_yaw -= m_playerInput.MouseV * (invertY ? -1 : 1);
+		m_yaw -= m_playerInput.MouseV * (invertY ? -1 : 1); // reverse our yaw depending on bool
 		m_pitch += m_playerInput.MouseH;
 
-		m_yaw = Mathf.Clamp(m_yaw,lookAngle.x, lookAngle.y); // we clamp yaw value so we cant rotate fully 360 around x axis
+		m_yaw = Mathf.Clamp(m_yaw,lookAngle.x, lookAngle.y); // we clamp yaw value so we can't rotate fully 360 around x axis
 
 		//Debug.Log("angle x: " +lookAngle.x);
 		//Debug.Log("angle y: " +lookAngle.y);
@@ -155,25 +159,29 @@ public class CameraController : MonoBehaviour
 
 	void ZoomCamera()
 	{
-		if(m_playerInput.ZoomInput)
+		if(m_playerInput.ZoomInput) // if player pressed zoom button
 		{
-			m_zoomingFinish = false;
+			m_zoomingFinish = false; // we set bool zoomingFinish to false
+
+			// Lerp our cam pos , cam fov and crosshait Scale to desired values
 
 			m_camera.transform.localPosition = Vector3.Lerp(m_camera.transform.localPosition, zoomTransform.localPosition, zoomSpeed * Time.deltaTime);
 			m_camera.fieldOfView = Mathf.Lerp(m_camera.fieldOfView, zoomFOV, zoomSpeed * Time.deltaTime);
 			crosshair.localScale = Vector3.Lerp(crosshair.localScale, m_zoomCrosshairScale, zoomSpeed * Time.deltaTime);
 		}
-		else
+		else // if player is not holding zoom button
 		{
-			if(Vector3.Distance(m_camera.transform.localPosition,m_cameraStartPos) > 0.01f && m_zoomingFinish == false )
+			if(Vector3.Distance(m_camera.transform.localPosition,m_cameraStartPos) > 0.01f && m_zoomingFinish == false ) // if our camera pos is different than its start pos we zoom out
 			{
+				// Lerp our cam pos , cam fov and crosshait Scale to initial values
+
 				m_camera.transform.localPosition = Vector3.Lerp(m_camera.transform.localPosition, m_cameraStartPos, zoomSpeed * Time.deltaTime);
 				m_camera.fieldOfView = Mathf.Lerp(m_camera.fieldOfView, m_initFOV, zoomSpeed * Time.deltaTime);
 				crosshair.localScale = Vector3.Lerp(crosshair.localScale, m_crosshairInitScale, zoomSpeed * Time.deltaTime);
 			}
-			else
+			else // if the distance between cam start pos and cam pos now is smaller than 0,01f we snap all those values to initail values
 			{
-				if(m_zoomingFinish == false)
+				if(m_zoomingFinish == false) // we do it only when we are not finish zooming so the code below will execute only one time
 				{
 					m_zoomingFinish = true;
 
@@ -188,13 +196,13 @@ public class CameraController : MonoBehaviour
 		}
 	}
 
-	void ResizeCrosshair()
+	void ResizeCrosshair() // if our crosshair size is not initial size we lerp it to initial value
 	{
 		if(crosshair.localScale != m_crosshairInitScale && m_zoomingFinish == true)
 			crosshair.localScale = Vector3.Lerp(crosshair.localScale, m_crosshairInitScale, zoomSpeed * Time.deltaTime);
 	}	
 
-	void ZoomCrosshair()
+	void ZoomCrosshair() // zoom crosshair when shoot
 	{
 		crosshair.localScale = crosshair.localScale * shootCrosshairMultiplier;
 		//Debug.Log(crosshair.localScale);

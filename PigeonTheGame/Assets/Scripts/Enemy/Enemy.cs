@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
-	public WaypointNetwork waypoints;
+	public WaypointNetwork waypoints; // Waypoint our enemy will move on when patrolling
 
-	public enum State
+	public enum State  // States our enemy can be in
 	{
 		Patrol,
 		Chase,
@@ -16,27 +16,40 @@ public abstract class Enemy : MonoBehaviour
 		Moving
 	}
 
-	protected State currentState = State.Idle;
+	protected State currentState = State.Idle; // our enemy current state that he is in
 
-	public enum MoveType
+	public enum MoveType // Patrol Move Type
 	{
 		PingPong,
 		Loop,
 		Static
 	}
 
-	public MoveType moveType;
 
+	[Header("Movement")]
+	[Space]
+	public MoveType moveType;
 	public float moveSpeed = 5f;
+	public float stopDistance = 1.5f;
+
+	[Space]
+	[Header("Attack")]
+	[Space]
 	public int attackPower = 1;
 	public float attackRange = 1f;
 	public float attackRate = 3f;
-	public float stopDistance = 1.5f;
 
+	[Space]
+	[Header("Utilities")]
+	[Space]
 	public float waitTimeWhenEnter = 0f;
+	public float waitTimeOnWaypoint = 1f;
+	public float waitTimeWhenPlayerGetShot = 1f;
 
-	protected EnemyHealth m_health;
+	protected bool delayWaited = false;
 	protected bool m_isAttacking;
+	protected bool m_playerRested = true;
+	protected EnemyHealth m_health;
 	protected PlayerHealth m_playerHealth;
 	protected Transform m_playerTransform;
 	protected NavMeshAgent m_agent;
@@ -57,12 +70,17 @@ public abstract class Enemy : MonoBehaviour
 	{
 		m_agent = GetComponent<NavMeshAgent>();
 		m_health = GetComponent<EnemyHealth>();
-		m_anim = GetComponent<Animator>();
+		m_anim = GetComponentInChildren<Animator>();
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
 		m_playerTransform = m_playerHealth.gameObject.transform;
 
+		m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
+
 		if(waypoints != null)
+		{
+			waypoints.waypointsArray[m_currentWaypointIndex].position = transform.position;
 			m_currentWaypoint = waypoints.waypointsArray[0].position;
+		}
 	}
 
 	public virtual void SetNavMeshAgent()
@@ -73,51 +91,83 @@ public abstract class Enemy : MonoBehaviour
 	
     public virtual void FaceTarget()
     {
-        Quaternion lookRotation = Quaternion.LookRotation((m_playerTransform.position - transform.position).normalized);
+        Quaternion lookRotation = Quaternion.LookRotation((m_playerTransform.position - transform.position).normalized); // rotate our enemy to look at player
         transform.rotation = lookRotation;
     }
 
-	public virtual void GoToNextWaypoint()
+	public virtual IEnumerator GoToNextWaypoint()
 	{
 		GetNextWaypoint();
-		m_agent.SetDestination(m_targetWaypoint);
+		yield return new WaitForSeconds(waitTimeOnWaypoint);
+		StartCoroutine(GoToWaypoint());
 	}
 
 	public virtual void GetNextWaypoint()
     {
-		m_currentWaypoint = transform.position;
+		m_currentWaypoint = transform.position; // set our current waypoint to be our position
 
-		switch(moveType)
+		// depending on moveType we calculate what our next waypoint should be	
+		switch(moveType) 
 		{
-			case MoveType.PingPong:
+			case MoveType.PingPong: // if it is PingPong
 			{
-				if(m_currentWaypointIndex < waypoints.waypointsArray.Length - 1 )
+				if(m_currentWaypointIndex < waypoints.waypointsArray.Length - 1 ) // if our current waypoint index is less than the length of our waypoints array
 				{
-					m_currentWaypointIndex++;
+					m_currentWaypointIndex++; // we increment our waypointIndex
 
-					if(m_currentWaypointIndex == waypoints.waypointsArray.Length - 1)
+					if(m_currentWaypointIndex == waypoints.waypointsArray.Length - 1) // if we are at the end of our path (waypointNetwork)
 					{
-						Array.Reverse(waypoints.waypointsArray);
-						m_currentWaypointIndex = 0;
+						Array.Reverse(waypoints.waypointsArray); // we reverse our waypointArray
+						m_currentWaypointIndex = 0; // and reset our waypoint Index
 					}
 				}
 			}
 			break;
 
-			case MoveType.Loop:
+			case MoveType.Loop: // if it is Loop
 			{
-				m_currentWaypointIndex = (m_currentWaypointIndex + 1) % waypoints.waypointsArray.Length;
+				m_currentWaypointIndex = (m_currentWaypointIndex + 1) % waypoints.waypointsArray.Length; // we set our waypoint Index to be the modulo ( rest from the division) of our waypointArray length. So when for example index is 3 and array length is 3 the rest will be 0 so basically we go back to beginning
 			}
 			break;
 		}
 
-		m_targetWaypoint = waypoints.waypointsArray[m_currentWaypointIndex].position;
+		m_targetWaypoint = waypoints.waypointsArray[m_currentWaypointIndex].position; // Set our targetWaypoint to be nextWaypoint in our waypointsArray based on our waypointIndex we calculate before
 
     }
 
-	IEnumerator WaitTimeCoroutine()
+	public virtual IEnumerator GoToWaypoint()
 	{
-		yield return new WaitForSeconds(waitTimeWhenEnter);
+		m_agent.SetDestination(m_targetWaypoint);
+
+		while(Vector3.Distance(transform.position, m_targetWaypoint) > 2f && RoomManager.instance.PlayerInCorridor)
+		{
+
+			if(RoomManager.instance.PlayerInRoom)
+				yield break;
+
+			yield return null;
+		}
+
+		StartCoroutine(GoToNextWaypoint());
+	}
+
+	public virtual IEnumerator WaitTimeCoroutine() // wait for some delay before attacking player
+	{
+		yield return new WaitForSeconds(waitTimeWhenEnter); 
+		delayWaited = true;
+	}
+
+	public virtual void yieldForGivenTime(int playerHealth)
+	{
+		if(playerHealth > 0 && this != null)
+			StartCoroutine(YieldForPlayer());
+	}
+
+	public virtual IEnumerator YieldForPlayer() // wait for some delay before attacking player
+	{
+		m_playerRested = false;
+		yield return new WaitForSeconds(waitTimeWhenPlayerGetShot); 
+		m_playerRested = true;
 	}
 
 	public virtual void OnDrawGizmos()

@@ -21,6 +21,11 @@ public abstract class Health : MonoBehaviour
 	{
 		m_health -= damage;
 	}
+
+	public virtual void TakeDamage(int damage, ContactPoint hitPoint)
+	{
+		m_health -= damage;
+	}
   
 	public virtual void Die()
 	{

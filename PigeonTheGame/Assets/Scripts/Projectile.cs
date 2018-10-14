@@ -9,11 +9,13 @@ public class Projectile : MonoBehaviour
 
     private Rigidbody m_rigid;
 
+    private GameObject m_objectShotFrom;
 
     // Use this for initialization
-    public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime)
+    public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
 		GetComponents();
+        m_objectShotFrom = objectShotFrom;
         m_damage = damage;
 		m_rigid.AddForce(dir * force, ForceMode.Impulse);
 		Destroy(gameObject, lifeTime);
@@ -28,9 +30,16 @@ public class Projectile : MonoBehaviour
     {
         Health otherHealth = other.gameObject.GetComponent<Health>();
 
-        if(otherHealth != null)
+        if(otherHealth != null && other.gameObject != m_objectShotFrom)
         {
-            otherHealth.TakeDamage(m_damage);
+
+            if(otherHealth.gameObject.GetComponent<EnemyHealth>())
+            {
+                otherHealth.TakeDamage(m_damage,other.contacts[0]);
+            }
+            else
+                otherHealth.TakeDamage(m_damage);
+
             Destroy(gameObject);
         }
     }

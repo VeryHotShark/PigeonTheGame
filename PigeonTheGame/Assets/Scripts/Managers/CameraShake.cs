@@ -5,6 +5,14 @@ using UnityEngine;
 public class CameraShake : MonoBehaviour
 {
 
+	[Header("Player Shoot")]
+	[Space]
+
+	public Transform desiredCamRot;
+	public float returnSpeed;
+	Vector3 initEulerRot;
+
+
 	public enum ShakeType
 	{
 		Pos,
@@ -32,11 +40,19 @@ public class CameraShake : MonoBehaviour
 		initialDuration = shakeDuration;
 		initialPosition = transform.localPosition;
 		initialRotation = transform.localRotation;
+		initEulerRot = initialRotation.eulerAngles;
+
+		PlayerWeapon.OnPlayerShoot += TiltCamera;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+		if(transform.localEulerAngles != initEulerRot)
+			transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, initEulerRot, Time.deltaTime * returnSpeed);
+
+
 		if(shakeDuration > 0f && isShaking)
 		{
 			switch(shakeType)
@@ -47,10 +63,13 @@ public class CameraShake : MonoBehaviour
 				case ShakeType.Rot :
 					transform.localRotation = Quaternion.LookRotation((Random.insideUnitSphere - transform.localPosition).normalized * power * Time.deltaTime);
 					break;
-
+				case ShakeType.PosRot :
+				{
+					transform.localPosition = initialPosition + Random.insideUnitSphere * power * Time.deltaTime;
+					transform.localRotation = Quaternion.LookRotation((Random.insideUnitSphere - transform.localPosition).normalized * power * Time.deltaTime);
+					break;
+				}
 			}
-
-
 
 			shakeDuration -= Time.deltaTime;
 		}
@@ -62,4 +81,9 @@ public class CameraShake : MonoBehaviour
 			transform.localRotation = initialRotation;
 		}
     }
+
+	void TiltCamera()
+	{
+		transform.localRotation = desiredCamRot.localRotation;
+	}
 }
