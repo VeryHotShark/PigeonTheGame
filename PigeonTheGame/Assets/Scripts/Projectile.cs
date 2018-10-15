@@ -39,8 +39,7 @@ public class Projectile : MonoBehaviour
 
         m_rigid.velocity = Vector3.zero;
 
-        Debug.Log(m_rigid.velocity);
-        Debug.DrawLine(contactPoint.point,reflectDir,Color.red, 2f);
+        //Debug.DrawLine(contactPoint.point,reflectDir,Color.red, 2f);
 
         float rotation = 90 - Mathf.Atan2(reflectDir.z,reflectDir.x) * Mathf.Rad2Deg;
         transform.eulerAngles = new Vector3(0f,rotation, 0f);

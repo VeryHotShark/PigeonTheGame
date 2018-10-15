@@ -45,8 +45,9 @@ public class CameraController : MonoBehaviour
 	Camera m_camera;
 
 	public Camera GetCamera { get { return m_camera;}}
+    public bool ZoomingFinish { get { return m_zoomingFinish; } set { m_zoomingFinish = value; } }
 
-	float m_yaw;
+    float m_yaw;
 	float m_pitch;
 
 	Vector3 smoothRefVelocity;

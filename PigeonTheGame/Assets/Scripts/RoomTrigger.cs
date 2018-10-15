@@ -35,7 +35,7 @@ public class RoomTrigger : MonoBehaviour
                     break;
             }
 
-            Debug.Log(RoomManager.instance.PlayerInRoom);
+            //Debug.Log(RoomManager.instance.PlayerInRoom);
         }
     }
 
