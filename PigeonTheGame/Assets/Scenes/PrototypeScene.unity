@@ -13538,7 +13538,7 @@ MonoBehaviour:
   - {fileID: 1710120393}
   projectile: {fileID: 114875321109015342, guid: 27e31d66c5f491545aceb5a09488948e,
     type: 2}
-  projectileLife: 0.2
+  projectileLife: 1
   spreadPower: 2
   zoomSpreadPower: 1
   force: 100
@@ -16665,7 +16665,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 720
+  m_AngularSpeed: 10000
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -16687,7 +16687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoints: {fileID: 651109822}
   moveType: 0
-  moveSpeed: 10
+  moveSpeed: 20
   stopDistance: 1.5
   attackPower: 1
   attackRange: 2
