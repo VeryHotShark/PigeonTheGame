@@ -6,37 +6,12 @@ public class EnemyManager : MonoBehaviour
 {
 
     public static EnemyManager instance;
-    List<EnemyHealth> m_enemies = new List<EnemyHealth>();
-
+    List<Enemy> m_enemies = new List<Enemy>();
 	int m_enemyCount;
 
+    public List<Enemy> Enemies { get { return m_enemies; } set { m_enemies = value; } }
 
-
-    public List<EnemyHealth> Enemies
-    {
-        get
-        {
-            return m_enemies;
-        }
-
-        set
-        {
-            m_enemies = value;
-        }
-    }
-
-    public int EnemyCount
-    {
-        get
-        {
-            return m_enemyCount;
-        }
-
-        set
-        {
-            m_enemyCount = value;
-        }
-    }
+    public int EnemyCount { get { return m_enemyCount; } set { m_enemyCount = value; } }
 
     void Awake()
     {
@@ -50,9 +25,9 @@ public class EnemyManager : MonoBehaviour
 
 	void SubscribeToEnemies()
 	{
-		foreach(EnemyHealth enemy in m_enemies)
+		foreach(Enemy enemy in m_enemies)
 		{
-			enemy.OnEnemyDeath += DecreaseEnemyCount;
+			enemy.enemyHealth.OnEnemyDeath += DecreaseEnemyCount;
 		}
 	}
 

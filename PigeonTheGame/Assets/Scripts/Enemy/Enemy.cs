@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public abstract class Enemy : MonoBehaviour
 {
 	public WaypointNetwork waypoints; // Waypoint our enemy will move on when patrolling
+	public RoomIndex roomIndex;
 
 	public enum State  // States our enemy can be in
 	{
@@ -49,6 +50,7 @@ public abstract class Enemy : MonoBehaviour
 	protected bool delayWaited = false;
 	protected bool m_isAttacking;
 	protected bool m_playerRested = true;
+	protected bool m_reset = false;
 	protected EnemyHealth m_health;
 	protected PlayerHealth m_playerHealth;
 	protected Transform m_playerTransform;
@@ -57,12 +59,34 @@ public abstract class Enemy : MonoBehaviour
 	protected Vector3 m_currentWaypoint;
 	protected Vector3 m_targetWaypoint;
 
+	public EnemyHealth enemyHealth {get { return m_health;} set { m_health = value;}}
+
 	int m_currentWaypointIndex = 0;
+
+	Vector3 m_startPos;
+	Quaternion m_starRot;
+
+	public virtual void Start()
+	{
+		Init();
+	}
 
 	// Use this for initialization
 	public virtual void Init ()
 	{
-		GetComponents();
+		m_startPos = transform.position;
+		m_starRot = transform.rotation;
+
+
+		if(!m_reset)
+		{
+			GetComponents();
+
+			EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
+			EnemyManager.instance.EnemyCount ++; // and we increment the count of our enemy
+			m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
+		}
+		
 		SetNavMeshAgent();
 	}
 
@@ -75,6 +99,7 @@ public abstract class Enemy : MonoBehaviour
 		m_playerTransform = m_playerHealth.gameObject.transform;
 
 		m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
+		PlayerHealth.OnPlayerDeath += ResetEnemy;
 
 		if(waypoints != null)
 		{
@@ -174,4 +199,19 @@ public abstract class Enemy : MonoBehaviour
 	{
 		Gizmos.DrawWireSphere(transform.position, attackRange);
 	}
+
+	public virtual void ResetEnemy()
+	{
+		if(this.gameObject == null)
+			return;
+
+		StopAllCoroutines();
+		m_reset = true;
+		transform.position = m_startPos;
+		transform.rotation = m_starRot;
+		m_health.Init();
+		//Init();
+	}
+
+	public abstract void ResetVariables();
 }

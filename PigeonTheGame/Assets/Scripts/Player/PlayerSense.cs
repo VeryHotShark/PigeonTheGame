@@ -7,7 +7,7 @@ public class PlayerSense : MonoBehaviour
 
 	public Transform sensePivot;
 	public GameObject senseSprite;
-	EnemyHealth m_nearestEnemy;
+	Enemy m_nearestEnemy;
 
 	Camera m_camera;
 
@@ -24,9 +24,9 @@ public class PlayerSense : MonoBehaviour
 	{
 		// FOR EACH ENEMY IN OUR ENEMY LIST WE CHECK IF THE DISTANCE TO THAT ENEMY IS SMALLER THAN OUR PREVIOUS DST TO ENEMY
 
-		foreach(EnemyHealth enemy in EnemyManager.instance.Enemies)
+		foreach(Enemy enemy in EnemyManager.instance.Enemies)
 		{
-			if(enemy.IsDead())
+			if(enemy.enemyHealth.IsDead())
 				continue;
 
 			float dst = Vector3.Distance(transform.position, enemy.transform.position);

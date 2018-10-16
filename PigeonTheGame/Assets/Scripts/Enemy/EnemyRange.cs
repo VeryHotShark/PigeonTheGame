@@ -7,6 +7,11 @@ using UnityEngine.AI;
 public class EnemyRange : Enemy
 {
 
+     public override void ResetVariables()
+    {
+        
+    }
+
     //public WaypointNetwork patrolPath;
 
     [Header("Movement")]
@@ -18,13 +23,11 @@ public class EnemyRange : Enemy
     int m_moving = Animator.StringToHash("Moving");
     int m_shooting = Animator.StringToHash("Shooting");
 
-
-    // Use this for initialization
-    void Start()
+    public override void Init()
     {
         base.Init();
 
-        currentState = State.Idle; // our default state is Idle
+        currentState = State.Idle;
     }
 
     public override void GetComponents()
@@ -121,13 +124,13 @@ public class EnemyRange : Enemy
             }
         }
 
-        
+
         //    DEBUG PURPOSES
-        
+
         //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
         //go.transform.position = randomPosOnNavMesh;
         //go.GetComponent<BoxCollider>().enabled = false;
-         
+
 
         while (Vector3.Distance(transform.position, randomPosOnNavMesh) > 1f) // while the distance between enemy and its target position is greater than one just keep going
         {

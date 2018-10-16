@@ -5,11 +5,15 @@ using UnityEngine;
 public class RoomTrigger : MonoBehaviour
 {
 
+    public RoomIndex roomIndex;
+
     public enum TriggerType
     {
         RoomEnter,
         RoomExit,
-        Checkpoint
+        Checkpoint,
+        RoomEnterCheckpoint,
+        RoomExitCheckpoint
     }
 
     public TriggerType type;
@@ -24,6 +28,7 @@ public class RoomTrigger : MonoBehaviour
                     {
                         RoomManager.instance.PlayerInRoom = true;
                         RoomManager.instance.PlayerInCorridor = false;
+                        RoomManager.instance.PlayerCurrentRoom = roomIndex;
                     }
                     break;
 
@@ -31,22 +36,38 @@ public class RoomTrigger : MonoBehaviour
                     {
                         RoomManager.instance.PlayerInCorridor = true;
                         RoomManager.instance.PlayerInRoom = false;
+                        RoomManager.instance.PlayerCurrentRoom = roomIndex;
+                    }
+                    break;
+
+                case TriggerType.Checkpoint:
+                    {
+                        CheckpointManager.instance.m_currentCheckpoint = null;
+                        CheckpointManager.instance.m_currentCheckpoint = this;
+                    }
+                    break;
+
+                case TriggerType.RoomEnterCheckpoint:
+                    {
+                        RoomManager.instance.PlayerInRoom = true;
+                        RoomManager.instance.PlayerInCorridor = false;
+                        RoomManager.instance.PlayerCurrentRoom = roomIndex;
+                        CheckpointManager.instance.m_currentCheckpoint = null;
+                        CheckpointManager.instance.m_currentCheckpoint = this;
+                    }
+                    break;
+
+                case TriggerType.RoomExitCheckpoint:
+                    {
+                        RoomManager.instance.PlayerInCorridor = true;
+                        RoomManager.instance.PlayerInRoom = false;
+                        RoomManager.instance.PlayerCurrentRoom = roomIndex;
+                        CheckpointManager.instance.m_currentCheckpoint = null;
+                        CheckpointManager.instance.m_currentCheckpoint = this;
                     }
                     break;
             }
-
-            //Debug.Log(RoomManager.instance.PlayerInRoom);
         }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-		if (other.gameObject.CompareTag("Player"))
-		{
-			CheckpointManager.instance.m_currentCheckpoint = null;
-			CheckpointManager.instance.m_currentCheckpoint = this;
-		}
-
     }
 
 }

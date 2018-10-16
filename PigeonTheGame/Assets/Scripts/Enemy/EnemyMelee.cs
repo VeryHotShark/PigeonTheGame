@@ -5,7 +5,13 @@ using System.Collections.Generic;
 public class EnemyMelee : Enemy
 {
     // Use this for initialization
-    void Start()
+
+    public override void ResetVariables()
+    {
+        
+    }
+
+    public override void Init()
     {
         base.Init();
 

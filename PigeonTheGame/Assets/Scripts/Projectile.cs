@@ -49,10 +49,10 @@ public class Projectile : MonoBehaviour
 
         if(otherHealth != null && other.gameObject != m_objectShotFrom)
         {
-
             if(otherHealth.gameObject.GetComponent<EnemyHealth>())
             {
-                otherHealth.TakeDamage(m_damage,other.contacts[0]);
+                if(m_objectShotFrom.GetComponent<Enemy>() == null)
+                    otherHealth.TakeDamage(m_damage,other.contacts[0]);
             }
             else
                 otherHealth.TakeDamage(m_damage);

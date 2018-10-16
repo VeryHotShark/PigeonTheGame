@@ -6,6 +6,7 @@ public class PlayerHealth : Health
 {
 
 	public event System.Action<int> OnPlayerLoseHealth; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
+	public static event System.Action OnPlayerDeath; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
 
 	PlayerMovement m_playerMovement;
 
@@ -24,7 +25,11 @@ public class PlayerHealth : Health
 			OnPlayerLoseHealth(m_health); // we invoke this event
 
 		if(m_health <= 0) // if we are dead
+		{
+			if(OnPlayerDeath != null)
+				OnPlayerDeath();
 			Respawn();
+		}
 	}
 
 	void Respawn()

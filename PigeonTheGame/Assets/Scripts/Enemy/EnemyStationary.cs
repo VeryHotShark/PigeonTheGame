@@ -5,6 +5,11 @@ using UnityEngine;
 public class EnemyStationary : Enemy
 {
 
+     public override void ResetVariables()
+    {
+        
+    }
+
     [Header("Movement")]
     public int projectileAmount = 5;
 	public int projectileAmountVariation = 2;
@@ -14,7 +19,7 @@ public class EnemyStationary : Enemy
     bool m_duringRoutine;
     EnemyWeapon m_enemyWeapon;
 
-    void Start()
+    public override void Init()
     {
         base.Init();
 

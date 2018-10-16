@@ -71,6 +71,7 @@ public class CameraController : MonoBehaviour
 		m_cameraStartPos = m_camera.transform.localPosition;
 
 		PlayerWeapon.OnPlayerShoot += ZoomCrosshair; // we zoom our crosshair when playter shoot
+		PlayerHealth.OnPlayerDeath += ResetCam;
 
 		m_initFOV = m_camera.fieldOfView;
 		m_crosshairInitScale = crosshair.localScale;
@@ -209,5 +210,10 @@ public class CameraController : MonoBehaviour
 		//Debug.Log(crosshair.localScale);
 	}
 
+	void ResetCam()
+	{
+		m_yaw = 0f;
+		m_pitch = 0f;
+	}
 	
 }
