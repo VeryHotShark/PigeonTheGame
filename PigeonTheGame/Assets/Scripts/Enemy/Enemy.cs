@@ -50,8 +50,8 @@ public abstract class Enemy : MonoBehaviour
 	protected bool delayWaited = false;
 	protected bool m_isAttacking;
 	protected bool m_playerRested = true;
-	protected bool m_reset = false;
-	protected EnemyHealth m_health;
+    protected bool m_reset = false;
+    protected EnemyHealth m_health;
 	protected PlayerHealth m_playerHealth;
 	protected Transform m_playerTransform;
 	protected NavMeshAgent m_agent;
@@ -61,15 +61,20 @@ public abstract class Enemy : MonoBehaviour
 
 	public EnemyHealth enemyHealth {get { return m_health;} set { m_health = value;}}
 
-	int m_currentWaypointIndex = 0;
+    public bool Reset { get { return m_reset; } set { m_reset = value; } }
+
+    int m_currentWaypointIndex = 0;
 
 	Vector3 m_startPos;
 	Quaternion m_starRot;
 
-	public virtual void Start()
-	{
-		Init();
-	}
+	/*
+		public virtual void Start()
+		{
+			GetComponents();
+			Init();
+		}
+	 */
 
 	// Use this for initialization
 	public virtual void Init ()
@@ -77,13 +82,22 @@ public abstract class Enemy : MonoBehaviour
 		m_startPos = transform.position;
 		m_starRot = transform.rotation;
 
-
-		GetComponents();
-
 		EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
 		EnemyManager.instance.EnemyCount ++; // and we increment the count of our enemy
 		m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
 		m_health.OnEnemyDeath += UnsubscribeFromPlayer;
+
+		m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
+		PlayerHealth.OnPlayerDeath += ResetVariables;
+
+		currentState = State.Idle;
+		m_health.Init();
+
+		if(waypoints != null)
+		{
+			waypoints.waypointsArray[m_currentWaypointIndex].position = transform.position;
+			m_currentWaypoint = waypoints.waypointsArray[0].position;
+		}
 		
 		SetNavMeshAgent();
 	}
@@ -96,14 +110,6 @@ public abstract class Enemy : MonoBehaviour
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
 		m_playerTransform = m_playerHealth.gameObject.transform;
 
-		m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-		PlayerHealth.OnPlayerDeath += ResetVariables;
-
-		if(waypoints != null)
-		{
-			waypoints.waypointsArray[m_currentWaypointIndex].position = transform.position;
-			m_currentWaypoint = waypoints.waypointsArray[0].position;
-		}
 	}
 
 	public virtual void SetNavMeshAgent()
@@ -200,16 +206,22 @@ public abstract class Enemy : MonoBehaviour
 
 	public virtual void UnsubscribeFromPlayer(EnemyHealth enemy)
 	{
+		StopAllCoroutines();
 		PlayerHealth.OnPlayerDeath -= ResetVariables;
+		m_playerHealth.OnPlayerLoseHealth -= yieldForGivenTime;
+		enemy.OnEnemyDeath -= EnemyManager.instance.DecreaseEnemyCount;
 		enemy.OnEnemyDeath -= UnsubscribeFromPlayer;
 	}
 
 	public virtual void ResetVariables()
 	{
+		m_reset = true;
 		StopAllCoroutines();
-		m_health.Init();
 		transform.position = m_startPos;
 		transform.rotation = m_starRot;
+
+		m_health.Init();
+
 		currentState = State.Idle;
 	}
 }

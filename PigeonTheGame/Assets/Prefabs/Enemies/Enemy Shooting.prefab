@@ -1192,6 +1192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startHealth: 3
+  hitVFX: {fileID: 1975918751145560, guid: 127e027eeed89174fb24b651cc69c03a, type: 2}
 --- !u!114 &114902207131895976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1204,6 +1205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints: {fileID: 0}
+  roomIndex: 0
   moveType: 0
   moveSpeed: 5
   stopDistance: 1.5

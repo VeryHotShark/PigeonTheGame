@@ -14,6 +14,7 @@ public abstract class Health : MonoBehaviour
 	public virtual void Init()
 	{
 		m_health = startHealth;
+		m_isDead = false;
 	}
 
     // Use this for initialization
@@ -30,7 +31,7 @@ public abstract class Health : MonoBehaviour
 	public virtual void Die()
 	{
 		m_isDead = true;
-		Destroy(gameObject);
+		gameObject.SetActive(false);
 	}
 
 	public bool IsDead()
