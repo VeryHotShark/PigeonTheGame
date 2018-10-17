@@ -75,7 +75,7 @@ public class CameraClipDetection : MonoBehaviour
             if (hit.distance < m_initialDst && hit.distance - 1f <= m_nearestDst)
             {
                 m_clip = true;
-				Debug.Log("Prawda");
+				Debug.Log(hit.collider.transform.name);
                 m_nearestDst = hit.distance;
             }
             else

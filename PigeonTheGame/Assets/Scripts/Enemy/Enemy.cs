@@ -78,14 +78,12 @@ public abstract class Enemy : MonoBehaviour
 		m_starRot = transform.rotation;
 
 
-		if(!m_reset)
-		{
-			GetComponents();
+		GetComponents();
 
-			EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
-			EnemyManager.instance.EnemyCount ++; // and we increment the count of our enemy
-			m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
-		}
+		EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
+		EnemyManager.instance.EnemyCount ++; // and we increment the count of our enemy
+		m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
+		m_health.OnEnemyDeath += UnsubscribeFromPlayer;
 		
 		SetNavMeshAgent();
 	}
@@ -99,7 +97,7 @@ public abstract class Enemy : MonoBehaviour
 		m_playerTransform = m_playerHealth.gameObject.transform;
 
 		m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-		PlayerHealth.OnPlayerDeath += ResetEnemy;
+		PlayerHealth.OnPlayerDeath += ResetVariables;
 
 		if(waypoints != null)
 		{
@@ -200,18 +198,18 @@ public abstract class Enemy : MonoBehaviour
 		Gizmos.DrawWireSphere(transform.position, attackRange);
 	}
 
-	public virtual void ResetEnemy()
+	public virtual void UnsubscribeFromPlayer(EnemyHealth enemy)
 	{
-		if(this.gameObject == null)
-			return;
-
-		StopAllCoroutines();
-		m_reset = true;
-		transform.position = m_startPos;
-		transform.rotation = m_starRot;
-		m_health.Init();
-		//Init();
+		PlayerHealth.OnPlayerDeath -= ResetVariables;
+		enemy.OnEnemyDeath -= UnsubscribeFromPlayer;
 	}
 
-	public abstract void ResetVariables();
+	public virtual void ResetVariables()
+	{
+		StopAllCoroutines();
+		m_health.Init();
+		transform.position = m_startPos;
+		transform.rotation = m_starRot;
+		currentState = State.Idle;
+	}
 }

@@ -28,6 +28,7 @@ public class EnemyHealth : Health
 
     public override void Die()
     {
+
         if (OnEnemyDeath != null)
         {
             OnEnemyDeath(this); // call OnEnemyDeath if someone is subscribe to that event

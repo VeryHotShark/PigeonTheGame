@@ -9,7 +9,7 @@ public class EnemyRange : Enemy
 
      public override void ResetVariables()
     {
-        
+        m_anim.SetBool(m_moving, false);
     }
 
     //public WaypointNetwork patrolPath;

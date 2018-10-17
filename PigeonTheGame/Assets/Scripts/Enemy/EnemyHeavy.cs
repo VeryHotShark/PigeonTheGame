@@ -7,7 +7,11 @@ public class EnemyHeavy : Enemy
 
     public override void ResetVariables()
     {
+        base.ResetVariables();
 
+        m_duringRoutine = false;
+
+        m_anim.SetBool(m_moving, false);
     }
 
     [Header("Attack")]
