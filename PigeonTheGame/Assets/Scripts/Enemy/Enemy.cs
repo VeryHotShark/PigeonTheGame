@@ -58,6 +58,9 @@ public abstract class Enemy : MonoBehaviour
 	protected Animator m_anim;
 	protected Vector3 m_currentWaypoint;
 	protected Vector3 m_targetWaypoint;
+	protected SpawnPoint m_spawnPoint;
+
+	public SpawnPoint spawnPoint {get { return m_spawnPoint;} set {m_spawnPoint = value;}}
 
 	public EnemyHealth enemyHealth {get { return m_health;} set { m_health = value;}}
 
@@ -86,6 +89,7 @@ public abstract class Enemy : MonoBehaviour
 		EnemyManager.instance.EnemyCount ++; // and we increment the count of our enemy
 		m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
 		m_health.OnEnemyDeath += UnsubscribeFromPlayer;
+		m_health.OnEnemyDeath += EnemyDied;
 
 		m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
 		PlayerHealth.OnPlayerDeath += ResetVariables;
@@ -209,8 +213,15 @@ public abstract class Enemy : MonoBehaviour
 		StopAllCoroutines();
 		PlayerHealth.OnPlayerDeath -= ResetVariables;
 		m_playerHealth.OnPlayerLoseHealth -= yieldForGivenTime;
+		enemy.OnEnemyDeath -= EnemyDied;
 		enemy.OnEnemyDeath -= EnemyManager.instance.DecreaseEnemyCount;
 		enemy.OnEnemyDeath -= UnsubscribeFromPlayer;
+	}
+
+	public virtual void EnemyDied(EnemyHealth enemy)
+	{
+		if(spawnPoint != null)
+			spawnPoint.enemyAlive = false;
 	}
 
 	public virtual void ResetVariables()

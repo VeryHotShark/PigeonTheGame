@@ -5862,6 +5862,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   roomIndex: 0
+  enemyAlive: 0
 --- !u!1 &236771850
 GameObject:
   m_ObjectHideFlags: 0
@@ -6466,6 +6467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 2
   roomIndex: 0
+  enemyAlive: 0
 --- !u!1001 &336188900
 Prefab:
   m_ObjectHideFlags: 0
@@ -12311,6 +12313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   roomIndex: 0
+  enemyAlive: 0
 --- !u!1 &705505351
 GameObject:
   m_ObjectHideFlags: 0
@@ -13789,6 +13792,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   roomIndex: 0
+  enemyAlive: 0
 --- !u!4 &1062537875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4430572831101544, guid: a1587105a4a6d374998c7d936b614a25,
@@ -14076,6 +14080,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   roomIndex: 0
+  enemyAlive: 0
 --- !u!1 &1185514033
 GameObject:
   m_ObjectHideFlags: 0
@@ -14190,7 +14195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomIndex: 0
-  type: 0
+  type: 3
 --- !u!1 &1202991643
 GameObject:
   m_ObjectHideFlags: 0
@@ -15896,6 +15901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   roomIndex: 0
+  enemyAlive: 0
 --- !u!1 &1629320365
 GameObject:
   m_ObjectHideFlags: 0
@@ -16151,7 +16157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomIndex: 0
-  type: 1
+  type: 3
 --- !u!1 &1669035297
 GameObject:
   m_ObjectHideFlags: 0

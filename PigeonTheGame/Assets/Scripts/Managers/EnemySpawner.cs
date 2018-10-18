@@ -33,12 +33,16 @@ public class EnemySpawner : MonoBehaviour
     
     public List<EnemyPool> enemyPools = new List<EnemyPool>();
     public Dictionary<EnemyType,Queue<Enemy>> poolDictionary = new Dictionary<EnemyType, Queue<Enemy>>();
+    GameObject parentTransform;
 
     List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
 
     void Start()
     {
+        PlayerHealth.OnPlayerDeath += RespawnDeadEnemies;
+
         spawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
+        parentTransform = CreateParent();
 
         foreach(EnemyPool enemyPool in enemyPools)
         {
@@ -47,7 +51,8 @@ public class EnemySpawner : MonoBehaviour
 
         foreach(SpawnPoint spawnPoint in spawnPoints)
         {
-            ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation);
+            ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
+            spawnPoint.enemyAlive = true;
         }
     }
 
@@ -55,11 +60,15 @@ public class EnemySpawner : MonoBehaviour
     {
         if(!poolDictionary.ContainsKey(enemyType))
         {
+            
+            //GameObject parentTransform = CreateParent(enemy.roomIndex);
+
             Queue<Enemy> objectPool = new Queue<Enemy>();
 
             for(int i = 0 ; i < poolSize ; i++)
             {
                 Enemy enemyObj = Instantiate(enemy) as Enemy;
+                enemyObj.gameObject.transform.parent = parentTransform.transform;
                 enemyObj.GetComponents();
                 enemyObj.gameObject.SetActive(false);
                 objectPool.Enqueue(enemyObj);
@@ -69,7 +78,27 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    void ReuseObject(EnemyType enemyType, Vector3 position,Quaternion rotation)
+    void RespawnDeadEnemies()
+    {
+        foreach(SpawnPoint spawnPoint in spawnPoints)
+        {
+            if(spawnPoint.roomIndex == RoomManager.instance.PlayerCurrentRoom)
+            {
+                if(!spawnPoint.enemyAlive)
+                {
+                    ReuseObject(spawnPoint.enemyType,spawnPoint.transform.position,spawnPoint.transform.rotation,spawnPoint);
+                }
+            }
+        }
+    }
+
+    GameObject CreateParent(/*RoomIndex roomIndex*/)
+    {
+        //string parentName = roomIndex.ToString();
+        return new GameObject("Enemies");
+    }
+
+    void ReuseObject(EnemyType enemyType, Vector3 position,Quaternion rotation, SpawnPoint spawnPoint)
     {
         if(poolDictionary.ContainsKey(enemyType))
         {
@@ -79,6 +108,7 @@ public class EnemySpawner : MonoBehaviour
             objToReuse.transform.rotation = rotation;
 
             objToReuse.gameObject.SetActive(true);
+            objToReuse.spawnPoint = spawnPoint;
             objToReuse.Init();
             //objToReuse.ResetVariables();
 
