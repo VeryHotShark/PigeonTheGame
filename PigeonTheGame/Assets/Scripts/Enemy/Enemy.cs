@@ -227,9 +227,15 @@ public abstract class Enemy : MonoBehaviour
 	public virtual void ResetVariables()
 	{
 		m_reset = true;
+
+
+		m_agent.Stop();
+		m_agent.ResetPath();
+
+		transform.position = m_spawnPoint.transform.position;
+		transform.rotation = m_spawnPoint.transform.rotation;
+
 		StopAllCoroutines();
-		transform.position = m_startPos;
-		transform.rotation = m_starRot;
 
 		m_health.Init();
 

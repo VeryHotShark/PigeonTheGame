@@ -52,7 +52,6 @@ public class EnemySpawner : MonoBehaviour
         foreach(SpawnPoint spawnPoint in spawnPoints)
         {
             ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
-            spawnPoint.enemyAlive = true;
         }
     }
 
@@ -109,6 +108,7 @@ public class EnemySpawner : MonoBehaviour
 
             objToReuse.gameObject.SetActive(true);
             objToReuse.spawnPoint = spawnPoint;
+            objToReuse.spawnPoint.enemyAlive = true;
             objToReuse.Init();
             //objToReuse.ResetVariables();
 
