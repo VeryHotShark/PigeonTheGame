@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class EnemyRange : Enemy
 {
 
-     public override void ResetVariables()
+    public override void ResetVariables()
     {
         m_anim.SetBool(m_moving, false);
     }
@@ -107,22 +107,20 @@ public class EnemyRange : Enemy
         randomPoint.y = transform.position.y; // set the y value of that random point to be the same as enemy y value
         Vector3 randomPosOnNavMesh = Vector3.zero; // declaring a Vector3 to store randomPosOnNavMesh
 
-        if (NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas)) // if there is navMesh on random point that we specified
-        {
-            randomPosOnNavMesh = hit.position; // we assign that navMesh position to our randomPosOnNavMesh variable
-            m_agent.SetDestination(randomPosOnNavMesh); // and we set our agent to move there
-        }
-        else // if there is no navMesh in specified position we sample random position till we get the random pos that is on our navMesh || TODO to fix because now randomPoint is generated only one time so we will never get to sample other randomPoint so basically we can get stuck and stay in one position
-        {
-            while (NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas) == false) // while the result of sampling position is false we keep doing that till we get the good random point
-            {
-                NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas);
-                randomPosOnNavMesh = hit.position;
-                m_agent.SetDestination(randomPosOnNavMesh);
+        bool foundPos = false;
 
-                yield return null;
+        while (foundPos == false) // while the result of sampling position is false we keep doing that till we get the good random point
+        {
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas)) // if there is navMesh on random point that we specified
+            {
+                foundPos = true;
+                randomPosOnNavMesh = hit.position; // we assign that navMesh position to our randomPosOnNavMesh variable
+                m_agent.SetDestination(randomPosOnNavMesh); // and we set our agent to move there
             }
+
+            yield return null;
         }
+
 
 
         //    DEBUG PURPOSES

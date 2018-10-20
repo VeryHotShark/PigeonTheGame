@@ -13,6 +13,7 @@ public class PlayerWeapon : MonoBehaviour
 	public LayerMask layerMask;
 
 	public int damage = 1;
+	public float timeBetweenShot = 0.5f;
 
 	public GameObject playerWeapon;
 
@@ -53,6 +54,8 @@ public class PlayerWeapon : MonoBehaviour
 
 	Transform m_middleSpawnPoint;
 
+	float timer;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -82,48 +85,53 @@ public class PlayerWeapon : MonoBehaviour
 
 		// IF PLAYER PRESS SHOOT INPUT
 
+		timer -= Time.deltaTime;
+
 		if(m_playerInput.ShootInput)	
 		{
-			SpawnVFX();
-
-			//CameraShake.shakeType = CameraShake.ShakeType.Rot;
-			//CameraShake.isShaking = true;
-
-			// RECOIL
-			
-			playerWeapon.transform.localPosition -= transform.InverseTransformDirection(playerWeapon.transform.forward) * kickPower;
-			rotationWhenShot += rotationAmount;
-
-
-			if(OnPlayerShoot != null)
-				OnPlayerShoot();
-
-			// CAST RAY TO CHECK IF WE HIT SOMETHING 
-
-			Ray ray = new Ray(m_camera.transform.position, m_camera.transform.forward);
-			RaycastHit hit;
-			bool hitSomething = Physics.Raycast(ray, out hit,100f, layerMask, QueryTriggerInteraction.Collide);
-
-			if(hitSomething) // If we did
+			if(timer <= 0f)
 			{
-				Vector3 shootDir = (hit.point - m_middleSpawnPoint.position).normalized; // we calculate the shoot dir by substracting our spawn position from the point we hit
+				SpawnVFX();
 
-				foreach(Transform spawnPoint in spawnPoints) // foreach spawn point in our spawnpoints array
+				// RECOIL
+				
+				playerWeapon.transform.localPosition -= transform.InverseTransformDirection(playerWeapon.transform.forward) * kickPower;
+				rotationWhenShot += rotationAmount;
+
+
+				if(OnPlayerShoot != null)
+					OnPlayerShoot();
+
+				// CAST RAY TO CHECK IF WE HIT SOMETHING 
+
+				Ray ray = new Ray(m_camera.transform.position, m_camera.transform.forward);
+				RaycastHit hit;
+				bool hitSomething = Physics.Raycast(ray, out hit,100f, layerMask, QueryTriggerInteraction.Collide);
+
+				if(hitSomething) // If we did
 				{
-					if(spawnPoint != spawnPoints[0]) // if its not middle spawnPoint
+					Vector3 shootDir = (hit.point - m_middleSpawnPoint.position).normalized; // we calculate the shoot dir by substracting our spawn position from the point we hit
+
+					foreach(Transform spawnPoint in spawnPoints) // foreach spawn point in our spawnpoints array
 					{
-						Vector3 randomHitPoint = (hit.point + Random.insideUnitSphere * (m_playerInput.ZoomInput ? zoomSpreadPower : spreadPower )) + Vector3.up * 0.5f; // We add to point we hit random point that is inside sphere with radius of 1 so it will not shoot directly in middle 
+						if(spawnPoint != spawnPoints[0]) // if its not middle spawnPoint
+						{
+							Vector3 randomHitPoint = (hit.point + Random.insideUnitSphere * (m_playerInput.ZoomInput ? zoomSpreadPower : spreadPower )) + Vector3.up * 0.5f; // We add to point we hit random point that is inside sphere with radius of 1 so it will not shoot directly in middle 
 
-						shootDir = (randomHitPoint - spawnPoint.position).normalized; // and now it will be our shootDireciton
+							shootDir = (randomHitPoint - spawnPoint.position).normalized; // and now it will be our shootDireciton
+						}
+
+						Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile; // we spawn projectile
+						
+						obj.OnProjectileSpawn(shootDir, force, damage, projectileLife, transform.gameObject); // and we give it that direction ,force, damage etc
 					}
-
-					Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile; // we spawn projectile
-					
-					obj.OnProjectileSpawn(shootDir, force, damage, projectileLife, transform.gameObject); // and we give it that direction ,force, damage etc
 				}
+
+				Debug.DrawLine(m_camera.transform.position, hit.point, Color.red, 2f);
+
+				timer = timeBetweenShot;
 			}
 
-			Debug.DrawLine(m_camera.transform.position, hit.point, Color.red, 2f);
 		}
 
 	}

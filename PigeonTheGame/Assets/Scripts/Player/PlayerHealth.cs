@@ -46,10 +46,17 @@ public class PlayerHealth : Health
 	{
 		if(transform.position.y < -10f) // if we fall below -10f respawn
 		{
-			transform.position = CheckpointManager.instance.m_currentCheckpoint.transform.position;
-			m_playerMovement.Rigid.velocity = Vector3.zero;
-			m_playerMovement.LastMoveVector = Vector3.zero;
+			if(OnPlayerDeath != null)
+				OnPlayerDeath();
+
+			Respawn();
 		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if(other.gameObject.layer == LayerMask.NameToLayer("Trap"))
+			TakeDamage(1);
 	}
 
 }

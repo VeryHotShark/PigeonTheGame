@@ -17,7 +17,15 @@ public class PlayerMovement : MonoBehaviour
     public float aimMoveSpeed;
     public float smoothTime;
     public float turnSpeed;
+
+    [Space]
+    [Header("Player Dash")]
     public float dashPower = 5f;
+    public float dashDistance = 3f;
+    public float dashTime = 0.2f;
+    public LayerMask dashLayerMask;
+    public AnimationCurve dashCurve;
+
 
     [Space]
     [Header("Player Jump")]
@@ -50,7 +58,9 @@ public class PlayerMovement : MonoBehaviour
     float m_angle;
 
     bool m_isGrounded;
-
+    bool m_dashing;
+    bool m_dashedInAir;
+    bool m_allowDash;
 
     // ANIMATOR
 
@@ -122,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 0.6f, groundLayerMask))
         {
             m_playerInput.InputEnabled = true;
+            m_allowDash = true;
             m_isGrounded = true;
         }
         else
@@ -136,18 +147,67 @@ public class PlayerMovement : MonoBehaviour
 
         if (m_playerInput.DashInput)
         {
-            StartCoroutine(StopDashVFX());
 
-            m_rigid.AddForce(m_moveDir * dashPower, ForceMode.Impulse);
-            //Debug.Log("Dash Used :" + moveDir);
-            // Or you can do different way for example moving exactly 2 meters in some direction by Translate or lerping
+            if(m_allowDash)
+            {
+                StartCoroutine(StopDashVFX());
+
+                if(!m_isGrounded)
+                {
+                    m_dashedInAir = true;
+                    m_allowDash = false;
+                }
+
+                if(!m_dashing)
+                    StartCoroutine(Dash());
+            }
+
+
+            //m_rigid.AddForce(m_moveDir * dashPower, ForceMode.Impulse);
         }
+    }
+
+    IEnumerator Dash()
+    {
+        //m_playerInput.InputEnabled = true;
+        m_dashing = true;
+
+        float percent = 0f;
+        float speed = 1f / dashTime;
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = startPos + m_moveDir.normalized * dashDistance;
+
+        // CHECK IF THERE SOME OBSTACLE ON OUR WAY
+        //Vector3 rayDir = new Vector3(m_moveDir.x, startPos.y,m_moveDir.z).normalized;
+        Ray ray = new Ray(startPos, m_moveDir.normalized);
+        RaycastHit hit;
+
+        bool hitSomething = Physics.Raycast(ray, out hit, dashDistance, dashLayerMask,QueryTriggerInteraction.Ignore);
+
+
+        if(hitSomething)
+        {
+            endPos = hit.point + hit.normal * 1f;
+            Debug.DrawLine(startPos,endPos,Color.red,3f);
+        }
+
+        while(percent < 1f)
+        {
+            percent += Time.deltaTime * speed;
+            transform.position = Vector3.Lerp(startPos, endPos, dashCurve.Evaluate(percent));
+
+            yield return null;
+        }
+
+        m_dashing = false;
+        //m_playerInput.InputEnabled = false;
     }
 
     IEnumerator StopDashVFX()
     {
         dashVFX.emitting = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(dashTime);
         dashVFX.emitting = false;
     }
 

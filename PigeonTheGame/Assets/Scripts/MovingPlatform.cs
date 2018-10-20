@@ -17,7 +17,7 @@ public class MovingPlatform : MonoBehaviour
 	public AnimationCurve moveCurve = AnimationCurve.Linear(0f,0f,1f,1f);
 
 	public bool falling;
-	public bool alreadyFall;
+	bool alreadyFall;
 
 	public float fallingDelay = 1f;
 
@@ -27,7 +27,8 @@ public class MovingPlatform : MonoBehaviour
 
 	public float waitDuration = 0f;
 
-	//Vector3 m_startPos;
+	Vector3 m_startPos;
+	
 	Vector3 m_targetWaypoint;
 
 	Vector3 m_currentWaypoint;
@@ -36,10 +37,25 @@ public class MovingPlatform : MonoBehaviour
 
 	Rigidbody m_rigid;
 
+
     // Use this for initialization
     void Start()
     {
 		m_rigid = GetComponent<Rigidbody>();
+
+		if(falling)
+			PlayerHealth.OnPlayerDeath += Reset;
+
+		m_startPos = transform.position;
+
+		Init();
+
+    }
+
+	void Init()
+	{
+
+
 		if(waypoints != null)
 		{
 			waypoints.waypointsArray[0].position = transform.position;
@@ -48,8 +64,7 @@ public class MovingPlatform : MonoBehaviour
 
 		if(moveType != MoveType.Static)
 			MoveToNextWaypoint();
-
-    }
+	}
 
     // Update is called once per frame
     void GetNextWaypoint()
@@ -142,6 +157,15 @@ public class MovingPlatform : MonoBehaviour
 		m_rigid.isKinematic = false;
 
 		alreadyFall = true;
+	}
+
+	void Reset()
+	{
+		transform.position = m_startPos;
+		m_rigid.isKinematic = true;
+		m_rigid.useGravity = false;
+
+		Init();
 	}
 
 }

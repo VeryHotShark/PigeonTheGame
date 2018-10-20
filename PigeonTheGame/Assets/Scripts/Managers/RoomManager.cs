@@ -10,7 +10,11 @@ public enum RoomIndex
     Second,
     Third,
     Fourth,
-    Fifth
+    Fifth,
+    FirstCorridor,
+    SecondCorridor,
+    ThirdCorridor,
+    FourthCorridor
 }
 
 

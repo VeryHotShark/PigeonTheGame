@@ -1231,7 +1231,7 @@ MonoBehaviour:
   damage: 1
   speed: 35
   projectileLife: 3
-  projectile: {fileID: 114875321109015342, guid: 27e31d66c5f491545aceb5a09488948e,
+  projectile: {fileID: 114177798566745280, guid: 1e3a7a91d832d314691e20f183ce37c5,
     type: 2}
   spawnPoint: {fileID: 4784540998680984}
 --- !u!137 &137068400536421592
