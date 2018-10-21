@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: ShootMask
+  m_Mask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/Neck2
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/Neck2/Neck1
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/Neck2/Neck1/Head
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/Neck2/Neck1/Head/Head_end
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.L
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.L/upper_arm.L
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.L/upper_arm.L/forearm.L
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.L/upper_arm.L/forearm.L/hand.L
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.L/upper_arm.L/forearm.L/hand.L/hand.L_end
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.R
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.R/upper_arm.R
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.R/upper_arm.R/forearm.R
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.R/upper_arm.R/forearm.R/hand.R
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Belly/Chest2/Chest1/shoulder.R/upper_arm.R/forearm.R/hand.R/hand.R_end
+    m_Weight: 1
+  - m_Path: BrandonTheRig.002/spine/Tail3
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Tail3/Tail2
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Tail3/Tail2/Tail1
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Tail3/Tail2/Tail1/Tail1_end
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.L
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.L/Lower_leg.L
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.L/Lower_leg.L/Foot.L
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.L/Lower_leg.L/Foot.L/Toes.L
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.L/Lower_leg.L/Foot.L/Toes.L/Toes.L_end
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.R
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.R/Lower_leg.R
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.R/Lower_leg.R/Foot.R
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.R/Lower_leg.R/Foot.R/Toes.R
+    m_Weight: 0
+  - m_Path: BrandonTheRig.002/spine/Upper_leg.R/Lower_leg.R/Foot.R/Toes.R/Toes.R_end
+    m_Weight: 0
+  - m_Path: PigeonRemap
+    m_Weight: 1

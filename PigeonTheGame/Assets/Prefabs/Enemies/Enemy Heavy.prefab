@@ -1224,7 +1224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   speed: 70
-  projectileLife: 3
+  projectileLife: 40
   projectile: {fileID: 114875321109015342, guid: 215c6cf03155c304681816a00cc66d88,
     type: 2}
   spawnPoint: {fileID: 4061900842244974}

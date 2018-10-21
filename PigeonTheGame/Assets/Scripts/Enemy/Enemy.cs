@@ -119,6 +119,7 @@ public abstract class Enemy : MonoBehaviour
 	public virtual void SetNavMeshAgent()
 	{
 		m_agent.speed = moveSpeed;
+		m_agent.acceleration = moveSpeed + 5f;
 	}
 
 	

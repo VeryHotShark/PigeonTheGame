@@ -6,6 +6,9 @@ public class EnemyMelee : Enemy
 {
     // Use this for initialization
 
+    int m_moving = Animator.StringToHash("Moving");
+    int m_shooting = Animator.StringToHash("Shooting");
+
     public override void ResetVariables()
     {
         base.ResetVariables();
@@ -58,12 +61,14 @@ public class EnemyMelee : Enemy
             {
                 if (!m_isAttacking) // if we are not already attacking TODO Chnage this to use State.Attack instead of bool m_isAttacking
                 {
+                    m_anim.SetBool(m_moving, false);
                     FaceTarget();
                     StartCoroutine(AttackTarget());
                 }
             }
             else // if player is outside attackRange
             {
+                m_anim.SetBool(m_moving, true);
                 currentState = State.Chase;
             }
         }
@@ -97,6 +102,7 @@ public class EnemyMelee : Enemy
 
         while (!m_playerHealth.IsDead() && Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && m_playerRested) // if player is not dead and player is withinRange
         {
+            m_anim.SetTrigger(m_shooting);
             m_playerHealth.TakeDamage(1); // we make it take one damage
             Debug.Log("HIT");
             yield return new WaitForSeconds(attackRate); // wait for some delay before next attack

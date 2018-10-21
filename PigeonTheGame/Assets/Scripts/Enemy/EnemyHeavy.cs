@@ -84,7 +84,7 @@ public class EnemyHeavy : Enemy
         while (amountToShoot > 0 && m_playerRested) // while amount to shoot is greater than 0
         {
             m_anim.SetTrigger(m_shooting);
-            m_enemyWeapon.ShootProjectile(); // we spawn projectile
+            m_enemyWeapon.ShootProjectile(m_playerTransform.position); // we spawn projectile
             amountToShoot--; // we decrease amountToShoot by one
             yield return new WaitForSeconds(attackRate); // and we wait for some time between shots
         }

@@ -16,6 +16,8 @@ public class PlayerWeapon : MonoBehaviour
 	public float timeBetweenShot = 0.5f;
 
 	public GameObject playerWeapon;
+	public Transform shellTransform;
+	public GameObject shell;
 
 	[Space]
 	[Header("recoil")]
@@ -53,6 +55,10 @@ public class PlayerWeapon : MonoBehaviour
 	Camera m_camera;
 
 	Transform m_middleSpawnPoint;
+	Animator m_anim;
+
+
+	int m_shootHash = Animator.StringToHash("Shoot");
 
 	float timer;
 
@@ -72,6 +78,7 @@ public class PlayerWeapon : MonoBehaviour
 		m_playerInput = GetComponent<PlayerInput>();
 		m_cameraController = FindObjectOfType<CameraController>();
 		m_camera = m_cameraController.GetComponentInChildren<Camera>();
+		m_anim = GetComponentInChildren<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -91,6 +98,8 @@ public class PlayerWeapon : MonoBehaviour
 		{
 			if(timer <= 0f)
 			{
+				m_anim.SetTrigger(m_shootHash);
+
 				SpawnVFX();
 
 				// RECOIL
@@ -98,15 +107,13 @@ public class PlayerWeapon : MonoBehaviour
 				playerWeapon.transform.localPosition -= transform.InverseTransformDirection(playerWeapon.transform.forward) * kickPower;
 				rotationWhenShot += rotationAmount;
 
-
-				if(OnPlayerShoot != null)
-					OnPlayerShoot();
-
 				// CAST RAY TO CHECK IF WE HIT SOMETHING 
-
 				Ray ray = new Ray(m_camera.transform.position, m_camera.transform.forward);
 				RaycastHit hit;
 				bool hitSomething = Physics.Raycast(ray, out hit,100f, layerMask, QueryTriggerInteraction.Collide);
+
+				if(OnPlayerShoot != null)
+					OnPlayerShoot();
 
 				if(hitSomething) // If we did
 				{
@@ -167,6 +174,10 @@ public class PlayerWeapon : MonoBehaviour
 		GameObject vfx = Instantiate(muzzleflashVFX,m_middleSpawnPoint.position,playerWeapon.transform.rotation) as GameObject;
 		vfx.transform.parent = playerWeapon.transform;
 		Destroy(vfx,2f);
+
+		GameObject shellVFX = Instantiate(shell,shellTransform.position,shellTransform.rotation) as GameObject;
+		//vfx.transform.parent = playerWeapon.transform;
+		Destroy(shellVFX,3f);
 	}
 
 }

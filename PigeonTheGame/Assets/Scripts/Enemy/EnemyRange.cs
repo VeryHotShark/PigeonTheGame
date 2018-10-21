@@ -87,7 +87,7 @@ public class EnemyRange : Enemy
         yield return new WaitForSeconds(0.3f); // wait for very small delay when reaching new Pos before shooting a shot 
 
         m_anim.SetTrigger(m_shooting);
-        m_enemyWeapon.ShootProjectile(); // spawn projectile
+        m_enemyWeapon.ShootProjectile(m_playerTransform.position); // spawn projectile
 
     }
 

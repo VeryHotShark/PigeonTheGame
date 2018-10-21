@@ -65,7 +65,7 @@ public class EnemyStationary : Enemy
 
         while (amountToShoot > 0 && m_playerRested) // while projectile amount is > 0
         {
-            m_enemyWeapon.ShootProjectile(); // shoot projectile
+            m_enemyWeapon.ShootProjectile(m_playerTransform.position); // shoot projectile
             amountToShoot--; // decrement by one
             yield return new WaitForSeconds(attackRate); // wait for some delay and repeat while amount is > 0
         }

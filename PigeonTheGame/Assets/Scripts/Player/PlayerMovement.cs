@@ -70,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
 
     int m_directionXHash = Animator.StringToHash("X");
     int m_directionYHash = Animator.StringToHash("Y");
+    int m_dashHash = Animator.StringToHash("Dash");
+    int m_inAirHash = Animator.StringToHash("InAir");
 
     public Rigidbody Rigid
     { get { return m_rigid; } set { m_rigid = value; } }
@@ -131,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 0.6f, groundLayerMask))
         {
+            m_anim.SetBool(m_inAirHash, false);
             m_playerInput.InputEnabled = true;
             m_allowDash = true;
             m_isGrounded = true;
@@ -138,6 +141,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             m_isGrounded = false;
+             m_anim.SetBool(m_inAirHash, true);
         }
     }
 
@@ -150,6 +154,8 @@ public class PlayerMovement : MonoBehaviour
 
             if(m_allowDash)
             {
+                m_anim.SetTrigger(m_dashHash);
+
                 StartCoroutine(StopDashVFX());
 
                 if(!m_isGrounded)
@@ -263,6 +269,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (m_playerInput.JumpInput) // if we pressed jump button
             {
+                m_anim.SetBool(m_inAirHash, true);
                 m_isGrounded = false; // we are not on ground anymore
                 m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse); // we add upwards force to make our player jump
             }

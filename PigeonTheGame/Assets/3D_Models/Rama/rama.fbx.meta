@@ -1,18 +1,35 @@
 fileFormatVersion: 2
-guid: be0b5a1f93838234a869dc13fdd0ab82
+guid: 77c113714dab5ef4b8dda38df8c011a4
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: Pigeon
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube.005
-    9500000: //RootNode
-  externalObjects: {}
+    100000: 44458548_310328016223171_2362757471983894528_n
+    100002: Cube
+    100004: //RootNode
+    400000: 44458548_310328016223171_2362757471983894528_n
+    400002: Cube
+    400004: //RootNode
+    2100000: 44458548_310328016223171_2362757471983894528_n
+    2100002: Material.001
+    2300000: 44458548_310328016223171_2362757471983894528_n
+    2300002: Cube
+    3300000: 44458548_310328016223171_2362757471983894528_n
+    3300002: Cube
+    4300000: 44458548_310328016223171_2362757471983894528_n
+    4300002: Cube
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 44458548_310328016223171_2362757471983894528_n
+    second: {fileID: 2100000, guid: 8760d4a92ca23c54fb1c0974dca377dd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 4b8919050fa4fdb45828c68216859dca, type: 2}
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -30,7 +47,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -61,8 +78,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
