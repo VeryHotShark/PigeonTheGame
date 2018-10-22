@@ -242,4 +242,5 @@ public abstract class Enemy : MonoBehaviour
 
 		currentState = State.Idle;
 	}
+
 }

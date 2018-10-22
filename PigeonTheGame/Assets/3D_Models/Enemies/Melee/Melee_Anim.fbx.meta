@@ -91,7 +91,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: color raven
-    second: {fileID: 2100000, guid: 199d02311c8e87541a98a1c1a2f9f98c, type: 2}
+    second: {fileID: 2100000, guid: 061c5f55e727f224bb207a8788d2737f, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -170,7 +170,15 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.41095892
+        functionName: DealDamage
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: d5ec273dea541f04f84a34df14cc9259,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
