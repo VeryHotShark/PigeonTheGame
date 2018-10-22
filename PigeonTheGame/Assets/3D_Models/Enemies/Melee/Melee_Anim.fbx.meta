@@ -72,6 +72,7 @@ ModelImporter:
     400064: Upper_leg.L
     400066: Upper_leg.R
     2100000: Material
+    2100002: color raven
     4300000: Cube
     7400000: Running
     7400002: SebaTheRig|Atack
@@ -79,12 +80,23 @@ ModelImporter:
     7400006: SebaTheRig|Shoot
     9500000: //RootNode
     13700000: Cube
-  externalObjects: {}
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: af2d6724c9dfd7b4bac788f88e1d1961, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: color raven
+    second: {fileID: 2100000, guid: 199d02311c8e87541a98a1c1a2f9f98c, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -118,7 +130,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

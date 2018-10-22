@@ -79,6 +79,8 @@ ModelImporter:
     400072: Upper_leg.R
     2100000: No Name
     2100002: Material
+    2100004: texture raven
+    2100006: Material.002
     4300000: Eyes
     4300002: Seba
     4300004: Hat
@@ -90,12 +92,17 @@ ModelImporter:
     13700000: Eyes
     13700002: Hat
     13700004: Seba
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 7792bb79efefafc41ab5f36a2da080b6, type: 3}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
