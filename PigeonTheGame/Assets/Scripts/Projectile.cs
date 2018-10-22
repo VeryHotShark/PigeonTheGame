@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo będą rózne rodzaje pocisków np gracza , kruków , heavy itp
 {
+    public AnimationCurve lifeSizeCurve;
+
+    float lifePercent;
 
     int m_damage;
 
@@ -14,13 +17,17 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     float myForce;
     float m_speed;
     float m_distance;
+    float m_lifeTime;
 
     Vector3 m_startPos;
     Vector3 m_dir;
 
+    Vector3 m_startSize;
+
     // Use this for initialization
     public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
+        m_startSize = transform.localScale;
         m_startPos = transform.position;
         myForce = force;
         m_speed = force;
@@ -32,9 +39,16 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         m_damage = damage;
 		m_rigid.AddForce(dir * force, ForceMode.Impulse);
         m_distance = lifeTime;
-		Destroy(gameObject, 2f);
+        m_lifeTime = lifeTime;
+		//Destroy(gameObject, lifeTime);
+
+        StartCoroutine(SizeOverLifetime());
     }
 
+	void GetComponents()
+	{
+		m_rigid = GetComponent<Rigidbody>();
+	}
     void Update()
     {
         // (transform.position - m_startPos).sqrMagnitude || CHANGE TO THIS LATER TODO zmień sposób liczenia dystansu bo teraz on liczy jak dalkeo jest od spawnPointu a nie ile już drogi przeleciał, ale żeby zrobić żebyśmy znali dystans jaki przemieszcza się co klatkę to trzeba by było albo zrobić kalkulacje jego pozycji tearzniejszej klatki odciąć z poprzednią i tego wyliczyć dystans przebyty i dodać do sumy dystans albo jak zmienić żeby projectile leciał Transform.Translate to wtedy możesz wyliczyć dystans który przybędzie do następnej klatki tak : dystans = speed * Time.deltaTime  
@@ -42,16 +56,14 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         //transform.Translate(transform.InverseTransformDirection(m_dir) * m_speed * Time.deltaTime);
 
-        if( Vector3.Distance(m_startPos, transform.position) > m_distance)
-        {
-            Destroy(gameObject);
-        }
+        /*
+            if( Vector3.Distance(m_startPos, transform.position) > m_distance)
+            {
+                Destroy(gameObject);
+            }
+         */
     }
 
-	void GetComponents()
-	{
-		m_rigid = GetComponent<Rigidbody>();
-	}
 
     void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
     {
@@ -89,5 +101,24 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         transform.eulerAngles = new Vector3(0f,rotation, 0f);
         m_rigid.AddForce(reflectDir * myForce, ForceMode.Impulse);
 
+    }
+
+    IEnumerator SizeOverLifetime()
+    {
+        float percent = 0f;
+        float speed = 1f / m_lifeTime;
+
+        float desiredSize;
+
+        while(percent < 1f)
+        {
+            percent += Time.deltaTime * speed;
+            desiredSize = lifeSizeCurve.Evaluate(percent);
+            transform.localScale = Vector3.Lerp(m_startSize, Vector3.zero, desiredSize) ;
+
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 }

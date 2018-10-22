@@ -76,9 +76,12 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody Rigid
     { get { return m_rigid; } set { m_rigid = value; } }
 
+    public Animator Anim
+    { get { return m_anim; } set { m_anim = value; } }
+
     public Vector3 LastMoveVector { get { return m_lastMoveDir; } set { m_lastMoveDir = value; } }
 
-    void Start()
+    void Awake()
     {
         GetComponents();
 
