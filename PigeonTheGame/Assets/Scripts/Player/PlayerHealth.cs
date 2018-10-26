@@ -1,69 +1,50 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : Health
 {
 
-	public float respawnDelay;
+    public float respawnDelay;
 
     public event System.Action<int> OnPlayerLoseHealth; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
-    public static event System.Action OnPlayerDeath; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
+    public static event System.Action OnPlayerDeath;
+    public static event System.Action OnPlayerRespawn;
 
     PlayerMovement m_playerMovement;
 
-    Collider[] m_collidersArray;
     Rigidbody m_rigid;
 
-    Rigidbody[] m_childrenRigidsArray;
-    Collider[] m_childrenCollidersArray;
-
-	Animator m_anim;
-
-    void GetComponents()
+    public override void GetComponents()
     {
         m_playerMovement = GetComponent<PlayerMovement>();
 
-		m_anim = m_playerMovement.Anim;
+        m_anim = m_playerMovement.Anim;
         m_rigid = m_playerMovement.Rigid;
 
         m_collidersArray = GetComponents<Collider>();
 
-        m_childrenRigidsArray = GetComponentsInChildren<Rigidbody>();
+        m_childrenRigidsList = GetComponentsInChildren<Rigidbody>().ToList();
         m_childrenCollidersArray = GetComponentsInChildren<Collider>();
 
-		Debug.Log(m_childrenRigidsArray.Length);
-		Debug.Log(m_childrenCollidersArray.Length);
+        RemoveParentRigidFromList();
+        GetRagdollInitTransforms();
 
         RagdollToggle(false);
     }
 
-    void RagdollToggle(bool state)
+    void RemoveParentRigidFromList()
     {
-        if ( m_childrenCollidersArray != null)
-        {
-			for(int i = 0; i< m_childrenCollidersArray.Length ; i++)
-				m_childrenCollidersArray[i].enabled = state;
-		}
 
-		if(m_childrenRigidsArray != null )
-		{
-            for (int i = 0; i < m_childrenRigidsArray.Length ; i++)
+        for (int i = 0; i < m_childrenRigidsList.Count; i++)
+        {
+            if (m_rigid == m_childrenRigidsList[i])
             {
-                m_childrenRigidsArray[i].detectCollisions = state;
-				m_childrenRigidsArray[i].useGravity = state;
-				m_childrenRigidsArray[i].isKinematic = !state;
+                m_childrenRigidsList.Remove(m_childrenRigidsList[i]);
+                return;
             }
         }
-
-		m_anim.enabled = !state;
-
-		m_rigid.detectCollisions = !state;
-		m_rigid.useGravity = !state;
-		m_rigid.isKinematic = state;
-
-		foreach(Collider c in m_collidersArray)
-			c.enabled = !state;
     }
 
     public void Start()
@@ -72,7 +53,7 @@ public class PlayerHealth : Health
 
         GetComponents();
 
-		RagdollToggle(false);
+        RagdollToggle(false);
     }
 
     public override void TakeDamage(int damage)
@@ -88,13 +69,19 @@ public class PlayerHealth : Health
             if (OnPlayerDeath != null)
                 OnPlayerDeath();
 
-			RagdollToggle(true);
+            m_isDead = true;
+            RagdollToggle(true);
             StartCoroutine(RespawnAfterDelay());
         }
     }
 
     void Respawn()
     {
+        m_isDead = false;
+
+        if (OnPlayerRespawn != null)
+            OnPlayerRespawn();
+
         transform.position = CheckpointManager.instance.m_currentCheckpoint.transform.position; // go to last checkpoint that we were in
         m_playerMovement.Rigid.velocity = Vector3.zero; // set velocity to zero
         m_playerMovement.LastMoveVector = Vector3.zero; // and direction to zero so when respawnning player won't keep the speed from before
@@ -102,14 +89,15 @@ public class PlayerHealth : Health
         m_health = base.startHealth; // reset health
     }
 
-	IEnumerator RespawnAfterDelay()
-	{
-		yield return new WaitForSeconds(respawnDelay);
+    IEnumerator RespawnAfterDelay()
+    {
+        yield return new WaitForSeconds(respawnDelay);
 
-		RagdollToggle(false);
-		Respawn();
+        RagdollToggle(false);
+        ResetRagdollTransform();
+        Respawn();
 
-	}
+    }
 
     public void Update()
     {
@@ -126,6 +114,33 @@ public class PlayerHealth : Health
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Trap"))
             TakeDamage(1);
+    }
+
+    public override void RagdollToggle(bool state)
+    {
+        if (m_childrenCollidersArray != null)
+        {
+            for (int i = 0; i < m_childrenCollidersArray.Length; i++)
+                m_childrenCollidersArray[i].enabled = state;
+        }
+
+        if (m_childrenRigidsList != null)
+        {
+            for (int i = 0; i < m_childrenRigidsList.Count; i++)
+            {
+                m_childrenRigidsList[i].detectCollisions = state;
+                m_childrenRigidsList[i].useGravity = state;
+                m_childrenRigidsList[i].isKinematic = !state;
+            }
+        }
+
+        m_anim.enabled = !state;
+        m_rigid.detectCollisions = !state;
+        m_rigid.useGravity = !state;
+        m_rigid.isKinematic = state;
+
+        foreach (Collider c in m_collidersArray)
+            c.enabled = !state;
     }
 
 }

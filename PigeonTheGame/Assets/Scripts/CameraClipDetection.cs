@@ -75,13 +75,13 @@ public class CameraClipDetection : MonoBehaviour
             if (hit.distance < m_initialDst && hit.distance - 1f <= m_nearestDst)
             {
                 m_clip = true;
-				Debug.Log(hit.collider.transform.name);
+				//Debug.Log(hit.collider.transform.name);
                 m_nearestDst = hit.distance;
             }
             else
             {
                 m_clip = false;
-				Debug.Log("Falsz1");
+				//Debug.Log("Falsz1");
                 m_nearestDst = m_currentDst;
             }
         }

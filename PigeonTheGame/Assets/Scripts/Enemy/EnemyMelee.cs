@@ -115,7 +115,7 @@ public class EnemyMelee : Enemy
 	public void DealDamage()
 	{
 		m_playerHealth.TakeDamage(1); // we make it take one damage
-		Debug.Log("EVENT");
+		//Debug.Log("EVENT");
 	}
 
 }

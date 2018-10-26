@@ -7489,10 +7489,6 @@ Prefab:
       value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1090239723911262, guid: 8641bf19060cc31428f65b5932c4b273, type: 2}
-      propertyPath: m_Name
-      value: Enemy Melee (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090239723911262, guid: 8641bf19060cc31428f65b5932c4b273, type: 2}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -12969,19 +12965,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4738201739147234, guid: 31ac348808462f743ac5e97d6acd213f, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4738201739147234, guid: 31ac348808462f743ac5e97d6acd213f, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.9791874
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4738201739147234, guid: 31ac348808462f743ac5e97d6acd213f, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4738201739147234, guid: 31ac348808462f743ac5e97d6acd213f, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.20295826
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4738201739147234, guid: 31ac348808462f743ac5e97d6acd213f, type: 2}
       propertyPath: m_RootOrder

@@ -71,7 +71,9 @@ public class CameraController : MonoBehaviour
 		m_cameraStartPos = m_camera.transform.localPosition;
 
 		PlayerWeapon.OnPlayerShoot += ZoomCrosshair; // we zoom our crosshair when playter shoot
-		PlayerHealth.OnPlayerDeath += ResetCam;
+		PlayerHealth.OnPlayerDeath += DisableCamWhenDead;
+		PlayerHealth.OnPlayerRespawn += ResetCam;
+		PlayerHealth.OnPlayerRespawn += ReenableCamWhenRespawn;
 
 		m_initFOV = m_camera.fieldOfView;
 		m_crosshairInitScale = crosshair.localScale;
@@ -121,7 +123,17 @@ public class CameraController : MonoBehaviour
 
     }
 
+	void DisableCamWhenDead()
+	{
+		m_playerInput.MouseEnabled = false;
+		m_playerInput.InputEnabled = false;
+	}
 
+	void ReenableCamWhenRespawn()
+	{
+		m_playerInput.MouseEnabled = true;
+		m_playerInput.InputEnabled = true;
+	}
 
     // Update is called once per frame
     void UpdateCamRotation()

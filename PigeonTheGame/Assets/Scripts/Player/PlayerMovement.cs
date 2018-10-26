@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody m_rigid;
     PlayerInput m_playerInput;
+    PlayerHealth m_playerHealth;
     CameraController m_CameraController;
 
     Vector3 m_moveVector;
@@ -85,12 +86,16 @@ public class PlayerMovement : MonoBehaviour
     {
         GetComponents();
 
+        PlayerHealth.OnPlayerDeath += DisableSmoke;
+        PlayerHealth.OnPlayerRespawn += ReenableSmoke;
+
         aimMoveSpeed = moveSpeed / 2f; // speed is slower 2 times when aiming TODO change to variable
         dashVFX.emitting = false;
     }
 
     void GetComponents()
     {
+        m_playerHealth = GetComponent<PlayerHealth>();
         m_playerInput = GetComponent<PlayerInput>();
         m_rigid = GetComponent<Rigidbody>();
         m_CameraController = FindObjectOfType<CameraController>();
@@ -101,10 +106,25 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckIfGrounded();
-        PlayerDash();
-        PlayerJump();
-        SmokeTrail();
+        if (!m_playerHealth.IsDead())
+        {
+            CheckIfGrounded();
+            PlayerDash();
+            PlayerJump();
+            SmokeTrail();
+        }
+    }
+
+    void DisableSmoke()
+    {
+        var particle = smokeParticle;
+        particle.gameObject.SetActive(false);
+    }
+
+    void ReenableSmoke()
+    {
+        var particle = smokeParticle;
+        particle.gameObject.SetActive(true);
     }
 
     void FixedUpdate()
@@ -122,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
         Quaternion desiredRot = m_CameraController.transform.rotation; // our player desired rot is cam rot
 
         if (!snapToCamera) // smooth our rotation if bool is false
-            desiredRot = Quaternion.Slerp(transform.rotation, m_CameraController.transform.rotation, smoothRotateSpeed * Time.fixedDeltaTime); 
+            desiredRot = Quaternion.Slerp(transform.rotation, m_CameraController.transform.rotation, smoothRotateSpeed * Time.fixedDeltaTime);
 
         m_rigid.MoveRotation(desiredRot); // actually rotate our player
     }
@@ -144,7 +164,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             m_isGrounded = false;
-             m_anim.SetBool(m_inAirHash, true);
+            m_anim.SetBool(m_inAirHash, true);
         }
     }
 
@@ -155,19 +175,19 @@ public class PlayerMovement : MonoBehaviour
         if (m_playerInput.DashInput)
         {
 
-            if(m_allowDash)
+            if (m_allowDash)
             {
                 m_anim.SetTrigger(m_dashHash);
 
                 StartCoroutine(StopDashVFX());
 
-                if(!m_isGrounded)
+                if (!m_isGrounded)
                 {
                     m_dashedInAir = true;
                     m_allowDash = false;
                 }
 
-                if(!m_dashing)
+                if (!m_dashing)
                     StartCoroutine(Dash());
             }
 
@@ -192,16 +212,16 @@ public class PlayerMovement : MonoBehaviour
         Ray ray = new Ray(startPos, m_moveDir.normalized);
         RaycastHit hit;
 
-        bool hitSomething = Physics.Raycast(ray, out hit, dashDistance, dashLayerMask,QueryTriggerInteraction.Ignore);
+        bool hitSomething = Physics.Raycast(ray, out hit, dashDistance, dashLayerMask, QueryTriggerInteraction.Ignore);
 
 
-        if(hitSomething)
+        if (hitSomething)
         {
             endPos = hit.point + hit.normal * 1f;
-            Debug.DrawLine(startPos,endPos,Color.red,3f);
+            Debug.DrawLine(startPos, endPos, Color.red, 3f);
         }
 
-        while(percent < 1f)
+        while (percent < 1f)
         {
             percent += Time.deltaTime * speed;
             transform.position = Vector3.Lerp(startPos, endPos, dashCurve.Evaluate(percent));
@@ -223,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
     void CalculateMovePosition()
     {
 
-		// Calculate our horizontal and vertical direction using current Camera rotation so our movement is always Camera rotation dependent;
+        // Calculate our horizontal and vertical direction using current Camera rotation so our movement is always Camera rotation dependent;
 
         Vector3 vDir = m_playerInput.V * m_CameraController.transform.forward;
         Vector3 hDir = m_playerInput.H * m_CameraController.transform.right;
@@ -295,7 +315,7 @@ public class PlayerMovement : MonoBehaviour
     {
         var emission = smokeParticle.emission;
 
-        if(m_playerInput.NoInput()) // if there is no input
+        if (m_playerInput.NoInput()) // if there is no input
         {
             emission.rateOverTime = 0f; // we emite no smoke
         }
