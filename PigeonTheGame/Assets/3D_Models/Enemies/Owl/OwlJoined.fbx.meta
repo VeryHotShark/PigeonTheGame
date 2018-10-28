@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: af372b1b4fcde494a89cbf2a2125d8ca
+guid: f80d14f7e3a554a43bce85f0d61462c2
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,10 +8,10 @@ ModelImporter:
     2100000: Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cube
+    4300000: Owl
   externalObjects: {}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1

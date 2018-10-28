@@ -110,6 +110,8 @@ public class EnemySpawner : MonoBehaviour
             objToReuse.spawnPoint = spawnPoint;
             objToReuse.spawnPoint.enemyAlive = true;
             objToReuse.Init();
+            objToReuse.enemyHealth.ResetRagdollTransform();
+            //objToReuse.enemyHealth.RagdollToggle(false);
             //objToReuse.ResetVariables();
 
             poolDictionary[enemyType].Enqueue(objToReuse);

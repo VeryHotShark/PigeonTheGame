@@ -15,6 +15,12 @@ public class PlayerHealth : Health
     PlayerMovement m_playerMovement;
 
     Rigidbody m_rigid;
+    public void Start()
+    {
+        base.Init();
+
+        GetComponents();
+    }
 
     public override void GetComponents()
     {
@@ -23,15 +29,18 @@ public class PlayerHealth : Health
         m_anim = m_playerMovement.Anim;
         m_rigid = m_playerMovement.Rigid;
 
-        m_collidersArray = GetComponents<Collider>();
+        if (ragdoll)
+        {
+            m_collidersArray = GetComponents<Collider>();
 
-        m_childrenRigidsList = GetComponentsInChildren<Rigidbody>().ToList();
-        m_childrenCollidersArray = GetComponentsInChildren<Collider>();
+            m_childrenRigidsList = GetComponentsInChildren<Rigidbody>().ToList();
+            m_childrenCollidersArray = GetComponentsInChildren<Collider>();
 
-        RemoveParentRigidFromList();
-        GetRagdollInitTransforms();
+            RemoveParentRigidFromList();
+            GetRagdollInitTransforms();
 
-        RagdollToggle(false);
+            RagdollToggle(false);
+        }
     }
 
     void RemoveParentRigidFromList()
@@ -47,32 +56,28 @@ public class PlayerHealth : Health
         }
     }
 
-    public void Start()
-    {
-        base.Init();
-
-        GetComponents();
-
-        RagdollToggle(false);
-    }
-
     public override void TakeDamage(int damage)
     {
         CameraShake.isShaking = true; // when we take damage we make our cam Shake
         base.TakeDamage(damage);
 
+        AudioManager.instance.Play("PlayerHit");
+
         if (OnPlayerLoseHealth != null)
             OnPlayerLoseHealth(m_health); // we invoke this event
 
         if (m_health <= 0) // if we are dead
-        {
-            if (OnPlayerDeath != null)
-                OnPlayerDeath();
+            Die();
+    }
 
-            m_isDead = true;
-            RagdollToggle(true);
-            StartCoroutine(RespawnAfterDelay());
-        }
+    public override void Die()
+    {
+        if (OnPlayerDeath != null)
+            OnPlayerDeath();
+
+        m_isDead = true;
+        RagdollToggle(true);
+        StartCoroutine(RespawnAfterDelay());
     }
 
     void Respawn()
@@ -113,7 +118,7 @@ public class PlayerHealth : Health
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Trap"))
-            TakeDamage(1);
+            TakeDamage(3);
     }
 
     public override void RagdollToggle(bool state)
@@ -141,6 +146,17 @@ public class PlayerHealth : Health
 
         foreach (Collider c in m_collidersArray)
             c.enabled = !state;
+    }
+
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Owl"))
+        {
+            TakeDamage(1);
+            m_playerMovement.Rigid.AddForce(-m_playerMovement.transform.forward * 20f, ForceMode.Impulse);
+        }
+
     }
 
 }

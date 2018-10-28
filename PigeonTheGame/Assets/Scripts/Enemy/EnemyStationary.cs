@@ -32,8 +32,9 @@ public class EnemyStationary : Enemy
         m_enemyWeapon = GetComponent<EnemyWeapon>();
     }
 
-    void Update()
+    public void Update()
     {
+
         if (RoomManager.instance.PlayerInCorridor)
         {
             currentState = State.Idle;
@@ -44,7 +45,7 @@ public class EnemyStationary : Enemy
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
 
-        if (!m_playerHealth.IsDead() && delayWaited) // if player is not dead and we waited some delay
+        if (!m_playerHealth.IsDead() && delayWaited && !m_health.IsDead()) // if player is not dead and we waited some delay
         {
             FaceTarget();
 

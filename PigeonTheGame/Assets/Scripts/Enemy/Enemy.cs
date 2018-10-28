@@ -69,8 +69,8 @@ public abstract class Enemy : MonoBehaviour
 
     int m_currentWaypointIndex = 0;
 
-    Vector3 m_startPos;
-    Quaternion m_starRot;
+    protected Vector3 m_startPos;
+    protected Quaternion m_starRot;
 
     // Use this for initialization
     public virtual void Init()
@@ -224,7 +224,7 @@ public abstract class Enemy : MonoBehaviour
         m_reset = true;
 
 
-        m_agent.Stop();
+        m_agent.isStopped = true;
         m_agent.ResetPath();
 
         transform.position = m_spawnPoint.transform.position;
@@ -233,8 +233,11 @@ public abstract class Enemy : MonoBehaviour
         StopAllCoroutines();
 
         m_health.Init();
+        m_agent.isStopped = false;
 
         currentState = State.Idle;
     }
+
+    
 
 }

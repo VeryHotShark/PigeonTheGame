@@ -37,8 +37,9 @@ public class EnemyRange : Enemy
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
+
         if (RoomManager.instance.PlayerInCorridor) // if player is in corridor do nothing
         {
             currentState = State.Idle;
@@ -48,7 +49,7 @@ public class EnemyRange : Enemy
         if (delayWaited == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
-        if (!m_playerHealth.IsDead() && delayWaited) // if player is not dead and we waited some delay
+        if (!m_playerHealth.IsDead() && delayWaited && !m_health.IsDead()) // if player is not dead and we waited some delay
         {
             FaceTarget();
 
@@ -84,7 +85,7 @@ public class EnemyRange : Enemy
 
         currentState = State.Attack; // set state to Attack
 
-        yield return new WaitForSeconds(0.3f); // wait for very small delay when reaching new Pos before shooting a shot 
+        yield return new WaitForSeconds(0.5f); // wait for very small delay when reaching new Pos before shooting a shot 
 
         m_anim.SetTrigger(m_shooting);
         m_enemyWeapon.ShootProjectile(m_playerTransform.position); // spawn projectile

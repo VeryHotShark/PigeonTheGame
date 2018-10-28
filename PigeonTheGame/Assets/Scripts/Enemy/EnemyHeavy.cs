@@ -39,15 +39,16 @@ public class EnemyHeavy : Enemy
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
+
         if (RoomManager.instance.PlayerInCorridor) // if player is in corridor just do nothing
         {
             currentState = State.Idle;
             return;
         }
 
-        if (!m_playerHealth.IsDead())
+        if (!m_playerHealth.IsDead()&& !m_health.IsDead())
         {
             FaceTarget();
 

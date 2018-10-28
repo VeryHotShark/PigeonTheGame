@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyHealth : Health
 {
-
     public GameObject hitVFX;
 
     public event System.Action<EnemyHealth> OnEnemyDeath; // public event OnEnemyDeath
@@ -12,22 +11,33 @@ public class EnemyHealth : Health
     void Start()
     {
         base.Init();
+
+        GetComponents();
+
+        PlayerHealth.OnPlayerDeath += Deactivate;
     }
 
     public override void GetComponents()
     {
-        m_anim = GetComponent<Animator>();
         base.GetComponents();
+        m_anim = GetComponent<Animator>();
 
-        GetRagdollInitTransforms();
-        RagdollToggle(false);
+        if (ragdoll)
+        {
+            GetRagdollInitTransforms();
+            RagdollToggle(false);
+        }
+
     }
 
     public override void TakeDamage(int damage, ContactPoint hit)
     {
-        GameObject vfx = Instantiate(hitVFX, hit.point, Quaternion.identity);
-        vfx.transform.rotation = Quaternion.LookRotation(hit.normal);
-        Destroy(vfx, 2f);
+        if (hitVFX != null)
+        {
+            GameObject vfx = Instantiate(hitVFX, hit.point, Quaternion.identity);
+            vfx.transform.rotation = Quaternion.LookRotation(hit.normal);
+            Destroy(vfx, 2f);
+        }
 
         base.TakeDamage(damage);
 
@@ -39,7 +49,14 @@ public class EnemyHealth : Health
     {
         base.RagdollToggle(state);
 
-        m_anim.enabled = !state;
+        if (m_collidersArray != null)
+        {
+            foreach (Collider c in m_collidersArray)
+                c.enabled = !state;
+        }
+
+        if (m_anim != null)
+            m_anim.enabled = !state;
     }
 
     public override void Die()
@@ -51,6 +68,12 @@ public class EnemyHealth : Health
         m_isDead = true;
         RagdollToggle(true);
         //StartCoroutine(RespawnAfterDelay());
+    }
+
+    public void Deactivate()
+    {
+        if (m_isDead)
+            gameObject.SetActive(false);
     }
 
 }

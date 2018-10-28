@@ -46,15 +46,16 @@ public class EnemyMelee : Enemy
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
+
         if (RoomManager.instance.PlayerInCorridor) // if player is in corridor do nothing
         {
             currentState = State.Patrol;
             return;
         }
 
-        if (!m_playerHealth.IsDead())
+        if (!m_playerHealth.IsDead() && !m_health.IsDead())
         {
 
             if (Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && RoomManager.instance.PlayerInRoom) // if player is within attackRange and in room attack the player

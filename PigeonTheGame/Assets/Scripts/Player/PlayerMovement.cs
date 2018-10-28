@@ -82,6 +82,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector3 LastMoveVector { get { return m_lastMoveDir; } set { m_lastMoveDir = value; } }
 
+    public PlayerHealth playerHealth { get { return m_playerHealth; }}
+
     void Awake()
     {
         GetComponents();
@@ -151,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Cast ray downwards to check if we are on ground
 
-        Ray ray = new Ray(transform.position, Vector3.down);
+        Ray ray = new Ray(transform.position - transform.forward, Vector3.down);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 0.6f, groundLayerMask))

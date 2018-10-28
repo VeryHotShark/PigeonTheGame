@@ -64,7 +64,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4332928359131558}
-  - component: {fileID: 95184281250561924}
   m_Layer: 0
   m_Name: GFX
   m_TagString: Untagged
@@ -251,6 +250,7 @@ GameObject:
   - component: {fileID: 114348244369415450}
   - component: {fileID: 114210619596321952}
   - component: {fileID: 114922743366453916}
+  - component: {fileID: 95500358804509846}
   m_Layer: 0
   m_Name: Enemy Heavy
   m_TagString: Untagged
@@ -828,7 +828,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1442369652845542}
   m_LocalRotation: {x: -0, y: -0.9991929, z: -0, w: 0.040169932}
-  m_LocalPosition: {x: 10.7, y: 6.53, z: 65.71}
+  m_LocalPosition: {x: -6.20438, y: 6.53, z: 60.394073}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4332928359131558}
@@ -1193,13 +1193,13 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.4, z: 1}
   m_Center: {x: 0, y: 0.18, z: 0.15}
---- !u!95 &95184281250561924
+--- !u!95 &95500358804509846
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1043545381067658}
+  m_GameObject: {fileID: 1442369652845542}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: edf2917dc05e9374ab95f0c5c188410d, type: 3}
   m_Controller: {fileID: 9100000, guid: 3240f486cb73f2943ac25d999c1ca8d1, type: 2}

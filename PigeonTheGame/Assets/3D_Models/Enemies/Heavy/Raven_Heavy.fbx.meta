@@ -100,7 +100,17 @@ ModelImporter:
     13700008: Heavy
     13700010: Cube.004
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 8f5ced1385d223f4880290e1c0c2e0bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 9e2bb6691ed05924fb33b349d5b6110e, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

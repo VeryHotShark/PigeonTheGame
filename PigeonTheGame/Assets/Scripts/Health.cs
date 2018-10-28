@@ -5,14 +5,14 @@ using System.Linq;
 
 public abstract class Health : MonoBehaviour
 {
-
+    public bool ragdoll;
     public int startHealth;
 
     protected int m_health;
 
     protected bool m_isDead;
-	
-	protected Animator m_anim;
+
+    protected Animator m_anim;
 
     // RAGDOLL
 
@@ -31,13 +31,17 @@ public abstract class Health : MonoBehaviour
         m_isDead = false;
     }
 
-	public virtual void GetComponents()
-	{
-		m_collidersArray = GetComponents<Collider>();
+    public virtual void GetComponents()
+    {
+        if (ragdoll)
+        {
+            m_collidersArray = GetComponents<Collider>();
 
-        m_childrenRigidsList = GetComponentsInChildren<Rigidbody>().ToList();
-        m_childrenCollidersArray = GetComponentsInChildren<Collider>();
-	}
+            m_childrenRigidsList = GetComponentsInChildren<Rigidbody>().ToList();
+            m_childrenCollidersArray = GetComponentsInChildren<Collider>();
+        }
+
+    }
 
     // Use this for initialization
     public virtual void TakeDamage(int damage)
