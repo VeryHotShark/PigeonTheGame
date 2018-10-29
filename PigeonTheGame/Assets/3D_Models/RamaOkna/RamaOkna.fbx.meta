@@ -1,17 +1,22 @@
 fileFormatVersion: 2
-guid: f80d14f7e3a554a43bce85f0d61462c2
+guid: 3fffe47fb563a1a4e8e3c3600af8456d
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material
+    2100000: okno kolor
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Owl
-  externalObjects: {}
+    4300000: Cube.032
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: okno kolor
+    second: {fileID: 2100000, guid: 4e861fe207dd5fb4fb0c85202d1b1e70, type: 2}
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1

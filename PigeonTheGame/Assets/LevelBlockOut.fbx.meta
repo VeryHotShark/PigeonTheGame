@@ -167,6 +167,8 @@ ModelImporter:
     100322: torch.005
     100324: torch.006
     100326: torch.007
+    100328: Empty.001
+    100330: StairsNew.001
     400000: Camera
     400002: Cube.001
     400004: Lamp
@@ -331,6 +333,8 @@ ModelImporter:
     400322: torch.005
     400324: torch.006
     400326: torch.007
+    400328: Empty.001
+    400330: StairsNew.001
     2000000: Camera
     2100000: Default_Prototype
     2300000: Cube.001
@@ -495,6 +499,7 @@ ModelImporter:
     2300318: torch.005
     2300320: torch.006
     2300322: torch.007
+    2300324: StairsNew.001
     3300000: Cube.001
     3300002: Stairs (1)_0
     3300004: Stairs_0
@@ -657,6 +662,7 @@ ModelImporter:
     3300318: torch.005
     3300320: torch.006
     3300322: torch.007
+    3300324: StairsNew.001
     4300000: Cube.001
     4300002: Stairs (1)_0
     4300004: Stairs_0
@@ -818,6 +824,7 @@ ModelImporter:
     4300316: Circle.014
     4300318: Circle.013
     4300320: Cube.049
+    4300322: StairsNew.001
     6400000: Cube.001
     6400002: Stairs (1)_0
     6400004: Stairs_0
@@ -980,6 +987,7 @@ ModelImporter:
     6400318: torch.005
     6400320: torch.006
     6400322: torch.007
+    6400324: StairsNew.001
     10800000: Lamp
     2186277476908879412: ImportLogs
   externalObjects: {}

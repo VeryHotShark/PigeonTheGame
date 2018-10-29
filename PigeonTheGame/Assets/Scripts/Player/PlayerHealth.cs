@@ -13,8 +13,10 @@ public class PlayerHealth : Health
     public static event System.Action OnPlayerRespawn;
 
     PlayerMovement m_playerMovement;
-
     Rigidbody m_rigid;
+
+    int m_hitHash = Animator.StringToHash("Hit");
+
     public void Start()
     {
         base.Init();
@@ -62,6 +64,7 @@ public class PlayerHealth : Health
         base.TakeDamage(damage);
 
         AudioManager.instance.Play("PlayerHit");
+        m_playerMovement.Anim.SetTrigger(m_hitHash);
 
         if (OnPlayerLoseHealth != null)
             OnPlayerLoseHealth(m_health); // we invoke this event
@@ -106,7 +109,7 @@ public class PlayerHealth : Health
 
     public void Update()
     {
-        if (transform.position.y < -10f) // if we fall below -10f respawn
+        if (transform.position.y < -20f) // if we fall below -10f respawn
         {
             if (OnPlayerDeath != null)
                 OnPlayerDeath();

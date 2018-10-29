@@ -87,6 +87,10 @@ public class EnemySpawner : MonoBehaviour
                 {
                     ReuseObject(spawnPoint.enemyType,spawnPoint.transform.position,spawnPoint.transform.rotation,spawnPoint);
                 }
+                else
+                {
+                    spawnPoint.MyEnemy.ResetVariables();
+                }
             }
         }
     }
@@ -106,13 +110,15 @@ public class EnemySpawner : MonoBehaviour
             objToReuse.transform.position = position;
             objToReuse.transform.rotation = rotation;
 
-            objToReuse.gameObject.SetActive(true);
             objToReuse.spawnPoint = spawnPoint;
             objToReuse.spawnPoint.enemyAlive = true;
-            objToReuse.Init();
+            objToReuse.spawnPoint.MyEnemy = objToReuse;
+
+            objToReuse.gameObject.SetActive(true);
             objToReuse.enemyHealth.ResetRagdollTransform();
-            //objToReuse.enemyHealth.RagdollToggle(false);
-            //objToReuse.ResetVariables();
+
+            objToReuse.ResetVariables();
+            objToReuse.Init();
 
             poolDictionary[enemyType].Enqueue(objToReuse);
         }

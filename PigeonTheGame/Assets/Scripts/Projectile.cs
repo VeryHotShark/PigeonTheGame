@@ -72,6 +72,9 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         Health otherHealth = other.gameObject.GetComponent<Health>();
 
+        if(otherHealth == null)
+            otherHealth = other.gameObject.GetComponentInParent<Health>();
+
         if(otherHealth != null && other.gameObject != m_objectShotFrom)
         {
             if(otherHealth.gameObject.GetComponent<EnemyHealth>())

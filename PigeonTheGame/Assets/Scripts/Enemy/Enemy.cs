@@ -69,17 +69,12 @@ public abstract class Enemy : MonoBehaviour
 
     int m_currentWaypointIndex = 0;
 
-    protected Vector3 m_startPos;
-    protected Quaternion m_starRot;
-
     // Use this for initialization
     public virtual void Init()
     {
-        m_startPos = transform.position;
-        m_starRot = transform.rotation;
-
         EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
         EnemyManager.instance.EnemyCount++; // and we increment the count of our enemy
+
         m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
         m_health.OnEnemyDeath += UnsubscribeFromPlayer;
         m_health.OnEnemyDeath += EnemyDied;
@@ -223,12 +218,8 @@ public abstract class Enemy : MonoBehaviour
     {
         m_reset = true;
 
-
         m_agent.isStopped = true;
         m_agent.ResetPath();
-
-        transform.position = m_spawnPoint.transform.position;
-        transform.rotation = m_spawnPoint.transform.rotation;
 
         StopAllCoroutines();
 
@@ -236,6 +227,8 @@ public abstract class Enemy : MonoBehaviour
         m_agent.isStopped = false;
 
         currentState = State.Idle;
+
+        Init();
     }
 
     

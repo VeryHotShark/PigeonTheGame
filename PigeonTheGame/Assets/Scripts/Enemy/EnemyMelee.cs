@@ -9,25 +9,6 @@ public class EnemyMelee : Enemy
     int m_moving = Animator.StringToHash("Moving");
     int m_shooting = Animator.StringToHash("Shooting");
 
-    public override void ResetVariables()
-    {
-        base.ResetVariables();
-
-        if (!m_playerHealth.IsDead())
-        {
-            currentState = State.Chase;
-            StartCoroutine(UpdatePath()); // Start our routine to chase our player
-        }
-
-        if (waypoints != null)
-        {
-            currentState = State.Patrol;
-            StartCoroutine(GoToNextWaypoint());
-        }
-
-        m_isAttacking = false;
-    }
-
     public override void Init()
     {
         base.Init();
@@ -43,6 +24,8 @@ public class EnemyMelee : Enemy
             currentState = State.Patrol;
             StartCoroutine(GoToNextWaypoint());
         }
+
+        m_isAttacking = false;
     }
 
     // Update is called once per frame

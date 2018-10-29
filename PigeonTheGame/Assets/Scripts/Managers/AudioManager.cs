@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -23,8 +24,12 @@ public class SoundClip
     public bool playOnAwake;
     public bool loop;
 
+    public bool generateGO;
+
     [HideInInspector]
     public AudioSource audioSource;
+    [HideInInspector]
+    public GameObject audioGameObject;
 }
 
 public class AudioManager : MonoBehaviour
@@ -44,7 +49,15 @@ public class AudioManager : MonoBehaviour
 
         foreach (SoundClip soundClip in soundClips)
         {
-            soundClip.audioSource = gameObject.AddComponent<AudioSource>();
+            if(soundClip.generateGO)
+            {
+                soundClip.audioGameObject = new GameObject(soundClip.name);
+                soundClip.audioSource = soundClip.audioGameObject.AddComponent<AudioSource>();
+            }
+            else
+            {
+                soundClip.audioSource = gameObject.AddComponent<AudioSource>();
+            }
             soundClip.audioSource.clip = soundClip.audioClip;
 
             soundClip.audioSource.volume = soundClip.volume;
@@ -63,6 +76,36 @@ public class AudioManager : MonoBehaviour
 
 		if(clipToPlay == null)
 			return;
+
+        clipToPlay.audioSource.Play();
+    }
+
+    public void PlayAfterDelay(string name, float delay)
+    {
+        StartCoroutine(PlayClipDelay(name,delay));
+    }
+
+    IEnumerator PlayClipDelay(string name, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        SoundClip clipToPlay = soundClips.Find(sound => sound.name == name);
+
+		if(clipToPlay == null)
+			yield break;
+
+        clipToPlay.audioSource.Play();
+    }
+
+    public void PlayClipAt(string name, Vector3 pos)
+    {
+        SoundClip clipToPlay = soundClips.Find(sound => sound.name == name);
+
+		if(clipToPlay == null)
+			return;
+
+        if(clipToPlay.generateGO)
+            clipToPlay.audioGameObject.transform.position = pos;
 
         clipToPlay.audioSource.Play();
     }

@@ -93,6 +93,8 @@ public class PlayerMovement : MonoBehaviour
 
         aimMoveSpeed = moveSpeed / 2f; // speed is slower 2 times when aiming TODO change to variable
         dashVFX.emitting = false;
+
+        StartCoroutine(StepSoundRoutine());
     }
 
     void GetComponents()
@@ -179,6 +181,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (m_allowDash)
             {
+                AudioManager.instance.Play("PlayerDash");
+
                 m_anim.SetTrigger(m_dashHash);
 
                 StartCoroutine(StopDashVFX());
@@ -323,6 +327,20 @@ public class PlayerMovement : MonoBehaviour
         }
         else
             emission.rateOverTime = 50f; // else our emission is 50f
+    }
+
+    IEnumerator StepSoundRoutine()
+    {
+        while(!m_playerHealth.IsDead())
+        {
+            if(!m_playerInput.NoInput() && m_isGrounded)
+            {
+                AudioManager.instance.Play("PlayerStep");
+                yield return new WaitForSeconds(0.3f);
+            }
+
+            yield return null;
+        }
     }
 
 

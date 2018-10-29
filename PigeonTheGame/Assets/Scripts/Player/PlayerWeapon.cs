@@ -98,6 +98,9 @@ public class PlayerWeapon : MonoBehaviour
 		{
 			if(timer <= 0f)
 			{
+				AudioManager.instance.Play("PlayerShoot");
+				AudioManager.instance.PlayAfterDelay("PlayerReload",0.2f);
+				
 				m_anim.SetTrigger(m_shootHash);
 
 				SpawnVFX();

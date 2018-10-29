@@ -87,6 +87,7 @@ public class EnemyRange : Enemy
 
         yield return new WaitForSeconds(0.5f); // wait for very small delay when reaching new Pos before shooting a shot 
 
+        AudioManager.instance.PlayClipAt("EnemyShoot", transform.position);
         m_anim.SetTrigger(m_shooting);
         m_enemyWeapon.ShootProjectile(m_playerTransform.position); // spawn projectile
 

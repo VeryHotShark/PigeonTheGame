@@ -9,9 +9,10 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: SpikeTwo
+    4300002: Cube
   externalObjects: {}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1

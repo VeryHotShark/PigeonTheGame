@@ -66,8 +66,11 @@ public class EnemyHealth : Health
             OnEnemyDeath(this); // call OnEnemyDeath if someone is subscribe to that event
 
         m_isDead = true;
-        RagdollToggle(true);
-        //StartCoroutine(RespawnAfterDelay());
+
+        if(ragdoll)
+            RagdollToggle(true);
+        else
+            gameObject.SetActive(false);
     }
 
     public void Deactivate()
