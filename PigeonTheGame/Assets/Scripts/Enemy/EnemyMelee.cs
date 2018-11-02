@@ -38,7 +38,10 @@ public class EnemyMelee : Enemy
             return;
         }
 
-        if (!m_playerHealth.IsDead() && !m_health.IsDead())
+         if (delayWaited == false) // if we haven't waited for some delay when player came into room
+            StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
+
+        if (!m_playerHealth.IsDead() && !m_health.IsDead() && delayWaited)
         {
 
             if (Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && RoomManager.instance.PlayerInRoom) // if player is within attackRange and in room attack the player

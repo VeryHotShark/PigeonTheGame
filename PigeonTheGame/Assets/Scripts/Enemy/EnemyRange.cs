@@ -53,10 +53,10 @@ public class EnemyRange : Enemy
 
         if (!m_playerHealth.IsDead() && delayWaited && !m_health.IsDead()) // if player is not dead and we waited some delay
         {
-            FaceTarget();
 
             if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom) // if player is outside attackRange 
             {
+                
                 m_anim.SetBool(m_moving, true);
 
                 currentState = State.Chase; // we set state to chase
@@ -70,7 +70,8 @@ public class EnemyRange : Enemy
                 if (currentState != State.Moving && currentState != State.Attack) // if we are not moving (not already during moving Routine) and we are not in attackState
                 {
                     m_agent.ResetPath(); // we reset path
-                    StartCoroutine(MoveToRandomPos()); // and Start MoveToRandomPos routine || TODO Change so we start sAttackTarget Routine first and then we call MoveTORandomPos from AttackTarget Routine
+                     FaceTarget();
+                    StartCoroutine(AttackTarget()); // and Start MoveToRandomPos routine || TODO Change so we start sAttackTarget Routine first and then we call MoveTORandomPos from AttackTarget Routine
                 }
             }
             else
@@ -103,7 +104,7 @@ public class EnemyRange : Enemy
 
     IEnumerator AttackTarget()
     {
-        //FaceTarget();
+        FaceTarget();
 
         currentState = State.Attack; // set state to Attack
 
@@ -113,14 +114,13 @@ public class EnemyRange : Enemy
         m_anim.SetTrigger(m_shooting);
         m_enemyWeapon.ShootProjectile(m_playerTransform.position); // spawn projectile
 
+          if (m_playerRested)
+            yield return StartCoroutine(MoveToRandomPos()); // Start our shoot routine and wait till it finish
+
     }
 
     IEnumerator MoveToRandomPos()
     {
-        //currentState = State.Moving;
-
-        if (m_playerRested)
-            yield return StartCoroutine(AttackTarget()); // Start our shoot routine and wait till it finish
 
         m_anim.SetBool(m_moving, true);
         currentState = State.Moving; // change our state to moving
@@ -145,8 +145,6 @@ public class EnemyRange : Enemy
 
             yield return null;
         }
-
-
 
         //    DEBUG PURPOSES
 
