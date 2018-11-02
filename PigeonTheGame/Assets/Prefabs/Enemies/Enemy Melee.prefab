@@ -1242,14 +1242,14 @@ MonoBehaviour:
   waypoints: {fileID: 0}
   roomIndex: 0
   moveType: 0
-  moveSpeed: 20
+  moveSpeed: 25
   stopDistance: 1.5
   attackPower: 1
   attackRange: 2
   attackRate: 1
-  waitTimeWhenEnter: 0
+  waitTimeWhenEnter: 1
   waitTimeOnWaypoint: 1
-  waitTimeWhenPlayerGetShot: 1
+  waitTimeWhenPlayerGetShot: 0
 --- !u!114 &114513549674918772
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ragdoll: 1
   startHealth: 1
-  hitVFX: {fileID: 1975918751145560, guid: 127e027eeed89174fb24b651cc69c03a, type: 2}
+  hitVFX: {fileID: 1194393215392672, guid: 8602233fc6cff4548bc2633406795b28, type: 2}
 --- !u!136 &136327128857966720
 CapsuleCollider:
   m_ObjectHideFlags: 1

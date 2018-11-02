@@ -43,7 +43,7 @@ public class EnemyMelee : Enemy
 
             if (Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && RoomManager.instance.PlayerInRoom) // if player is within attackRange and in room attack the player
             {
-                if (!m_isAttacking) // if we are not already attacking TODO Chnage this to use State.Attack instead of bool m_isAttacking
+                if (currentState != State.Attack) // if we are not already attacking TODO Chnage this to use State.Attack instead of bool m_isAttacking
                 {
                     m_anim.SetBool(m_moving, false);
                     FaceTarget();
@@ -75,31 +75,31 @@ public class EnemyMelee : Enemy
 
             yield return new WaitForSeconds(refreshRate); // wait for refreshRate and come back to top
         }
-
-
     }
 
     IEnumerator AttackTarget()
     {
         currentState = State.Attack; // change state to Attack
-        m_isAttacking = true; // set bool to true to indicate that we are during routine
 
-        while (!m_playerHealth.IsDead() && Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && m_playerRested) // if player is not dead and player is withinRange
+        while (!m_playerHealth.IsDead() && Vector3.Distance(m_playerTransform.position, transform.position) < attackRange) // if player is not dead and player is withinRange
         {
-            m_anim.SetTrigger(m_shooting);
-            //DealDamage();
-            // Debug.Log("HIT");
+            if (m_playerRested)
+            {
+                m_anim.SetTrigger(m_shooting);
+                FaceTarget();
+            }
+
             yield return new WaitForSeconds(attackRate); // wait for some delay before next attack
         }
 
-        m_isAttacking = false; // else we se bool to false so we are not attacking anymore
+        currentState = State.Chase; // change state to Attack
     }
 
-    
-	public void DealDamage()
-	{
-		m_playerHealth.TakeDamage(1); // we make it take one damage
-		//Debug.Log("EVENT");
-	}
+
+    public void DealDamage()
+    {
+        m_playerHealth.TakeDamage(1); // we make it take one damage
+                                      //Debug.Log("EVENT");
+    }
 
 }

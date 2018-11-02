@@ -8,13 +8,11 @@ public class EnemyHealth : Health
 
     public event System.Action<EnemyHealth> OnEnemyDeath; // public event OnEnemyDeath
 
-    void Start()
+    public override void Init()
     {
         base.Init();
 
-        GetComponents();
-
-        PlayerHealth.OnPlayerDeath += Deactivate;
+        PlayerHealth.OnPlayerRespawn += Deactivate;
     }
 
     public override void GetComponents()
@@ -77,6 +75,8 @@ public class EnemyHealth : Health
     {
         if (m_isDead)
             gameObject.SetActive(false);
+
+        PlayerHealth.OnPlayerRespawn -= Deactivate;
     }
 
 }

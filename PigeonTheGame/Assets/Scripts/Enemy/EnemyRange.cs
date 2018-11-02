@@ -9,6 +9,10 @@ public class EnemyRange : Enemy
 
     public override void ResetVariables()
     {
+        base.ResetVariables();
+
+        delayWaited = false;
+
         m_anim.SetBool(m_moving, false);
     }
 
@@ -26,8 +30,6 @@ public class EnemyRange : Enemy
     public override void Init()
     {
         base.Init();
-
-        currentState = State.Idle;
     }
 
     public override void GetComponents()
@@ -60,7 +62,7 @@ public class EnemyRange : Enemy
                 currentState = State.Chase; // we set state to chase
 
                 m_agent.ResetPath();
-                //StopAllCoroutines();
+                StopAllCoroutines();
                 m_agent.destination = m_playerTransform.position; // and set destination to be our player so enemy will chase us
             }
             else if (Vector3.Distance(m_playerTransform.position, transform.position) <= attackRange) // else if we are within attackRange
@@ -75,6 +77,26 @@ public class EnemyRange : Enemy
             {
                 currentState = State.Idle; // else we set state to idle
             }
+        }
+    }
+
+    
+    IEnumerator UpdatePath()
+    {
+        float refreshRate = 0.25f;
+
+        while (!m_playerHealth.IsDead())
+        {
+            if (currentState == State.Chase && RoomManager.instance.PlayerInRoom) // if we are in room and our state is Chasing
+            {
+                Vector3 dirToTarget = (m_playerTransform.position - transform.position).normalized; // we calculate the dirToTarget
+                Vector3 targetPosition = m_playerTransform.position - (dirToTarget * stopDistance); // and substract small amount from our playerPosition so our enemy won't go through our Player
+
+                if (!m_health.IsDead()) // if we are not dead
+                    m_agent.SetDestination(targetPosition); // we set our agent destination
+            }
+
+            yield return new WaitForSeconds(refreshRate); // wait for refreshRate and come back to top
         }
     }
 
@@ -105,8 +127,9 @@ public class EnemyRange : Enemy
 
         NavMeshHit hit; // store the result of our Check if there is nav mesh in specified place
 
-        Vector3 randomPoint = transform.position + Random.insideUnitSphere * walkRadius; // calculate the random point withing our walk radius
-        randomPoint.y = transform.position.y; // set the y value of that random point to be the same as enemy y value
+        Vector3 randomPos = new Vector3(Random.insideUnitCircle.x,0f,Random.insideUnitCircle.y) * walkRadius;
+        Vector3 randomPoint = transform.position + randomPos; // calculate the random point withing our walk radius
+        
         Vector3 randomPosOnNavMesh = Vector3.zero; // declaring a Vector3 to store randomPosOnNavMesh
 
         bool foundPos = false;

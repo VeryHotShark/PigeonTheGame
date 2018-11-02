@@ -83,6 +83,7 @@ ModelImporter:
     400076: Cube.004
     2100000: No Name
     2100002: Material.001
+    2100004: heavy coloe
     4300000: Beak Bottom
     4300002: Beak Top
     4300004: Heavy
@@ -112,7 +113,7 @@ ModelImporter:
       name: No Name
     second: {fileID: 2100000, guid: 9e2bb6691ed05924fb33b349d5b6110e, type: 2}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1

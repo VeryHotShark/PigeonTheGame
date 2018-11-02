@@ -75,9 +75,9 @@ ModelImporter:
     2100002: color raven
     4300000: Cube
     7400000: Running
-    7400002: SebaTheRig|Atack
-    7400004: SebaTheRig|Running
-    7400006: SebaTheRig|Shoot
+    7400002: Melee|Atack
+    7400004: Melee|Running
+    7400006: Melee|Idle
     9500000: //RootNode
     13700000: Cube
     2186277476908879412: ImportLogs
@@ -148,7 +148,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: SebaTheRig|Atack
+      name: Melee|Atack
       takeName: SebaTheRig|Atack
       firstFrame: 0
       lastFrame: 15
@@ -184,7 +184,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: SebaTheRig|Running
+      name: Melee|Running
       takeName: SebaTheRig|Running
       firstFrame: 0
       lastFrame: 15
@@ -212,18 +212,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: SebaTheRig|Shoot
+      name: Melee|Idle
       takeName: SebaTheRig|Shoot
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 0
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

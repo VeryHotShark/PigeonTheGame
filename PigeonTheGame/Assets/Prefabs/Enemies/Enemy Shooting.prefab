@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ragdoll: 1
   startHealth: 3
-  hitVFX: {fileID: 1975918751145560, guid: 127e027eeed89174fb24b651cc69c03a, type: 2}
+  hitVFX: {fileID: 1194393215392672, guid: 8602233fc6cff4548bc2633406795b28, type: 2}
 --- !u!114 &114902207131895976
 MonoBehaviour:
   m_ObjectHideFlags: 1

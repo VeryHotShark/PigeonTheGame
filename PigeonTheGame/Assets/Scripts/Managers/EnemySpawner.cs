@@ -39,7 +39,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        PlayerHealth.OnPlayerDeath += RespawnDeadEnemies;
+        PlayerHealth.OnPlayerRespawn += RespawnDeadEnemies;
 
         spawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         parentTransform = CreateParent();
@@ -69,6 +69,7 @@ public class EnemySpawner : MonoBehaviour
                 Enemy enemyObj = Instantiate(enemy) as Enemy;
                 enemyObj.gameObject.transform.parent = parentTransform.transform;
                 enemyObj.GetComponents();
+                enemyObj.enemyHealth.GetComponents();
                 enemyObj.gameObject.SetActive(false);
                 objectPool.Enqueue(enemyObj);
             }
@@ -85,11 +86,13 @@ public class EnemySpawner : MonoBehaviour
             {
                 if(!spawnPoint.enemyAlive)
                 {
+                    //spawnPoint.MyEnemy
                     ReuseObject(spawnPoint.enemyType,spawnPoint.transform.position,spawnPoint.transform.rotation,spawnPoint);
                 }
                 else
                 {
                     spawnPoint.MyEnemy.ResetVariables();
+                    //spawnPoint.MyEnemy.Init();
                 }
             }
         }
@@ -107,17 +110,17 @@ public class EnemySpawner : MonoBehaviour
         {
             Enemy objToReuse = poolDictionary[enemyType].Dequeue();
 
-            objToReuse.transform.position = position;
-            objToReuse.transform.rotation = rotation;
-
             objToReuse.spawnPoint = spawnPoint;
             objToReuse.spawnPoint.enemyAlive = true;
             objToReuse.spawnPoint.MyEnemy = objToReuse;
 
             objToReuse.gameObject.SetActive(true);
+            objToReuse.enemyHealth.RagdollToggle(false);
             objToReuse.enemyHealth.ResetRagdollTransform();
 
-            objToReuse.ResetVariables();
+            objToReuse.transform.position = position;
+            objToReuse.transform.rotation = rotation;
+
             objToReuse.Init();
 
             poolDictionary[enemyType].Enqueue(objToReuse);

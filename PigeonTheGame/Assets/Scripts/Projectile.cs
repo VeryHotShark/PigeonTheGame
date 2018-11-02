@@ -24,6 +24,9 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
     Vector3 m_startSize;
 
+    TrailRenderer m_trailRenderer;
+    float m_trailStartWidth;
+
     // Use this for initialization
     public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
@@ -35,12 +38,14 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         m_dir = dir;
 
 		GetComponents();
+        m_trailStartWidth = m_trailRenderer.startWidth;
+        m_trailRenderer.startWidth = m_startSize.x - 0.1f;
+
         m_objectShotFrom = objectShotFrom;
         m_damage = damage;
 		m_rigid.AddForce(dir * force, ForceMode.Impulse);
         m_distance = lifeTime;
         m_lifeTime = lifeTime;
-		//Destroy(gameObject, lifeTime);
 
         StartCoroutine(SizeOverLifetime());
     }
@@ -48,6 +53,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 	void GetComponents()
 	{
 		m_rigid = GetComponent<Rigidbody>();
+        m_trailRenderer = GetComponent<TrailRenderer>();
 	}
     void Update()
     {
@@ -83,7 +89,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
                     otherHealth.TakeDamage(m_damage,other.contacts[0]);
             }
             else
-                otherHealth.TakeDamage(m_damage);
+                otherHealth.TakeDamage(m_damage, other.contacts[0]);
 
             Destroy(gameObject);
         }
@@ -118,6 +124,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             percent += Time.deltaTime * speed;
             desiredSize = lifeSizeCurve.Evaluate(percent);
             transform.localScale = Vector3.Lerp(m_startSize, Vector3.zero, desiredSize) ;
+            m_trailRenderer.startWidth = Mathf.Lerp(m_trailStartWidth, 0f, desiredSize);
 
             yield return null;
         }

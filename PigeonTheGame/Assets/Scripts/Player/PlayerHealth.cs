@@ -6,6 +6,10 @@ using UnityEngine;
 public class PlayerHealth : Health
 {
 
+    public bool GodMode;
+
+    public GameObject hitVFX;
+
     public float respawnDelay;
 
     public event System.Action<int> OnPlayerLoseHealth; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
@@ -66,19 +70,49 @@ public class PlayerHealth : Health
         AudioManager.instance.Play("PlayerHit");
         m_playerMovement.Anim.SetTrigger(m_hitHash);
 
-        if (OnPlayerLoseHealth != null)
-            OnPlayerLoseHealth(m_health); // we invoke this event
+        GameObject playerHitVFX = Instantiate(hitVFX, transform.position + Vector3.up, Quaternion.identity);
+        Destroy(playerHitVFX,0.3f);
 
-        if (m_health <= 0) // if we are dead
-            Die();
+        if (!GodMode)
+        {
+
+            if (OnPlayerLoseHealth != null)
+                OnPlayerLoseHealth(m_health); // we invoke this event
+
+            if (m_health <= 0) // if we are dead
+                Die();
+        }
+    }
+
+     public override void TakeDamage(int damage, ContactPoint point)
+    {
+        CameraShake.isShaking = true; // when we take damage we make our cam Shake
+        base.TakeDamage(damage);
+
+        AudioManager.instance.Play("PlayerHit");
+        m_playerMovement.Anim.SetTrigger(m_hitHash);
+
+        GameObject playerHitVFX = Instantiate(hitVFX, point.point, Quaternion.identity);
+        Destroy(playerHitVFX,0.3f);
+
+        if (!GodMode)
+        {
+
+            if (OnPlayerLoseHealth != null)
+                OnPlayerLoseHealth(m_health); // we invoke this event
+
+            if (m_health <= 0) // if we are dead
+                Die();
+        }
     }
 
     public override void Die()
     {
+        m_isDead = true;
+        
         if (OnPlayerDeath != null)
             OnPlayerDeath();
 
-        m_isDead = true;
         RagdollToggle(true);
         StartCoroutine(RespawnAfterDelay());
     }

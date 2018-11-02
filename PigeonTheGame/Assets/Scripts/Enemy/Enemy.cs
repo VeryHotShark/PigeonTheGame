@@ -80,9 +80,8 @@ public abstract class Enemy : MonoBehaviour
         m_health.OnEnemyDeath += EnemyDied;
 
         m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-        PlayerHealth.OnPlayerDeath += ResetVariables;
+        PlayerHealth.OnPlayerRespawn += ResetVariables;
 
-        currentState = State.Idle;
         m_health.Init();
 
         if (waypoints != null)
@@ -91,6 +90,7 @@ public abstract class Enemy : MonoBehaviour
             m_currentWaypoint = waypoints.waypointsArray[0].position;
         }
 
+        currentState = State.Idle;
         SetNavMeshAgent();
     }
 
@@ -107,8 +107,13 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void SetNavMeshAgent()
     {
+        m_agent.isStopped = true;
+        m_agent.ResetPath();
+
+        m_agent.isStopped = false;
+
         m_agent.speed = moveSpeed;
-        m_agent.acceleration = moveSpeed + 5f;
+        m_agent.acceleration = moveSpeed + 8f;
     }
 
 
@@ -182,7 +187,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void yieldForGivenTime(int playerHealth)
     {
-        if (playerHealth > 0 && this != null)
+        if (playerHealth > 0 && !m_health.IsDead())
             StartCoroutine(YieldForPlayer());
     }
 
@@ -200,37 +205,35 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void UnsubscribeFromPlayer(EnemyHealth enemy)
     {
-        StopAllCoroutines();
-        PlayerHealth.OnPlayerDeath -= ResetVariables;
+        PlayerHealth.OnPlayerRespawn -= ResetVariables;
         m_playerHealth.OnPlayerLoseHealth -= yieldForGivenTime;
+
+
         enemy.OnEnemyDeath -= EnemyDied;
-        enemy.OnEnemyDeath -= EnemyManager.instance.DecreaseEnemyCount;
         enemy.OnEnemyDeath -= UnsubscribeFromPlayer;
     }
 
     public virtual void EnemyDied(EnemyHealth enemy)
     {
         if (spawnPoint != null)
+        {
             spawnPoint.enemyAlive = false;
+            StopAllCoroutines();
+            m_agent.ResetPath();
+        }
     }
 
     public virtual void ResetVariables()
     {
-        m_reset = true;
-
         m_agent.isStopped = true;
         m_agent.ResetPath();
 
-        StopAllCoroutines();
-
-        m_health.Init();
         m_agent.isStopped = false;
 
-        currentState = State.Idle;
+        transform.position = m_spawnPoint.transform.position;
+        transform.rotation = m_spawnPoint.transform.rotation;
 
         Init();
     }
-
-    
 
 }
