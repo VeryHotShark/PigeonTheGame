@@ -10,7 +10,7 @@ public class MovingPlatform : MonoBehaviour
 	{
 		PingPong,
 		Loop,
-		Static
+		Static,
 	}
 
 	public MoveType moveType;
@@ -28,6 +28,7 @@ public class MovingPlatform : MonoBehaviour
 	public float waitDuration = 0f;
 
 	Vector3 m_startPos;
+	Quaternion m_startRot;
 	
 	Vector3 m_targetWaypoint;
 
@@ -47,6 +48,7 @@ public class MovingPlatform : MonoBehaviour
 			PlayerHealth.OnPlayerDeath += Reset;
 
 		m_startPos = transform.position;
+		m_startRot = transform.rotation;
 
 		Init();
 
@@ -162,8 +164,11 @@ public class MovingPlatform : MonoBehaviour
 	void Reset()
 	{
 		transform.position = m_startPos;
+		transform.rotation = m_startRot;
 		m_rigid.isKinematic = true;
 		m_rigid.useGravity = false;
+
+		alreadyFall = false;
 
 		Init();
 	}

@@ -18,6 +18,12 @@ public class RoomTrigger : MonoBehaviour
 
     public TriggerType type;
 
+    public bool triggerDoor;
+
+    public DoorMovement door;
+
+    bool doorTriggered;
+
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -68,6 +74,19 @@ public class RoomTrigger : MonoBehaviour
                     break;
             }
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+          if (other.gameObject.CompareTag("Player"))
+          {
+              if(triggerDoor)
+                    if(door != null && !doorTriggered)
+                    {
+                        doorTriggered = true;
+                        door.InitDoor();
+                    }
+          }
     }
 
 }

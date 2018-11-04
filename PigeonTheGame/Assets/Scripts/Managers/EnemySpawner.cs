@@ -84,7 +84,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if(spawnPoint.roomIndex == RoomManager.instance.PlayerCurrentRoom)
             {
-                if(!spawnPoint.enemyAlive)
+                if(!spawnPoint.EnemyAlive)
                 {
                     //spawnPoint.MyEnemy
                     ReuseObject(spawnPoint.enemyType,spawnPoint.transform.position,spawnPoint.transform.rotation,spawnPoint);
@@ -111,8 +111,10 @@ public class EnemySpawner : MonoBehaviour
             Enemy objToReuse = poolDictionary[enemyType].Dequeue();
 
             objToReuse.spawnPoint = spawnPoint;
-            objToReuse.spawnPoint.enemyAlive = true;
+            objToReuse.spawnPoint.EnemyAlive = true;
             objToReuse.spawnPoint.MyEnemy = objToReuse;
+
+            objToReuse.waitTimeWhenEnter = spawnPoint.waitDelay;
 
             objToReuse.gameObject.SetActive(true);
             objToReuse.enemyHealth.RagdollToggle(false);

@@ -70,7 +70,7 @@ public class EnemyRange : Enemy
                 if (currentState != State.Moving && currentState != State.Attack) // if we are not moving (not already during moving Routine) and we are not in attackState
                 {
                     m_agent.ResetPath(); // we reset path
-                     FaceTarget();
+                    FaceTarget();
                     StartCoroutine(AttackTarget()); // and Start MoveToRandomPos routine || TODO Change so we start sAttackTarget Routine first and then we call MoveTORandomPos from AttackTarget Routine
                 }
             }
@@ -104,6 +104,8 @@ public class EnemyRange : Enemy
 
     IEnumerator AttackTarget()
     {
+        m_agent.updateRotation = false;
+
         FaceTarget();
 
         currentState = State.Attack; // set state to Attack
@@ -114,8 +116,13 @@ public class EnemyRange : Enemy
         m_anim.SetTrigger(m_shooting);
         m_enemyWeapon.ShootProjectile(m_playerTransform.position); // spawn projectile
 
-          if (m_playerRested)
+        yield return new WaitForSeconds(0.5f); // wait for very small delay when reaching new Pos before shooting a shot 
+
+        if (m_playerRested)
+        {
+            m_agent.updateRotation = true;
             yield return StartCoroutine(MoveToRandomPos()); // Start our shoot routine and wait till it finish
+        }
 
     }
 

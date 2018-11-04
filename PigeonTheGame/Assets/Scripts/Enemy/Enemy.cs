@@ -112,8 +112,10 @@ public abstract class Enemy : MonoBehaviour
 
         m_agent.isStopped = false;
 
-        m_agent.speed = moveSpeed;
-        m_agent.acceleration = moveSpeed + 8f;
+        int randomiseSpeed = UnityEngine.Random.Range(-3,4);
+
+        m_agent.speed = moveSpeed + randomiseSpeed;
+        m_agent.acceleration = moveSpeed + 8f + randomiseSpeed;
     }
 
 
@@ -217,7 +219,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if (spawnPoint != null)
         {
-            spawnPoint.enemyAlive = false;
+            spawnPoint.EnemyAlive = false;
             StopAllCoroutines();
             m_agent.ResetPath();
         }
@@ -232,6 +234,8 @@ public abstract class Enemy : MonoBehaviour
 
         transform.position = m_spawnPoint.transform.position;
         transform.rotation = m_spawnPoint.transform.rotation;
+
+        waitTimeWhenEnter = m_spawnPoint.waitDelay;
 
         Init();
     }
