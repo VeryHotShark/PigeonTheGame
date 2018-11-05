@@ -46,11 +46,15 @@ public class TrapMovement : MonoBehaviour
 		Vector3 start = isReturning ? endPos : startPos;
 		Vector3 end = isReturning ? startPos : endPos;
 
+		AudioManager.instance.PlayClipAt(isReturning ? "Spikes_Out" : "Spikes_In", transform.position);
+		
 		while(percent < 1f)
 		{
 			percent += Time.deltaTime * speed;
 			curvedPercent = moveCurve.Evaluate(percent);
 			transform.localPosition = Vector3.Lerp(start, end, isReturning ? percent : curvedPercent);
+
+
 			yield return null;
 		}
 

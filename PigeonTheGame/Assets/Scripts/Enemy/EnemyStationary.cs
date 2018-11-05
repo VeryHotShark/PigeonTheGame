@@ -19,6 +19,8 @@ public class EnemyStationary : Enemy
     bool m_duringRoutine;
     EnemyWeapon m_enemyWeapon;
 
+    int m_shooting = Animator.StringToHash("Shooting");
+
     public override void Init()
     {
         base.Init();
@@ -66,7 +68,10 @@ public class EnemyStationary : Enemy
 
         while (amountToShoot > 0 && m_playerRested) // while projectile amount is > 0
         {
+            AudioManager.instance.PlayClipAt("EnemyShoot", transform.position);
+            m_anim.SetTrigger(m_shooting);
             m_enemyWeapon.ShootProjectile(m_playerTransform.position); // shoot projectile
+            
             amountToShoot--; // decrement by one
             yield return new WaitForSeconds(attackRate); // wait for some delay and repeat while amount is > 0
         }

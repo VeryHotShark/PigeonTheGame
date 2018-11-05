@@ -63,7 +63,7 @@ public class EnemyMelee : Enemy
 
     IEnumerator UpdatePath()
     {
-        float refreshRate = 0.25f;
+        float refreshRate = 0.2f;
 
         while (!m_playerHealth.IsDead())
         {

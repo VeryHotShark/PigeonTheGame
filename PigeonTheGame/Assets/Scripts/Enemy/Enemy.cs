@@ -115,7 +115,7 @@ public abstract class Enemy : MonoBehaviour
         int randomiseSpeed = UnityEngine.Random.Range(-3,4);
 
         m_agent.speed = moveSpeed + randomiseSpeed;
-        m_agent.acceleration = moveSpeed + 8f + randomiseSpeed;
+        m_agent.acceleration = moveSpeed + 10f + randomiseSpeed;
     }
 
 

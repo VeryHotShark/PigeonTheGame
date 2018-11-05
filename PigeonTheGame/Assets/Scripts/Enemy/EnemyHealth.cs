@@ -37,6 +37,8 @@ public class EnemyHealth : Health
             Destroy(vfx, 2f);
         }
 
+        AudioManager.instance.PlayClipAt("EnemyHit",transform.position);
+
         base.TakeDamage(damage);
 
         if (m_health <= 0)

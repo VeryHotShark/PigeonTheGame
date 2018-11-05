@@ -90,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
 
         PlayerHealth.OnPlayerDeath += DisableSmoke;
         PlayerHealth.OnPlayerRespawn += ReenableSmoke;
+        PlayerHealth.OnPlayerRespawn += StartStepRoutine;
 
         aimMoveSpeed = moveSpeed / 2f; // speed is slower 2 times when aiming TODO change to variable
         dashVFX.emitting = false;
@@ -327,6 +328,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else
             emission.rateOverTime = 50f; // else our emission is 50f
+    }
+
+    void StartStepRoutine()
+    {
+        StartCoroutine(StepSoundRoutine());
     }
 
     IEnumerator StepSoundRoutine()
