@@ -8,7 +8,8 @@ public enum EnemyType
     Melee,
     Range,
     Heavy,
-    Stationary
+    Stationary,
+    Boss
 }
 
 [System.Serializable]

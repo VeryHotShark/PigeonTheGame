@@ -24,8 +24,6 @@ public class EnemyStationary : Enemy
     public override void Init()
     {
         base.Init();
-
-        currentState = State.Idle;
     }
 
     public override void GetComponents()

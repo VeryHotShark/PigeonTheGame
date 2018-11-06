@@ -16,8 +16,12 @@ public class PlayerHealth : Health
     public static event System.Action OnPlayerDeath;
     public static event System.Action OnPlayerRespawn;
 
+    protected Collider[] m_collidersArray;
+
     PlayerMovement m_playerMovement;
     Rigidbody m_rigid;
+
+    bool m_justGotHit;
 
     int m_hitHash = Animator.StringToHash("Hit");
 
@@ -185,15 +189,29 @@ public class PlayerHealth : Health
             c.enabled = !state;
     }
 
+    
 
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Owl"))
         {
-            TakeDamage(1);
-            m_playerMovement.Rigid.AddForce(-m_playerMovement.transform.forward * 20f, ForceMode.Impulse);
+            if(!other.gameObject.GetComponentInParent<EnemyHealth>().IsDead() && !m_justGotHit)
+            {
+                m_justGotHit = true;
+                TakeDamage(1);
+                StartCoroutine(ImmuneDuration());
+                //m_playerMovement.Rigid.AddForce(-m_playerMovement.transform.forward * 20f, ForceMode.Impulse);
+            }
         }
 
     }
+
+    IEnumerator ImmuneDuration()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+       m_justGotHit = false;
+    }
+
 
 }

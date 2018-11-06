@@ -28,21 +28,27 @@ public class EnemyBoss : Enemy
     public float waitAtGround;
     public float attackDuration;
 
+    [Header("Stage Two")]
+    [Space]
+    public int shootSeries = 5;
+    public int projectileAmountVariation = 2;
+
+    public int projectileAmountAtOnce = 5;
+    public float spreadAmount;
+    public float waitTimeBeforeNextShootSeries;
+
 
     CapsuleCollider m_collider;
+    EnemyWeapon m_enemyWeapon;
 
     bool m_duringRoutine;
+    bool m_attackRoutine;
+    bool m_inAir;
 
     int m_wait = Animator.StringToHash("Wait");
     int m_attack = Animator.StringToHash("Attack");
     int m_rise = Animator.StringToHash("Rise");
-
-    void Start()
-    {
-        GetComponents();
-        Init();
-        //StartCoroutine(Rise());
-    }
+    int m_shoot = Animator.StringToHash("Shoot");
 
     public override void Init()
     {
@@ -52,40 +58,83 @@ public class EnemyBoss : Enemy
 
         m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
         m_health.OnEnemyDeath += UnsubscribeFromPlayer;
+        m_health.OnEnemyDeath += EnemyDied;
 
         m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
+        PlayerHealth.OnPlayerRespawn += ResetVariables;
+
+        StopAllCoroutines();
+        
+        m_currentStage = BossStage.StageOne;
+        m_duringRoutine = false;
+
 
         currentState = State.Idle;
         m_health.Init();
+
+        m_collider.enabled = true;
 
     }
 
     public override void GetComponents()
     {
         base.GetComponents();
+        m_enemyWeapon = GetComponent<EnemyWeapon>();
         m_collider = GetComponentInChildren<CapsuleCollider>();
     }
 
     void Update()
     {
+        ChangeState();
+
         if (RoomManager.instance.PlayerInRoom && RoomManager.instance.PlayerCurrentRoom == roomIndex)
         {
-            if (!m_playerHealth.IsDead() && !m_health.IsDead() && m_duringRoutine == false)
+            if (!m_playerHealth.IsDead() && !m_health.IsDead())
             {
-                StartCoroutine(Rise());
+                switch(m_currentStage)
+                {
+                    case BossStage.StageOne:
+                    {
+                        if(!m_duringRoutine)
+                            StartCoroutine(Rise());
+                    }
+                    break;
+
+                    case BossStage.StageTwo:
+                    {
+                        FaceTarget();
+                        if(!m_duringRoutine)
+                            StartCoroutine(ShootSeries());
+                    }
+                    break;
+                }
             }
+        }
+    }
+
+    void ChangeState()
+    {
+        if(m_health.CurrentHealth > Mathf.RoundToInt(m_health.startHealth / 2f))
+        {
+            m_currentStage = BossStage.StageOne;
+        }
+        else
+        {
+            m_currentStage = BossStage.StageTwo;
         }
     }
 
     IEnumerator Rise()
     {
+        m_attackRoutine = true;
+        m_duringRoutine = true;
+        m_inAir = true;
+
         m_collider.direction = 1;
         transform.localEulerAngles = new Vector3(0f,transform.localEulerAngles.y,0f);
 
         m_anim.SetTrigger(m_rise);
         yield return new WaitForSeconds(0.4f);
-
-        m_duringRoutine = true;
 
         Vector3 startPos = transform.position;
         Vector3 desiredPos = startPos + Vector3.up * jumpHeight;
@@ -105,11 +154,18 @@ public class EnemyBoss : Enemy
         yield return new WaitForSeconds(waitAtPeak);
         m_anim.SetBool(m_wait, false);
 
-        StartCoroutine(Attack());
+      
+
+        if(m_currentStage == BossStage.StageOne && m_attackRoutine)
+            StartCoroutine(Attack());
+        else
+            StartCoroutine(ShootSeries());
     }
+
 
     IEnumerator Attack()
     {
+  
         m_collider.direction = 2;
         m_anim.SetBool(m_attack, true);
 
@@ -117,7 +173,7 @@ public class EnemyBoss : Enemy
         Vector3 desiredPos = m_playerTransform.position;
 
         //GFX.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
-        GFX.transform.rotation = Quaternion.LookRotation(desiredPos - startPos);
+        GFX.transform.localRotation = Quaternion.LookRotation(desiredPos - startPos);
         GFX.transform.localPosition = localGFXOffset;
 
         float percent = 0f;
@@ -131,16 +187,69 @@ public class EnemyBoss : Enemy
             yield return null;
         }
 
-
-
         yield return new WaitForSeconds(waitAtGround);
 
         GFX.transform.localEulerAngles = Vector3.zero;
         GFX.transform.localPosition = Vector3.zero;
         
         m_anim.SetBool(m_attack, false);
+        m_inAir = false;
+
+        if(m_currentStage == BossStage.StageTwo)
+        {
+            m_attackRoutine = false;
+            m_duringRoutine = false;
+            yield break;
+        }
 
         StartCoroutine(Rise());
     }
+
+    IEnumerator ShootSeries()
+    {
+        currentState = State.Attack;
+        m_duringRoutine = true; // set duringRoutine to true
+
+
+        while (shootSeries > 0 && m_playerRested) // while amount to shoot is greater than 0
+        {
+            m_anim.SetTrigger(m_shoot);
+
+            int amountToShoot = Random.Range(projectileAmountAtOnce - projectileAmountVariation, projectileAmountAtOnce + projectileAmountVariation + 1); // calculate how many projectiles will be shot
+
+            for(int i = 0; i < amountToShoot ; i++ )
+            {
+                Vector3 randomPoint = m_playerTransform.position + Random.insideUnitSphere * spreadAmount;
+                m_enemyWeapon.ShootProjectile(randomPoint);
+
+                yield return null;
+            }
+
+            //m_enemyWeapon.ShootProjectile(m_playerTransform.position); // we spawn projectile
+            shootSeries--; // we decrease amountToShoot by one
+            yield return new WaitForSeconds(attackRate); // and we wait for some time between shots
+        }
+
+        yield return StartCoroutine(WaitIdle()); // after shootSeries we can optionally wait for few seconds ex. for enemy to reload or something
+    }
+
+    IEnumerator WaitIdle()
+    {
+        //m_duringRoutine = false; // set our bool to false
+        currentState = State.Idle; // change our state to idle
+
+        yield return new WaitForSeconds(waitTimeBeforeNextShootSeries); // wait for some delay
+
+        StartCoroutine(ShootSeries());
+
+        /*  
+            if(m_inAir)
+                StartCoroutine(Attack());
+            else
+                StartCoroutine(Rise());
+         */
+    }
+
+    
 
 }

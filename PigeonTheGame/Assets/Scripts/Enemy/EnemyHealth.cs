@@ -8,6 +8,8 @@ public class EnemyHealth : Health
 
     public event System.Action<EnemyHealth> OnEnemyDeath; // public event OnEnemyDeath
 
+    protected Collider m_collider;
+
     public override void Init()
     {
         base.Init();
@@ -18,10 +20,12 @@ public class EnemyHealth : Health
     public override void GetComponents()
     {
         base.GetComponents();
+
         m_anim = GetComponent<Animator>();
 
         if (ragdoll)
         {
+            m_collider = GetComponent<Collider>();
             GetRagdollInitTransforms();
             RagdollToggle(false);
         }
@@ -49,10 +53,14 @@ public class EnemyHealth : Health
     {
         base.RagdollToggle(state);
 
-        if (m_collidersArray != null)
+        if (m_collider != null)
         {
-            foreach (Collider c in m_collidersArray)
-                c.enabled = !state;
+            m_collider.enabled = !state;
+        }
+        else
+        {
+            m_collider = GetComponentInChildren<Collider>();
+            m_collider.enabled = !state;
         }
 
         if (m_anim != null)
@@ -80,5 +88,6 @@ public class EnemyHealth : Health
 
         PlayerHealth.OnPlayerRespawn -= Deactivate;
     }
+
 
 }

@@ -15,7 +15,7 @@ public class EnemyWeapon : MonoBehaviour
     // Update is called once per frame
     public void ShootProjectile(Vector3 playerPos) // public Function to instantiate our projectile and set it parameters
     {
-        Projectile obj = Instantiate(projectile, spawnPoint.position, spawnPoint.rotation) as Projectile;
+        Projectile obj = Instantiate(projectile, spawnPoint.position, Quaternion.identity) as Projectile;
         obj.OnProjectileSpawn((playerPos - spawnPoint.position).normalized, speed, damage, projectileLife, transform.gameObject);
     }
 }

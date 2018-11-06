@@ -30,6 +30,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     // Use this for initialization
     public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
+        transform.rotation = Quaternion.LookRotation(dir);
+
         m_startSize = transform.localScale;
         m_startPos = transform.position;
         myForce = force;
@@ -38,8 +40,11 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         m_dir = dir;
 
 		GetComponents();
-        m_trailStartWidth = m_trailRenderer.startWidth;
-        m_trailRenderer.startWidth = m_startSize.x - 0.1f;
+        if(m_trailRenderer)
+        {
+            m_trailStartWidth = m_trailRenderer.startWidth;
+            m_trailRenderer.startWidth = m_startSize.x - 0.1f;
+        }
 
         m_objectShotFrom = objectShotFrom;
         m_damage = damage;
@@ -55,8 +60,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 		m_rigid = GetComponent<Rigidbody>();
         m_trailRenderer = GetComponent<TrailRenderer>();
 	}
-    void Update()
-    {
+    //void Update()
+    //{
         // (transform.position - m_startPos).sqrMagnitude || CHANGE TO THIS LATER TODO zmień sposób liczenia dystansu bo teraz on liczy jak dalkeo jest od spawnPointu a nie ile już drogi przeleciał, ale żeby zrobić żebyśmy znali dystans jaki przemieszcza się co klatkę to trzeba by było albo zrobić kalkulacje jego pozycji tearzniejszej klatki odciąć z poprzednią i tego wyliczyć dystans przebyty i dodać do sumy dystans albo jak zmienić żeby projectile leciał Transform.Translate to wtedy możesz wyliczyć dystans który przybędzie do następnej klatki tak : dystans = speed * Time.deltaTime  
         //Vector3.Distance(m_startPos, transform.position)
 
@@ -68,7 +73,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
                 Destroy(gameObject);
             }
          */
-    }
+    //}
 
 
     void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
@@ -124,7 +129,9 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             percent += Time.deltaTime * speed;
             desiredSize = lifeSizeCurve.Evaluate(percent);
             transform.localScale = Vector3.Lerp(m_startSize, Vector3.zero, desiredSize) ;
-            m_trailRenderer.startWidth = Mathf.Lerp(m_trailStartWidth, 0f, desiredSize);
+
+            if(m_trailRenderer)
+                m_trailRenderer.startWidth = Mathf.Lerp(m_trailStartWidth, 0f, desiredSize);
 
             yield return null;
         }

@@ -9,6 +9,7 @@ public abstract class Health : MonoBehaviour
     public int startHealth;
 
     protected int m_health;
+    public int CurrentHealth {get{return m_health;}}
 
     protected bool m_isDead;
 
@@ -16,7 +17,7 @@ public abstract class Health : MonoBehaviour
 
     // RAGDOLL
 
-    protected Collider[] m_collidersArray;
+   
 
     protected List<Rigidbody> m_childrenRigidsList;
     protected Collider[] m_childrenCollidersArray;
@@ -35,8 +36,6 @@ public abstract class Health : MonoBehaviour
     {
         if (ragdoll)
         {
-            m_collidersArray = GetComponents<Collider>();
-
             m_childrenRigidsList = GetComponentsInChildren<Rigidbody>().ToList();
             m_childrenCollidersArray = GetComponentsInChildren<Collider>();
         }

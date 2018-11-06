@@ -221,16 +221,22 @@ public abstract class Enemy : MonoBehaviour
         {
             spawnPoint.EnemyAlive = false;
             StopAllCoroutines();
-            m_agent.ResetPath();
+            Debug.Log(gameObject.name);
+            
+            if(m_agent!= null)
+                m_agent.ResetPath();
         }
     }
 
     public virtual void ResetVariables()
     {
-        m_agent.isStopped = true;
-        m_agent.ResetPath();
+        if(m_agent != null)
+        {
+            m_agent.isStopped = true;
+            m_agent.ResetPath();
+            m_agent.isStopped = false;
+        }
 
-        m_agent.isStopped = false;
 
         transform.position = m_spawnPoint.transform.position;
         transform.rotation = m_spawnPoint.transform.rotation;
