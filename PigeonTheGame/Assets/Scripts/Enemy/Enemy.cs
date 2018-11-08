@@ -237,11 +237,12 @@ public abstract class Enemy : MonoBehaviour
             m_agent.isStopped = false;
         }
 
-
         transform.position = m_spawnPoint.transform.position;
         transform.rotation = m_spawnPoint.transform.rotation;
 
         waitTimeWhenEnter = m_spawnPoint.waitDelay;
+        roomIndex = m_spawnPoint.roomIndex;
+
 
         Init();
     }

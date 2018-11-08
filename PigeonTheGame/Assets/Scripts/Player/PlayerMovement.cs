@@ -113,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!m_playerHealth.IsDead())
         {
-            CheckIfGrounded();
             PlayerDash();
             PlayerJump();
             SmokeTrail();
@@ -134,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        CheckIfGrounded();
         CalculateMovePosition();
 
         if (m_playerInput.InputEnabled)
@@ -159,7 +159,7 @@ public class PlayerMovement : MonoBehaviour
         Ray ray = new Ray(transform.position - transform.forward, Vector3.down);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 0.6f, groundLayerMask))
+        if (Physics.Raycast(ray, out hit, 1f, groundLayerMask))
         {
             m_anim.SetBool(m_inAirHash, false);
             m_playerInput.InputEnabled = true;

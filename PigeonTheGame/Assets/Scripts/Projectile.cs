@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 {
     public AnimationCurve lifeSizeCurve;
 
+    public bool richochet;
+
     float lifePercent;
 
     int m_damage;
@@ -78,8 +80,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
     void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
     {
-        
-        ReflectBullet(other);
+        if(richochet)
+            ReflectBullet(other);
 
         Health otherHealth = other.gameObject.GetComponent<Health>();
 

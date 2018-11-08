@@ -14,7 +14,8 @@ public class CameraController : MonoBehaviour
 
 	public CameraType cameraType;
 
-	public Transform target;
+	public Transform targetToFollow;
+	public Transform targetWhenDead;
 	public Transform yawTransform;
 	public float sensitivity = 1f;
 	public bool invertY = false;
@@ -54,6 +55,8 @@ public class CameraController : MonoBehaviour
 
 	Vector3 m_offset;
 
+	Transform m_target;
+
 
     // Use this for initialization
     void Start()
@@ -67,7 +70,8 @@ public class CameraController : MonoBehaviour
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 
-		transform.position = target.position;
+		m_target = targetToFollow;
+		transform.position = m_target.position;
 		m_cameraStartPos = m_camera.transform.localPosition;
 
 		PlayerWeapon.OnPlayerShoot += ZoomCrosshair; // we zoom our crosshair when playter shoot
@@ -107,19 +111,19 @@ public class CameraController : MonoBehaviour
 
     void UpdateCamPosition()
     {
-		if(target == null) // IF THERE IS NO TARGET , RETURN
+		if(m_target == null) // IF THERE IS NO TARGET , RETURN
 			return;
 
 		ZoomCamera();
 		ResizeCrosshair();
 
-		m_offset = target.position - transform.position; // offset between player and our position
+		m_offset = m_target.position - transform.position; // offset between player and our position
         Vector3 desiredPos = transform.position + m_offset; // desired position that we want to be
 
 		if(cameraType == CameraType.SmoothFollow)
-			transform.position = Vector3.SmoothDamp(transform.position, target.position, ref smoothRefVelocity, followDelay * (m_playerInput.NoInput() ? 1f : followMultiplierWhenStationary)); // smooth our camera
+			transform.position = Vector3.SmoothDamp(transform.position, m_target.position, ref smoothRefVelocity, followDelay * (m_playerInput.NoInput() ? 1f : followMultiplierWhenStationary)); // smooth our camera
 		else
-			transform.position = target.position; // snap our camera
+			transform.position = m_target.position; // snap our camera
 
     }
 
@@ -127,12 +131,14 @@ public class CameraController : MonoBehaviour
 	{
 		m_playerInput.MouseEnabled = false;
 		m_playerInput.InputEnabled = false;
+		m_target = targetWhenDead;
 	}
 
 	void ReenableCamWhenRespawn()
 	{
 		m_playerInput.MouseEnabled = true;
 		m_playerInput.InputEnabled = true;
+		m_target = targetToFollow;
 	}
 
     // Update is called once per frame

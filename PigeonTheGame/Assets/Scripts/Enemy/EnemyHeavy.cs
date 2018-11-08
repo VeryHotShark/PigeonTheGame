@@ -52,7 +52,7 @@ public class EnemyHeavy : Enemy
         {
             FaceTarget();
 
-            if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom) // if player is outside our attackRange and is in Room
+            if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom && RoomManager.instance.PlayerCurrentRoom == roomIndex) // if player is outside our attackRange and is in Room
             {
                 m_agent.ResetPath(); // we reset agent path
                 if (currentState != State.Attack && !m_duringRoutine) // if we are not in attack State and not during routine

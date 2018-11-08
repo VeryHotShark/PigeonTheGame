@@ -115,6 +115,7 @@ public class EnemySpawner : MonoBehaviour
             objToReuse.spawnPoint.EnemyAlive = true;
             objToReuse.spawnPoint.MyEnemy = objToReuse;
 
+            objToReuse.roomIndex = spawnPoint.roomIndex;
             objToReuse.waitTimeWhenEnter = spawnPoint.waitDelay;
 
             objToReuse.gameObject.SetActive(true);

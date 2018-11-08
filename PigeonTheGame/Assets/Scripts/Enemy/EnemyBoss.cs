@@ -52,16 +52,18 @@ public class EnemyBoss : Enemy
 
     public override void Init()
     {
+        if(m_health.IsDead())
+        {
+            EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
+            EnemyManager.instance.EnemyCount++; // and we increment the count of our enemy
 
-        EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
-        EnemyManager.instance.EnemyCount++; // and we increment the count of our enemy
+            m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
+            m_health.OnEnemyDeath += UnsubscribeFromPlayer;
+            m_health.OnEnemyDeath += EnemyDied;
 
-        m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
-        m_health.OnEnemyDeath += UnsubscribeFromPlayer;
-        m_health.OnEnemyDeath += EnemyDied;
-
-        m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-        PlayerHealth.OnPlayerRespawn += ResetVariables;
+            m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
+            PlayerHealth.OnPlayerRespawn += ResetVariables;
+        }
 
         StopAllCoroutines();
         
@@ -69,7 +71,7 @@ public class EnemyBoss : Enemy
         m_duringRoutine = false;
 
 
-        currentState = State.Idle;
+        currentState = State.Idle;  
         m_health.Init();
 
         m_collider.enabled = true;
@@ -211,7 +213,9 @@ public class EnemyBoss : Enemy
         m_duringRoutine = true; // set duringRoutine to true
 
 
-        while (shootSeries > 0 && m_playerRested) // while amount to shoot is greater than 0
+        int randomShootSeries = Random.Range(shootSeries - 1, shootSeries + 2);
+
+        while (randomShootSeries > 0 && m_playerRested) // while amount to shoot is greater than 0
         {
             m_anim.SetTrigger(m_shoot);
 
@@ -226,11 +230,11 @@ public class EnemyBoss : Enemy
             }
 
             //m_enemyWeapon.ShootProjectile(m_playerTransform.position); // we spawn projectile
-            shootSeries--; // we decrease amountToShoot by one
+            randomShootSeries--; // we decrease amountToShoot by one
             yield return new WaitForSeconds(attackRate); // and we wait for some time between shots
         }
 
-        yield return StartCoroutine(WaitIdle()); // after shootSeries we can optionally wait for few seconds ex. for enemy to reload or something
+        StartCoroutine(WaitIdle()); // after shootSeries we can optionally wait for few seconds ex. for enemy to reload or something
     }
 
     IEnumerator WaitIdle()
