@@ -15,6 +15,7 @@ public class EnemyHeavy : Enemy
     }
 
     [Header("Attack")]
+
     public int projectileAmount = 5;
     public int projectileAmountVariation = 2;
     public float waitTimeBeforeNextShootSeries;

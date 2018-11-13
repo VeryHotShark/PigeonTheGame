@@ -125,7 +125,8 @@ public class EnemySpawner : MonoBehaviour
             objToReuse.transform.position = position;
             objToReuse.transform.rotation = rotation;
 
-            objToReuse.Init();
+            objToReuse.ResetVariables();
+            //objToReuse.Init();
 
             poolDictionary[enemyType].Enqueue(objToReuse);
         }

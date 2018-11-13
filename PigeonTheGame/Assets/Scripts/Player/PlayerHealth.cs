@@ -9,12 +9,16 @@ public class PlayerHealth : Health
     public bool GodMode;
 
     public GameObject hitVFX;
+    public GameObject healVFX;
 
+    public int bigHealth = 3;
     public float respawnDelay;
 
     public event System.Action<int> OnPlayerLoseHealth; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
+    public event System.Action OnPlayerReachCheckPoint;
     public static event System.Action OnPlayerDeath;
     public static event System.Action OnPlayerRespawn;
+    public static event System.Action OnPlayerBigDeath;
 
     protected Collider[] m_collidersArray;
 
@@ -75,7 +79,7 @@ public class PlayerHealth : Health
         m_playerMovement.Anim.SetTrigger(m_hitHash);
 
         GameObject playerHitVFX = Instantiate(hitVFX, transform.position + Vector3.up, Quaternion.identity);
-        Destroy(playerHitVFX,0.3f);
+        Destroy(playerHitVFX, 0.3f);
 
         if (!GodMode)
         {
@@ -83,12 +87,23 @@ public class PlayerHealth : Health
             if (OnPlayerLoseHealth != null)
                 OnPlayerLoseHealth(m_health); // we invoke this event
 
-            if (m_health <= 0) // if we are dead
-                Die();
+            if (m_health <= 0)
+            {
+                if(bigHealth > 0)
+                {
+                    Die();
+                    bigHealth--;
+                }
+                else
+                {
+                    if(OnPlayerBigDeath != null)
+                        OnPlayerBigDeath();
+                }
+            }
         }
     }
 
-     public override void TakeDamage(int damage, ContactPoint point)
+    public override void TakeDamage(int damage, ContactPoint point)
     {
         CameraShake.isShaking = true; // when we take damage we make our cam Shake
         base.TakeDamage(damage);
@@ -97,7 +112,7 @@ public class PlayerHealth : Health
         m_playerMovement.Anim.SetTrigger(m_hitHash);
 
         GameObject playerHitVFX = Instantiate(hitVFX, point.point, Quaternion.identity);
-        Destroy(playerHitVFX,0.3f);
+        Destroy(playerHitVFX, 0.3f);
 
         if (!GodMode)
         {
@@ -105,15 +120,26 @@ public class PlayerHealth : Health
             if (OnPlayerLoseHealth != null)
                 OnPlayerLoseHealth(m_health); // we invoke this event
 
-            if (m_health <= 0) // if we are dead
-                Die();
+             if (m_health <= 0)
+            {
+                if(bigHealth > 0)
+                {
+                    Die();
+                    bigHealth--;
+                }
+                else 
+                {
+                    if(OnPlayerBigDeath != null)
+                        OnPlayerBigDeath();
+                }
+            }
         }
     }
 
     public override void Die()
     {
         m_isDead = true;
-        
+
         if (OnPlayerDeath != null)
             OnPlayerDeath();
 
@@ -162,6 +188,26 @@ public class PlayerHealth : Health
             TakeDamage(3);
     }
 
+    void OnTriggerExit(Collider other)
+    {
+        RoomTrigger roomTrigger = other.GetComponent<RoomTrigger>();
+
+        if (roomTrigger != null)
+        {
+            if(m_health != startHealth && roomTrigger.HealthResetted == false)
+            {
+                m_health = startHealth;
+
+                if (OnPlayerReachCheckPoint != null)
+                    OnPlayerReachCheckPoint();
+
+                GameObject healVFXInstance = Instantiate(healVFX, transform.position + Vector3.up, Quaternion.identity);
+                healVFXInstance.transform.parent = transform;
+                Destroy(healVFXInstance, 1.5f);
+            }
+        }
+    }
+
     public override void RagdollToggle(bool state)
     {
         if (m_childrenCollidersArray != null)
@@ -189,13 +235,13 @@ public class PlayerHealth : Health
             c.enabled = !state;
     }
 
-    
+
 
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Owl"))
         {
-            if(!other.gameObject.GetComponentInParent<EnemyHealth>().IsDead() && !m_justGotHit)
+            if (!other.gameObject.GetComponentInParent<EnemyHealth>().IsDead() && !m_justGotHit)
             {
                 m_justGotHit = true;
                 TakeDamage(1);
@@ -210,7 +256,7 @@ public class PlayerHealth : Health
     {
         yield return new WaitForSeconds(0.1f);
 
-       m_justGotHit = false;
+        m_justGotHit = false;
     }
 
 

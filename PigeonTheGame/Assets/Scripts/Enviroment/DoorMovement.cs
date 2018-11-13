@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class DoorMovement : MonoBehaviour
 {
+
+    public enum MoveDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
+    public MoveDirection moveDirection;
+
     public float moveUnit;
     public float moveTime;
     public AnimationCurve moveCurve;
@@ -21,7 +32,15 @@ public class DoorMovement : MonoBehaviour
     void Init()
     {
         startPos = transform.localPosition;
-        endPos = startPos - transform.up * moveUnit;
+
+        if (moveDirection == MoveDirection.Down)
+            endPos = startPos - transform.up * moveUnit;
+        else if (moveDirection == MoveDirection.Up)
+            endPos = startPos + transform.up * moveUnit;
+        else if (moveDirection == MoveDirection.Left)
+            endPos = startPos - transform.right * moveUnit;
+        else
+            endPos = startPos + transform.right * moveUnit;
     }
 
     IEnumerator StartYieldTime()
@@ -35,15 +54,20 @@ public class DoorMovement : MonoBehaviour
     {
         float curvedPercent = 0f;
         float percent = 0f;
-        float speed = 1f /  moveTime;
+        float speed = 1f / moveTime;
 
         while (percent < 1f)
         {
             percent += Time.deltaTime * speed;
             curvedPercent = moveCurve.Evaluate(percent);
-            transform.localPosition = Vector3.Lerp(startPos, endPos,  curvedPercent);
+            transform.localPosition = Vector3.Lerp(startPos, endPos, curvedPercent);
             yield return null;
         }
 
+    }
+
+    public void ResetPos()
+    {
+        transform.localPosition = startPos;
     }
 }

@@ -19,18 +19,18 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     float myForce;
     float m_speed;
     float m_distance;
-    float m_lifeTime;
+    protected float m_lifeTime;
 
     Vector3 m_startPos;
     Vector3 m_dir;
 
-    Vector3 m_startSize;
+    protected Vector3 m_startSize;
 
-    TrailRenderer m_trailRenderer;
-    float m_trailStartWidth;
+    protected TrailRenderer m_trailRenderer;
+    protected float m_trailStartWidth;
 
     // Use this for initialization
-    public void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
+    public virtual void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
         transform.rotation = Quaternion.LookRotation(dir);
 
@@ -78,7 +78,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     //}
 
 
-    void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
+    public virtual void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
     {
         if(richochet)
             ReflectBullet(other);
@@ -119,7 +119,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
     }
 
-    IEnumerator SizeOverLifetime()
+    public virtual IEnumerator SizeOverLifetime()
     {
         float percent = 0f;
         float speed = 1f / m_lifeTime;

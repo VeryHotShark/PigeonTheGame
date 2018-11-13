@@ -40,7 +40,7 @@ public class RoomManager : MonoBehaviour
 
     void Start()
     {
-        PlayerHealth.OnPlayerRespawn += ResetPlayerInRoom;
+        PlayerHealth.OnPlayerDeath += ResetPlayerInRoom;
     }
 
     private void Singleton()

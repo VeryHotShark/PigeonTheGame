@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player VFX")]
 
     public ParticleSystem smokeParticle;
+    public GameObject landVFX;
     public TrailRenderer dashVFX;
 
 
@@ -62,6 +63,9 @@ public class PlayerMovement : MonoBehaviour
     bool m_dashing;
     bool m_dashedInAir;
     bool m_allowDash;
+
+    bool m_landed = true;
+
 
     // ANIMATOR
 
@@ -165,10 +169,19 @@ public class PlayerMovement : MonoBehaviour
             m_playerInput.InputEnabled = true;
             m_allowDash = true;
             m_isGrounded = true;
+
+            if(m_isGrounded && !m_landed)
+            {
+                m_landed = true;
+                GameObject landVFXInstance = Instantiate(landVFX,transform.position - Vector3.up * 0.1f,Quaternion.identity);
+                Debug.Log("land");
+                Destroy(landVFXInstance,1.5f);
+            }
         }
         else
         {
             m_isGrounded = false;
+            m_landed = false;
             m_anim.SetBool(m_inAirHash, true);
         }
     }
@@ -300,7 +313,10 @@ public class PlayerMovement : MonoBehaviour
             if (m_playerInput.JumpInput) // if we pressed jump button
             {
                 m_anim.SetBool(m_inAirHash, true);
+
                 m_isGrounded = false; // we are not on ground anymore
+                m_landed = false;
+
                 m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse); // we add upwards force to make our player jump
             }
         }
@@ -322,7 +338,7 @@ public class PlayerMovement : MonoBehaviour
     {
         var emission = smokeParticle.emission;
 
-        if (m_playerInput.NoInput()) // if there is no input
+        if (m_playerInput.NoInput() || !m_isGrounded) // if there is no input
         {
             emission.rateOverTime = 0f; // we emite no smoke
         }

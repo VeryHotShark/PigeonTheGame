@@ -237,6 +237,8 @@ public abstract class Enemy : MonoBehaviour
             m_agent.isStopped = false;
         }
 
+        delayWaited = false;
+
         transform.position = m_spawnPoint.transform.position;
         transform.rotation = m_spawnPoint.transform.rotation;
 

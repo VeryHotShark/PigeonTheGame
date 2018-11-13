@@ -7,6 +7,8 @@ public class EnemyStationary : Enemy
 
     public override void ResetVariables()
     {
+        base.ResetVariables();
+
         m_duringRoutine = false;
     }
 

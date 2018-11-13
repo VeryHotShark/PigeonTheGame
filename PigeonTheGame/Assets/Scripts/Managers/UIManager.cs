@@ -27,9 +27,9 @@ public class UIManager : MonoBehaviour
 	{
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
 		m_playerHealth.OnPlayerLoseHealth += ChangeImage;
+		m_playerHealth.OnPlayerReachCheckPoint += ResetHealthImages;
 	}
 
-    // Update is called once per frame
     void ChangeImage(int playerCurrentHealth)
     {
 		if(playerCurrentHealth > 0)
@@ -45,5 +45,13 @@ public class UIManager : MonoBehaviour
 			}
 		}
 
+    }
+
+	  void ResetHealthImages()
+    {
+			foreach(Image liveImage in livesImages)
+			{
+				liveImage.sprite = aliveSprite;
+			}
     }
 }

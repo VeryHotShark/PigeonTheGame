@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 	{
 		m_enemyManager = FindObjectOfType<EnemyManager>();
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
+		PlayerHealth.OnPlayerBigDeath += RestartLevel;
 	}
 
     // Update is called once per frame
@@ -22,4 +23,9 @@ public class GameManager : MonoBehaviour
 			if(Input.GetKeyDown(KeyCode.R))
 				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+	void RestartLevel()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
 }

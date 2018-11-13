@@ -20,9 +20,20 @@ public class RoomTrigger : MonoBehaviour
 
     public bool triggerDoor;
 
-    public DoorMovement door;
+    public DoorMovement[] doors;
 
     bool doorTriggered;
+    public bool healthReset;
+
+    bool m_healthResetted;
+
+    public bool HealthResetted { get { return m_healthResetted; } }
+
+    void Start()
+    {
+        if(doors != null)
+            PlayerHealth.OnPlayerRespawn += ResetDoor;
+    }
 
     void OnTriggerExit(Collider other)
     {
@@ -73,6 +84,10 @@ public class RoomTrigger : MonoBehaviour
                     }
                     break;
             }
+
+            if(healthReset && !m_healthResetted)
+                m_healthResetted = true;
+
         }
     }
 
@@ -81,12 +96,24 @@ public class RoomTrigger : MonoBehaviour
           if (other.gameObject.CompareTag("Player"))
           {
               if(triggerDoor)
-                    if(door != null && !doorTriggered)
+                    if(doors != null && !doorTriggered)
                     {
                         doorTriggered = true;
-                        door.InitDoor();
+
+                        foreach(DoorMovement door in doors)
+                            door.InitDoor();
                     }
           }
+    }
+
+    void ResetDoor()
+    {
+        doorTriggered = false;
+        m_healthResetted = false;
+
+        if(doors != null)
+            foreach(DoorMovement door in doors)
+                door.ResetPos();
     }
 
 }

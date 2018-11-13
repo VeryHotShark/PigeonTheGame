@@ -169,6 +169,8 @@ ModelImporter:
     100326: torch.007
     100328: Empty.001
     100330: StairsNew.001
+    100332: MultiEdit
+    100334: MultiEdit.001
     400000: Camera
     400002: Cube.001
     400004: Lamp
@@ -335,6 +337,8 @@ ModelImporter:
     400326: torch.007
     400328: Empty.001
     400330: StairsNew.001
+    400332: MultiEdit
+    400334: MultiEdit.001
     2000000: Camera
     2100000: Default_Prototype
     2300000: Cube.001
@@ -500,6 +504,8 @@ ModelImporter:
     2300320: torch.006
     2300322: torch.007
     2300324: StairsNew.001
+    2300326: MultiEdit
+    2300328: MultiEdit.001
     3300000: Cube.001
     3300002: Stairs (1)_0
     3300004: Stairs_0
@@ -663,6 +669,8 @@ ModelImporter:
     3300320: torch.006
     3300322: torch.007
     3300324: StairsNew.001
+    3300326: MultiEdit
+    3300328: MultiEdit.001
     4300000: Cube.001
     4300002: Stairs (1)_0
     4300004: Stairs_0
@@ -825,6 +833,9 @@ ModelImporter:
     4300318: Circle.013
     4300320: Cube.049
     4300322: StairsNew.001
+    4300324: MultiEdit
+    4300326: MultiEdit.001
+    4300328: Mapa
     6400000: Cube.001
     6400002: Stairs (1)_0
     6400004: Stairs_0
@@ -988,11 +999,48 @@ ModelImporter:
     6400320: torch.006
     6400322: torch.007
     6400324: StairsNew.001
+    6400326: MultiEdit
+    6400328: MultiEdit.001
     10800000: Lamp
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GridFloor
+    second: {fileID: 2100000, guid: ac20a724453cc00429ccdbdad86fc40f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GridFloor_BW
+    second: {fileID: 2100000, guid: 5fc7d534a240bdb44a8cb13b2b1d96a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: KitchenWall
+    second: {fileID: 2100000, guid: 4a0fdc0ea75b88a4c9052cf369c39035, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: OwlWall
+    second: {fileID: 2100000, guid: ecf091d1862f3ff479badca189ef1a72, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof
+    second: {fileID: 2100000, guid: 8c6a66f9142a12e4499d5adf00d07c2a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WallLibrary
+    second: {fileID: 2100000, guid: 4580685a4c028ca47869d6fc6066f9bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WoodFloor
+    second: {fileID: 2100000, guid: c5077f02832e86444a662bfd6038cb5f, type: 2}
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
