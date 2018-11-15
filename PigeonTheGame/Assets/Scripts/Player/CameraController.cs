@@ -26,6 +26,23 @@ public class CameraController : MonoBehaviour
 
 	public Transform crosshair;
 
+	[Header("Marks Variables")]
+	public GameObject deathMark;
+
+	public float deathMarkStartSize;
+	public float deathMarkEndSize;
+	public float deathMarkDuration;
+	public AnimationCurve deathMarkCurve;
+
+	[Space]
+	public GameObject hitMark;
+
+	public float hitMarkStartSize;
+	public float hitMarkEndSize;
+	public float hitMarkDuration;
+	public AnimationCurve hitMarkCurve;
+
+
 	[Header("Zoom Variables")]
 
 	public Transform zoomTransform;
@@ -58,11 +75,15 @@ public class CameraController : MonoBehaviour
 	Transform m_target;
 
 
+	IEnumerator DeathRoutine;
+	IEnumerator HitRoutine;
+
     // Use this for initialization
     void Start()
     {
 		GetComponents();
 		Init();
+
     }
 
 	void Init()
@@ -78,6 +99,11 @@ public class CameraController : MonoBehaviour
 		PlayerHealth.OnPlayerDeath += DisableCamWhenDead;
 		PlayerHealth.OnPlayerRespawn += ResetCam;
 		PlayerHealth.OnPlayerRespawn += ReenableCamWhenRespawn;
+
+		deathMark.SetActive(false);
+		hitMark.SetActive(false);
+		EnemyHealth.OnEnemyTakeDamage += ShowHitMark;
+		EnemyHealth.OnAnyEnemyDeath += ShowDeathMark;
 
 		m_initFOV = m_camera.fieldOfView;
 		m_crosshairInitScale = crosshair.localScale;
@@ -233,5 +259,66 @@ public class CameraController : MonoBehaviour
 		m_yaw = 0f;
 		m_pitch = 0f;
 	}
+
+	void ShowDeathMark()
+	{
+		DeathRoutine = ShrinkDeathMarkRoutine();
+
+		if(DeathRoutine != null)
+			StartCoroutine(DeathRoutine);
+	}
+
+	void ShowHitMark()
+	{
+		HitRoutine = GrowHitMarkRoutine();
+
+		if(HitRoutine != null)
+			StartCoroutine(HitRoutine);
+	}
 	
+	IEnumerator ShrinkDeathMarkRoutine()
+	{
+		deathMark.SetActive(true);
+
+		Vector3 startSize = Vector3.one * deathMarkStartSize;
+		Vector3 endSize = Vector3.one * deathMarkEndSize;
+
+		deathMark.transform.localScale = startSize;
+
+		float percent = 0f;
+		float speed = 1f / deathMarkDuration;
+
+		while(percent < 1f)
+		{
+			percent += Time.deltaTime * speed;
+			deathMark.transform.localScale = Vector3.Lerp(startSize, endSize, deathMarkCurve.Evaluate(percent)) ;
+			yield return null;
+		}
+
+		deathMark.SetActive(false);
+
+	}
+
+	IEnumerator GrowHitMarkRoutine()
+	{
+		hitMark.SetActive(true);
+
+		Vector3 startSize = Vector3.one * hitMarkStartSize;
+		Vector3 endSize = Vector3.one * hitMarkEndSize;
+
+		hitMark.transform.localScale = startSize;
+
+		float percent = 0f;
+		float speed = 1f / hitMarkDuration;
+
+		while(percent < 1f)
+		{
+			percent += Time.deltaTime * speed;
+			hitMark.transform.localScale = Vector3.Lerp(startSize, endSize, hitMarkCurve.Evaluate(percent)) ;
+			yield return null;
+		}
+
+		hitMark.SetActive(false);
+
+	}
 }

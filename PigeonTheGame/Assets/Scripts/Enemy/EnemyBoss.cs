@@ -52,7 +52,7 @@ public class EnemyBoss : Enemy
 
     public override void Init()
     {
-        if(m_health.IsDead())
+        if (!m_health.IsDead())
         {
             EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
             EnemyManager.instance.EnemyCount++; // and we increment the count of our enemy
@@ -60,18 +60,19 @@ public class EnemyBoss : Enemy
             m_health.OnEnemyDeath += EnemyManager.instance.DecreaseEnemyCount; // and we make our EnemyManager to subscribe to our deathEvent so after death EnemyManager will automatically decrease enemies Count
             m_health.OnEnemyDeath += UnsubscribeFromPlayer;
             m_health.OnEnemyDeath += EnemyDied;
+            m_health.OnEnemyHalfHealth += ChangeState;
 
             m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
             PlayerHealth.OnPlayerRespawn += ResetVariables;
         }
 
         StopAllCoroutines();
-        
+
         m_currentStage = BossStage.StageOne;
         m_duringRoutine = false;
 
 
-        currentState = State.Idle;  
+        currentState = State.Idle;
         m_health.Init();
 
         m_collider.enabled = true;
@@ -87,28 +88,28 @@ public class EnemyBoss : Enemy
 
     void Update()
     {
-        ChangeState();
+
 
         if (RoomManager.instance.PlayerInRoom && RoomManager.instance.PlayerCurrentRoom == roomIndex)
         {
             if (!m_playerHealth.IsDead() && !m_health.IsDead())
             {
-                switch(m_currentStage)
+                switch (m_currentStage)
                 {
                     case BossStage.StageOne:
-                    {
-                        if(!m_duringRoutine)
-                            StartCoroutine(Rise());
-                    }
-                    break;
+                        {
+                            if (!m_duringRoutine)
+                                StartCoroutine(Rise());
+                        }
+                        break;
 
                     case BossStage.StageTwo:
-                    {
-                        FaceTarget();
-                        if(!m_duringRoutine)
-                            StartCoroutine(ShootSeries());
-                    }
-                    break;
+                        {
+                            FaceTarget();
+                            if (!m_duringRoutine)
+                                StartCoroutine(ShootSeries());
+                        }
+                        break;
                 }
             }
         }
@@ -116,24 +117,21 @@ public class EnemyBoss : Enemy
 
     void ChangeState()
     {
-        if(m_health.CurrentHealth > Mathf.RoundToInt(m_health.startHealth / 2f))
-        {
-            m_currentStage = BossStage.StageOne;
-        }
-        else
-        {
+        if (m_currentStage == BossStage.StageOne)
             m_currentStage = BossStage.StageTwo;
-        }
     }
 
     IEnumerator Rise()
     {
+        GFX.transform.localPosition = Vector3.zero;
+        FaceTarget();
+
         m_attackRoutine = true;
         m_duringRoutine = true;
         m_inAir = true;
 
         m_collider.direction = 1;
-        transform.localEulerAngles = new Vector3(0f,transform.localEulerAngles.y,0f);
+        //transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, 0f);
 
         m_anim.SetTrigger(m_rise);
         yield return new WaitForSeconds(0.4f);
@@ -156,9 +154,9 @@ public class EnemyBoss : Enemy
         yield return new WaitForSeconds(waitAtPeak);
         m_anim.SetBool(m_wait, false);
 
-      
 
-        if(m_currentStage == BossStage.StageOne && m_attackRoutine)
+
+        if (m_currentStage == BossStage.StageOne && m_attackRoutine)
             StartCoroutine(Attack());
         else
             StartCoroutine(ShootSeries());
@@ -167,7 +165,8 @@ public class EnemyBoss : Enemy
 
     IEnumerator Attack()
     {
-  
+        FaceTarget();
+
         m_collider.direction = 2;
         m_anim.SetBool(m_attack, true);
 
@@ -175,7 +174,7 @@ public class EnemyBoss : Enemy
         Vector3 desiredPos = m_playerTransform.position;
 
         //GFX.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
-        GFX.transform.localRotation = Quaternion.LookRotation(desiredPos - startPos);
+        //GFX.transform.localRotation = Quaternion.LookRotation(desiredPos - startPos);
         GFX.transform.localPosition = localGFXOffset;
 
         float percent = 0f;
@@ -191,13 +190,13 @@ public class EnemyBoss : Enemy
 
         yield return new WaitForSeconds(waitAtGround);
 
-        GFX.transform.localEulerAngles = Vector3.zero;
-        GFX.transform.localPosition = Vector3.zero;
-        
+        //GFX.transform.localEulerAngles = Vector3.zero;
+        //GFX.transform.localPosition = Vector3.zero;
+
         m_anim.SetBool(m_attack, false);
         m_inAir = false;
 
-        if(m_currentStage == BossStage.StageTwo)
+        if (m_currentStage == BossStage.StageTwo)
         {
             m_attackRoutine = false;
             m_duringRoutine = false;
@@ -221,7 +220,7 @@ public class EnemyBoss : Enemy
 
             int amountToShoot = Random.Range(projectileAmountAtOnce - projectileAmountVariation, projectileAmountAtOnce + projectileAmountVariation + 1); // calculate how many projectiles will be shot
 
-            for(int i = 0; i < amountToShoot ; i++ )
+            for (int i = 0; i < amountToShoot; i++)
             {
                 Vector3 randomPoint = m_playerTransform.position + Random.insideUnitSphere * spreadAmount;
                 m_enemyWeapon.ShootProjectile(randomPoint);
@@ -254,6 +253,6 @@ public class EnemyBoss : Enemy
          */
     }
 
-    
+
 
 }

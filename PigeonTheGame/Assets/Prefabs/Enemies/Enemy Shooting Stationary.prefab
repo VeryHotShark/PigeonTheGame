@@ -1312,7 +1312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdoll: 1
-  startHealth: 3
+  startHealth: 5
   hitVFX: {fileID: 1194393215392672, guid: 8602233fc6cff4548bc2633406795b28, type: 2}
 --- !u!114 &114807750510884834
 MonoBehaviour:

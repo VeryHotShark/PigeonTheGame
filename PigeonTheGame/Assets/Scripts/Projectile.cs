@@ -93,7 +93,10 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             if(otherHealth.gameObject.GetComponent<EnemyHealth>())
             {
                 if(m_objectShotFrom.GetComponent<Enemy>() == null)
+                {
+
                     otherHealth.TakeDamage(m_damage,other.contacts[0]);
+                }
             }
             else
                 otherHealth.TakeDamage(m_damage, other.contacts[0]);
