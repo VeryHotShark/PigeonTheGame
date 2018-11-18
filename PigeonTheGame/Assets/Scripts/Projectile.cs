@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo będą rózne rodzaje pocisków np gracza , kruków , heavy itp
 {
+    public GameObject hitVFX;
     public AnimationCurve lifeSizeCurve;
 
     public bool richochet;
@@ -27,6 +28,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     protected Vector3 m_startSize;
 
     protected TrailRenderer m_trailRenderer;
+    protected AudioSource m_audioSource;
     protected float m_trailStartWidth;
 
     // Use this for initialization
@@ -41,8 +43,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         m_dir = dir;
 
-		GetComponents();
-        if(m_trailRenderer)
+        GetComponents();
+        if (m_trailRenderer)
         {
             m_trailStartWidth = m_trailRenderer.startWidth;
             m_trailRenderer.startWidth = m_startSize.x - 0.1f;
@@ -50,52 +52,64 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         m_objectShotFrom = objectShotFrom;
         m_damage = damage;
-		m_rigid.AddForce(dir * force, ForceMode.Impulse);
+        m_rigid.AddForce(dir * force, ForceMode.Impulse);
         m_distance = lifeTime;
         m_lifeTime = lifeTime;
 
         StartCoroutine(SizeOverLifetime());
     }
 
-	void GetComponents()
-	{
-		m_rigid = GetComponent<Rigidbody>();
+    void GetComponents()
+    {
+        m_rigid = GetComponent<Rigidbody>();
         m_trailRenderer = GetComponent<TrailRenderer>();
-	}
+        m_audioSource = GetComponent<AudioSource>();
+    }
     //void Update()
     //{
-        // (transform.position - m_startPos).sqrMagnitude || CHANGE TO THIS LATER TODO zmień sposób liczenia dystansu bo teraz on liczy jak dalkeo jest od spawnPointu a nie ile już drogi przeleciał, ale żeby zrobić żebyśmy znali dystans jaki przemieszcza się co klatkę to trzeba by było albo zrobić kalkulacje jego pozycji tearzniejszej klatki odciąć z poprzednią i tego wyliczyć dystans przebyty i dodać do sumy dystans albo jak zmienić żeby projectile leciał Transform.Translate to wtedy możesz wyliczyć dystans który przybędzie do następnej klatki tak : dystans = speed * Time.deltaTime  
-        //Vector3.Distance(m_startPos, transform.position)
+    // (transform.position - m_startPos).sqrMagnitude || CHANGE TO THIS LATER TODO zmień sposób liczenia dystansu bo teraz on liczy jak dalkeo jest od spawnPointu a nie ile już drogi przeleciał, ale żeby zrobić żebyśmy znali dystans jaki przemieszcza się co klatkę to trzeba by było albo zrobić kalkulacje jego pozycji tearzniejszej klatki odciąć z poprzednią i tego wyliczyć dystans przebyty i dodać do sumy dystans albo jak zmienić żeby projectile leciał Transform.Translate to wtedy możesz wyliczyć dystans który przybędzie do następnej klatki tak : dystans = speed * Time.deltaTime  
+    //Vector3.Distance(m_startPos, transform.position)
 
-        //transform.Translate(transform.InverseTransformDirection(m_dir) * m_speed * Time.deltaTime);
+    //transform.Translate(transform.InverseTransformDirection(m_dir) * m_speed * Time.deltaTime);
 
-        /*
-            if( Vector3.Distance(m_startPos, transform.position) > m_distance)
-            {
-                Destroy(gameObject);
-            }
-         */
+    /*
+        if( Vector3.Distance(m_startPos, transform.position) > m_distance)
+        {
+            Destroy(gameObject);
+        }
+     */
     //}
 
 
     public virtual void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
     {
-        if(richochet)
+        if (richochet)
             ReflectBullet(other);
 
         Health otherHealth = other.gameObject.GetComponent<Health>();
 
-        if(otherHealth == null)
+        if (otherHealth == null)
             otherHealth = other.gameObject.GetComponentInParent<Health>();
 
-        if(otherHealth != null && other.gameObject != m_objectShotFrom)
+        if (otherHealth == null && hitVFX != null)
         {
-            if(otherHealth.gameObject.GetComponent<EnemyHealth>())
-            {
-                if(m_objectShotFrom.GetComponent<Enemy>() == null)
-                {
 
-                    otherHealth.TakeDamage(m_damage,other.contacts[0]);
+            if (m_audioSource != null)
+                m_audioSource.Play();
+
+            GameObject vfx = Instantiate(hitVFX, other.contacts[0].point, Quaternion.identity);
+            vfx.transform.rotation = Quaternion.Euler(other.contacts[0].normal);
+            Destroy(vfx, 1f);
+        }
+
+        if (otherHealth != null && other.gameObject != m_objectShotFrom)
+        {
+            if (otherHealth.gameObject.GetComponent<EnemyHealth>())
+            {
+                if (m_objectShotFrom.GetComponent<Enemy>() == null)
+                {
+                    AudioManager.instance.Play("PlayerHitMark");
+                    otherHealth.TakeDamage(m_damage, other.contacts[0]);
                 }
             }
             else
@@ -116,8 +130,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         //Debug.DrawLine(contactPoint.point,reflectDir,Color.red, 2f);
 
-        float rotation = 90 - Mathf.Atan2(reflectDir.z,reflectDir.x) * Mathf.Rad2Deg;
-        transform.eulerAngles = new Vector3(0f,rotation, 0f);
+        float rotation = 90 - Mathf.Atan2(reflectDir.z, reflectDir.x) * Mathf.Rad2Deg;
+        transform.eulerAngles = new Vector3(0f, rotation, 0f);
         m_rigid.AddForce(reflectDir * myForce, ForceMode.Impulse);
 
     }
@@ -129,13 +143,13 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         float desiredSize;
 
-        while(percent < 1f)
+        while (percent < 1f)
         {
             percent += Time.deltaTime * speed;
             desiredSize = lifeSizeCurve.Evaluate(percent);
-            transform.localScale = Vector3.Lerp(m_startSize, Vector3.zero, desiredSize) ;
+            transform.localScale = Vector3.Lerp(m_startSize, Vector3.zero, desiredSize);
 
-            if(m_trailRenderer)
+            if (m_trailRenderer)
                 m_trailRenderer.startWidth = Mathf.Lerp(m_trailStartWidth, 0f, desiredSize);
 
             yield return null;

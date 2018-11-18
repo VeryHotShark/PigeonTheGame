@@ -40,6 +40,7 @@ public class TimeManager : MonoBehaviour
         {
             percent += Time.unscaledDeltaTime * speed;
             Time.timeScale = Mathf.Lerp(slowTimeScale, 1f, percent);
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
             yield return null;
         }
 

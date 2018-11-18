@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyHealth : Health
 {
     public GameObject hitVFX;
+    public GameObject deathVFX;
 
     public event System.Action<EnemyHealth> OnEnemyDeath; // public event OnEnemyDeath
     public event System.Action OnEnemyHalfHealth; // public event OnEnemyDeath
@@ -45,7 +46,7 @@ public class EnemyHealth : Health
             Destroy(vfx, 2f);
         }
 
-        if(OnEnemyTakeDamage != null)
+        if (OnEnemyTakeDamage != null)
             OnEnemyTakeDamage();
 
         AudioManager.instance.PlayClipAt("EnemyHit", transform.position);
@@ -57,7 +58,15 @@ public class EnemyHealth : Health
         base.TakeDamage(damage);
 
         if (m_health <= 0)
+        {
+            if (deathVFX != null)
+            {
+                GameObject vfxInstance = Instantiate(deathVFX, hit.point, Quaternion.identity);
+                vfxInstance.transform.rotation = Quaternion.LookRotation(-hit.normal);
+                Destroy(vfxInstance, 2f);
+            }
             Die();
+        }
     }
 
     public override void RagdollToggle(bool state)
@@ -80,7 +89,7 @@ public class EnemyHealth : Health
 
     public override void Die()
     {
-         if (OnAnyEnemyDeath != null)
+        if (OnAnyEnemyDeath != null)
             OnAnyEnemyDeath(); // call OnEnemyDeath if someone is subscribe to that event
 
 

@@ -1249,7 +1249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdoll: 1
-  startHealth: 8
+  startHealth: 20
   hitVFX: {fileID: 1194393215392672, guid: 8602233fc6cff4548bc2633406795b28, type: 2}
 --- !u!114 &114276495919407356
 MonoBehaviour:
@@ -1273,6 +1273,8 @@ MonoBehaviour:
   waitTimeWhenEnter: 1
   waitTimeOnWaypoint: 1
   waitTimeWhenPlayerGetShot: 1
+  hitGroundVFX: {fileID: 1506188917974344, guid: 5da96d35bb437b249b8f749389ffb99b,
+    type: 2}
   GFX: {fileID: 1902900235275542}
   localGFXOffset: {x: 0, y: -4.8, z: 0.1}
   jumpDuration: 0.3

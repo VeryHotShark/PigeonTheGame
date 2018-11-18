@@ -151,6 +151,8 @@ public class MovingPlatform : MonoBehaviour
 
 	IEnumerator FallPlatformAfterDelay(GameObject go)
 	{
+		AudioManager.instance.PlayClipAt("FallingPlatform",transform.position);
+		
 		yield return new WaitForSeconds(fallingDelay);
 
 		go.gameObject.transform.parent = null;

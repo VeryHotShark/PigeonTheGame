@@ -43,6 +43,8 @@ public class GrenadeProjectile : Projectile
 
     public void CheckIfCollided()
     {
+        AudioManager.instance.PlayClipAt("HeavyExplosion", transform.position);
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRange, layerMask);
 
         if (colliders.Length > 0)

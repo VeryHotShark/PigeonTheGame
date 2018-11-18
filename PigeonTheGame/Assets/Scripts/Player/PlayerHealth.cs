@@ -201,6 +201,8 @@ public class PlayerHealth : Health
                 if (OnPlayerReachCheckPoint != null)
                     OnPlayerReachCheckPoint();
 
+                AudioManager.instance.Play("PlayerHeal");
+
                 GameObject healVFXInstance = Instantiate(healVFX, transform.position + Vector3.up, Quaternion.identity);
                 healVFXInstance.transform.parent = transform;
                 Destroy(healVFXInstance, 1.5f);

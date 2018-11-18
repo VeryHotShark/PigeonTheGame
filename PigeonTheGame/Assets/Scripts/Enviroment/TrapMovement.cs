@@ -5,6 +5,9 @@ using UnityEngine;
 public class TrapMovement : MonoBehaviour
 {
 
+	public AudioClip spikesIn;
+	public AudioClip spikesOut;
+
 	public float moveUnit;
 	public float moveTime;
 	public AnimationCurve moveCurve;
@@ -18,6 +21,8 @@ public class TrapMovement : MonoBehaviour
 
 	bool returning = false;
 
+	AudioSource m_audioSource;
+
 	void Start()
 	{
 		Init();
@@ -28,6 +33,8 @@ public class TrapMovement : MonoBehaviour
     {
 		startPos = transform.localPosition;
 		endPos = startPos + transform.forward * moveUnit;
+
+		m_audioSource = GetComponent<AudioSource>();
     }
 
 	IEnumerator StartYieldTime()
@@ -45,8 +52,9 @@ public class TrapMovement : MonoBehaviour
 
 		Vector3 start = isReturning ? endPos : startPos;
 		Vector3 end = isReturning ? startPos : endPos;
-
-		AudioManager.instance.PlayClipAt(isReturning ? "Spikes_Out" : "Spikes_In", transform.position);
+		
+		m_audioSource.clip = isReturning ? spikesOut : spikesIn;
+		m_audioSource.Play();
 		
 		while(percent < 1f)
 		{

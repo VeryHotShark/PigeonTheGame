@@ -26,6 +26,23 @@ public class EnemyMelee : Enemy
         }
 
         m_isAttacking = false;
+
+        if(m_audioSource != null)
+            StartCoroutine(StepSoundRoutine());
+    }
+
+    IEnumerator StepSoundRoutine()
+    {
+        while (!m_playerHealth.IsDead())
+        {
+            if (!m_health.IsDead() && RoomManager.instance.PlayerInRoom && currentState != State.Attack)
+            {
+                m_audioSource.Play();
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            yield return null;
+        }
     }
 
     // Update is called once per frame
@@ -38,7 +55,7 @@ public class EnemyMelee : Enemy
             return;
         }
 
-         if (delayWaited == false) // if we haven't waited for some delay when player came into room
+        if (delayWaited == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
         if (!m_playerHealth.IsDead() && !m_health.IsDead() && delayWaited)
@@ -103,6 +120,7 @@ public class EnemyMelee : Enemy
     {
         m_playerHealth.TakeDamage(1); // we make it take one damage
                                       //Debug.Log("EVENT");
+        AudioManager.instance.PlayClipAt("EnemyMeleeAttack", transform.position);
     }
 
 }

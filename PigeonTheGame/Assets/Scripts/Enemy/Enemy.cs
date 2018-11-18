@@ -60,6 +60,7 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 m_currentWaypoint;
     protected Vector3 m_targetWaypoint;
     protected SpawnPoint m_spawnPoint;
+    protected AudioSource m_audioSource;
 
     public SpawnPoint spawnPoint { get { return m_spawnPoint; } set { m_spawnPoint = value; } }
 
@@ -99,10 +100,10 @@ public abstract class Enemy : MonoBehaviour
 
         m_agent = GetComponent<NavMeshAgent>();
         m_health = GetComponent<EnemyHealth>();
+        m_audioSource = GetComponent<AudioSource>();
         m_anim = GetComponentInChildren<Animator>();
         m_playerHealth = FindObjectOfType<PlayerHealth>();
         m_playerTransform = m_playerHealth.gameObject.transform;
-
     }
 
     public virtual void SetNavMeshAgent()

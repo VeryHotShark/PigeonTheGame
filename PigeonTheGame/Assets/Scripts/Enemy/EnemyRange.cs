@@ -30,8 +30,24 @@ public class EnemyRange : Enemy
     public override void Init()
     {
         base.Init();
+
+        if (m_audioSource != null)
+            StartCoroutine(StepSoundRoutine());
     }
 
+    IEnumerator StepSoundRoutine()
+    {
+        while (!m_playerHealth.IsDead())
+        {
+            if (!m_health.IsDead() && RoomManager.instance.PlayerInRoom && currentState == State.Moving)
+            {
+                m_audioSource.Play();
+                yield return new WaitForSeconds(0.4f);
+            }
+
+            yield return null;
+        }
+    }
     public override void GetComponents()
     {
         base.GetComponents();
@@ -56,12 +72,12 @@ public class EnemyRange : Enemy
 
             if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom) // if player is outside attackRange 
             {
-                
+
                 m_anim.SetBool(m_moving, true);
 
                 currentState = State.Chase; // we set state to chase
 
-                m_agent.ResetPath();
+                //m_agent.ResetPath();
                 StopAllCoroutines();
                 m_agent.destination = m_playerTransform.position; // and set destination to be our player so enemy will chase us
             }
@@ -81,7 +97,7 @@ public class EnemyRange : Enemy
         }
     }
 
-    
+
     IEnumerator UpdatePath()
     {
         float refreshRate = 0.25f;
@@ -118,11 +134,8 @@ public class EnemyRange : Enemy
 
         yield return new WaitForSeconds(0.5f); // wait for very small delay when reaching new Pos before shooting a shot 
 
-        if (m_playerRested)
-        {
-            m_agent.updateRotation = true;
-            yield return StartCoroutine(MoveToRandomPos()); // Start our shoot routine and wait till it finish
-        }
+        m_agent.updateRotation = true;
+        StartCoroutine(MoveToRandomPos()); // Start our shoot routine and wait till it finish
 
     }
 
@@ -134,9 +147,9 @@ public class EnemyRange : Enemy
 
         NavMeshHit hit; // store the result of our Check if there is nav mesh in specified place
 
-        Vector3 randomPos = new Vector3(Random.insideUnitCircle.x,0f,Random.insideUnitCircle.y) * walkRadius;
+        Vector3 randomPos = new Vector3(Random.insideUnitCircle.x, 0f, Random.insideUnitCircle.y) * walkRadius;
         Vector3 randomPoint = transform.position + randomPos; // calculate the random point withing our walk radius
-        
+
         Vector3 randomPosOnNavMesh = Vector3.zero; // declaring a Vector3 to store randomPosOnNavMesh
 
         bool foundPos = false;

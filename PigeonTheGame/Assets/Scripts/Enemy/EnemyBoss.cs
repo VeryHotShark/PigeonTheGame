@@ -14,6 +14,12 @@ public class EnemyBoss : Enemy
 
     BossStage m_currentStage = BossStage.StageOne;
 
+    [Header("VFX")]
+    [Space]
+
+    public GameObject hitGroundVFX;
+
+
     [Header("BOSS")]
     [Space]
 
@@ -49,6 +55,8 @@ public class EnemyBoss : Enemy
     int m_attack = Animator.StringToHash("Attack");
     int m_rise = Animator.StringToHash("Rise");
     int m_shoot = Animator.StringToHash("Shoot");
+    int m_shooting = Animator.StringToHash("Shooting");
+    int m_secondStage = Animator.StringToHash("SecondStage");
 
     public override void Init()
     {
@@ -123,6 +131,9 @@ public class EnemyBoss : Enemy
 
     IEnumerator Rise()
     {
+        if(m_currentStage == BossStage.StageTwo)
+            m_anim.SetTrigger(m_secondStage);
+
         GFX.transform.localPosition = Vector3.zero;
         FaceTarget();
 
@@ -156,10 +167,12 @@ public class EnemyBoss : Enemy
 
 
 
-        if (m_currentStage == BossStage.StageOne && m_attackRoutine)
+        if (m_currentStage == BossStage.StageOne)
             StartCoroutine(Attack());
         else
+        {
             StartCoroutine(ShootSeries());
+        }
     }
 
 
@@ -188,6 +201,9 @@ public class EnemyBoss : Enemy
             yield return null;
         }
 
+        GameObject vfx = Instantiate(hitGroundVFX, transform.position,Quaternion.identity);
+        Destroy(vfx, 3f);
+
         yield return new WaitForSeconds(waitAtGround);
 
         //GFX.transform.localEulerAngles = Vector3.zero;
@@ -196,21 +212,25 @@ public class EnemyBoss : Enemy
         m_anim.SetBool(m_attack, false);
         m_inAir = false;
 
-        if (m_currentStage == BossStage.StageTwo)
-        {
-            m_attackRoutine = false;
-            m_duringRoutine = false;
-            yield break;
-        }
+        /*    
+            if (m_currentStage == BossStage.StageTwo)
+            {
+                m_attackRoutine = false;
+                m_duringRoutine = false;
+                yield break;
+            }
+         */
 
         StartCoroutine(Rise());
     }
 
     IEnumerator ShootSeries()
     {
+        m_anim.SetBool(m_shooting, true);
+
         currentState = State.Attack;
         m_duringRoutine = true; // set duringRoutine to true
-
+        
 
         int randomShootSeries = Random.Range(shootSeries - 1, shootSeries + 2);
 
@@ -243,7 +263,10 @@ public class EnemyBoss : Enemy
 
         yield return new WaitForSeconds(waitTimeBeforeNextShootSeries); // wait for some delay
 
-        StartCoroutine(ShootSeries());
+        m_anim.SetBool(m_shooting, false);
+
+        StartCoroutine(Attack());
+
 
         /*  
             if(m_inAir)

@@ -87,6 +87,9 @@ public class EnemyHeavy : Enemy
         {
             m_anim.SetTrigger(m_shooting);
             m_enemyWeapon.ShootProjectile(m_playerTransform.position); // we spawn projectile
+
+            AudioManager.instance.PlayClipAt("HeavyShoot", transform.position);
+
             amountToShoot--; // we decrease amountToShoot by one
             yield return new WaitForSeconds(attackRate); // and we wait for some time between shots
         }

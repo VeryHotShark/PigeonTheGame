@@ -52,6 +52,8 @@ public class DoorMovement : MonoBehaviour
     // Update is called once per frame
     IEnumerator MoveToDestination()
     {
+        AudioManager.instance.PlayClipAt("DoorOpen", transform.position);
+
         float curvedPercent = 0f;
         float percent = 0f;
         float speed = 1f / moveTime;

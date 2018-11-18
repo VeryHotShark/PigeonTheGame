@@ -66,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool m_landed = true;
 
+    public static event System.Action OnPlayerDash;
 
     // ANIMATOR
 
@@ -173,8 +174,10 @@ public class PlayerMovement : MonoBehaviour
             if(m_isGrounded && !m_landed)
             {
                 m_landed = true;
+
+                //AudioManager.instance.Play("PlayerJump");
+
                 GameObject landVFXInstance = Instantiate(landVFX,transform.position - Vector3.up * 0.1f,Quaternion.identity);
-                Debug.Log("land");
                 Destroy(landVFXInstance,1.5f);
             }
         }
@@ -190,11 +193,14 @@ public class PlayerMovement : MonoBehaviour
     {
         // If player press shift we add force to player
 
-        if (m_playerInput.DashInput)
+        if (m_playerInput.DashInput && !m_playerInput.NoInput())
         {
 
             if (m_allowDash)
             {
+                //if(OnPlayerDash != null)
+                //    OnPlayerDash();
+
                 AudioManager.instance.Play("PlayerDash");
 
                 m_anim.SetTrigger(m_dashHash);
@@ -312,6 +318,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (m_playerInput.JumpInput) // if we pressed jump button
             {
+                AudioManager.instance.Play("PlayerJump");
+
                 m_anim.SetBool(m_inAirHash, true);
 
                 m_isGrounded = false; // we are not on ground anymore
@@ -358,7 +366,7 @@ public class PlayerMovement : MonoBehaviour
             if(!m_playerInput.NoInput() && m_isGrounded)
             {
                 AudioManager.instance.Play("PlayerStep");
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.28f);
             }
 
             yield return null;
