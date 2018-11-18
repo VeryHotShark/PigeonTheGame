@@ -66,6 +66,7 @@ ModelImporter:
     400058: Upper_leg.L
     400060: Upper_leg.R
     2100000: Material
+    2100002: color owl
     4300000: OWL
     7400000: OwlRig|Owl_Attack
     7400002: Owl_Rise
@@ -79,10 +80,21 @@ ModelImporter:
     7400018: Owl_Attack_RightHandTrans
     7400020: Owl_soar
     7400022: Owl_inAir_pose
+    7400024: OwlRig|Owl_attack1
     9500000: //RootNode
     13700000: OWL
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: dad33b4b657b30642904536f2755eb38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: color owl
+    second: {fileID: 2100000, guid: dad33b4b657b30642904536f2755eb38, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -317,7 +329,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -423,6 +435,34 @@ ModelImporter:
       takeName: OwlRig|Owl_inair_pose
       firstFrame: 0
       lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: OwlRig|Owl_attack1
+      takeName: OwlRig|Owl_attack1
+      firstFrame: 0
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

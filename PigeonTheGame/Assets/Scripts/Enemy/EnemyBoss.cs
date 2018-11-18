@@ -111,11 +111,11 @@ public class EnemyBoss : Enemy
                         }
                         break;
 
-                    case BossStage.StageTwo:
+                        case BossStage.StageTwo:
                         {
-                            FaceTarget();
-                            if (!m_duringRoutine)
-                                StartCoroutine(ShootSeries());
+                        FaceTarget();
+                        //if (!m_duringRoutine)
+                        //StartCoroutine(ShootSeries());
                         }
                         break;
                 }
@@ -131,13 +131,13 @@ public class EnemyBoss : Enemy
 
     IEnumerator Rise()
     {
-        if(m_currentStage == BossStage.StageTwo)
-            m_anim.SetTrigger(m_secondStage);
+
 
         GFX.transform.localPosition = Vector3.zero;
         FaceTarget();
 
-        m_attackRoutine = true;
+        if(m_currentStage == BossStage.StageOne)
+            m_attackRoutine = true;
         m_duringRoutine = true;
         m_inAir = true;
 
@@ -167,7 +167,7 @@ public class EnemyBoss : Enemy
 
 
 
-        if (m_currentStage == BossStage.StageOne)
+        if (m_currentStage == BossStage.StageOne || m_attackRoutine == true)
             StartCoroutine(Attack());
         else
         {
@@ -201,7 +201,7 @@ public class EnemyBoss : Enemy
             yield return null;
         }
 
-        GameObject vfx = Instantiate(hitGroundVFX, transform.position,Quaternion.identity);
+        GameObject vfx = Instantiate(hitGroundVFX, transform.position, Quaternion.identity);
         Destroy(vfx, 3f);
 
         yield return new WaitForSeconds(waitAtGround);
@@ -211,6 +211,13 @@ public class EnemyBoss : Enemy
 
         m_anim.SetBool(m_attack, false);
         m_inAir = false;
+
+
+        if (m_currentStage == BossStage.StageTwo)
+        {
+            m_attackRoutine = false;
+            m_anim.SetBool(m_secondStage, true);
+        }
 
         /*    
             if (m_currentStage == BossStage.StageTwo)
@@ -230,19 +237,31 @@ public class EnemyBoss : Enemy
 
         currentState = State.Attack;
         m_duringRoutine = true; // set duringRoutine to true
-        
+
 
         int randomShootSeries = Random.Range(shootSeries - 1, shootSeries + 2);
 
         while (randomShootSeries > 0 && m_playerRested) // while amount to shoot is greater than 0
         {
+            FaceTarget();
             m_anim.SetTrigger(m_shoot);
 
             int amountToShoot = Random.Range(projectileAmountAtOnce - projectileAmountVariation, projectileAmountAtOnce + projectileAmountVariation + 1); // calculate how many projectiles will be shot
 
             for (int i = 0; i < amountToShoot; i++)
             {
-                Vector3 randomPoint = m_playerTransform.position + Random.insideUnitSphere * spreadAmount;
+                Vector3 randomPoint;
+
+                if(i == 0)
+                {
+                    randomPoint = m_playerTransform.position;
+                }
+                else
+                {
+
+                    randomPoint = m_playerTransform.position + Random.insideUnitSphere * spreadAmount;
+                }
+
                 m_enemyWeapon.ShootProjectile(randomPoint);
 
                 yield return null;
@@ -260,10 +279,12 @@ public class EnemyBoss : Enemy
     {
         //m_duringRoutine = false; // set our bool to false
         currentState = State.Idle; // change our state to idle
+        m_anim.SetBool(m_wait, true);
 
         yield return new WaitForSeconds(waitTimeBeforeNextShootSeries); // wait for some delay
 
-        m_anim.SetBool(m_shooting, false);
+        m_anim.SetBool(m_wait, false);
+        m_anim.SetBool(m_attack, true);
 
         StartCoroutine(Attack());
 

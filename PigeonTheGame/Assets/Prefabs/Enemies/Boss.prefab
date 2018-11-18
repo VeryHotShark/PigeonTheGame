@@ -1251,6 +1251,7 @@ MonoBehaviour:
   ragdoll: 1
   startHealth: 20
   hitVFX: {fileID: 1194393215392672, guid: 8602233fc6cff4548bc2633406795b28, type: 2}
+  deathVFX: {fileID: 1030772700552374, guid: 229a895ab42ebf443ab2362cef4f1f37, type: 2}
 --- !u!114 &114276495919407356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1284,9 +1285,9 @@ MonoBehaviour:
   attackDuration: 0.5
   shootSeries: 5
   projectileAmountVariation: 2
-  projectileAmountAtOnce: 5
+  projectileAmountAtOnce: 7
   spreadAmount: 5
-  waitTimeBeforeNextShootSeries: 2
+  waitTimeBeforeNextShootSeries: 0.5
 --- !u!114 &114767698418795256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1299,7 +1300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  speed: 50
+  speed: 70
   projectileLife: 2
   projectile: {fileID: 114844909270329674, guid: 00bc29f49b1a24a4f992bf9d7f60fa44,
     type: 2}
@@ -1357,7 +1358,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: a0ca4362811283b429c63ad347bee60e, type: 3}
+  - {fileID: 2100000, guid: dad33b4b657b30642904536f2755eb38, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
