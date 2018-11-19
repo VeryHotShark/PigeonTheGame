@@ -40,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1968516916462146}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.36607552, y: 1.1, z: -7.969}
+  m_LocalPosition: {x: -0.27, y: 0, z: -16.12}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -226,7 +226,7 @@ TrailRenderer:
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 041ac1f0a4209b541bbd6c64f538d084, type: 2}
+  - {fileID: 2100000, guid: 1587088d137416340ac0eadf2fc92cde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -246,7 +246,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.07
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 1
@@ -279,8 +279,8 @@ TrailRenderer:
       key0: {r: 0.990566, g: 0.4539488, b: 0.0046724924, a: 1}
       key1: {r: 0.9245283, g: 0.48815888, b: 0, a: 0.20784314}
       key2: {r: 1, g: 0.8217412, b: 0, a: 1}
-      key3: {r: 0.3584906, g: 0.3567996, b: 0.3567996, a: 0}
-      key4: {r: 0.3584906, g: 0.3567996, b: 0.3567996, a: 0}
+      key3: {r: 1, g: 0.8688902, b: 0.042452812, a: 0}
+      key4: {r: 1, g: 1, b: 1, a: 0}
       key5: {r: 0.9489598, g: 0.5839282, b: 0.10973184, a: 0}
       key6: {r: 0.949912, g: 0.5916907, b: 0.12634125, a: 0}
       key7: {r: 1, g: 1, b: 1, a: 0}

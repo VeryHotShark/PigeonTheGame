@@ -198,8 +198,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (m_allowDash)
             {
-                //if(OnPlayerDash != null)
-                //    OnPlayerDash();
+                if(OnPlayerDash != null && !m_playerInput.ZoomInput)
+                    OnPlayerDash();
 
                 AudioManager.instance.Play("PlayerDash");
 

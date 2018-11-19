@@ -52,6 +52,11 @@ public class CameraController : MonoBehaviour
 	public float zoomCrosshairScale = 1f;
 	public float shootCrosshairMultiplier = 1.2f;
 
+	[Header("Dash Variables")]
+	public float dashFOV = 70f;
+	public float dashDuration;
+	public AnimationCurve dashAnimCurve;
+
 	float m_initFOV;
 	Vector3 m_cameraStartPos;
 	Vector3 m_crosshairInitScale;
@@ -77,6 +82,7 @@ public class CameraController : MonoBehaviour
 
 	IEnumerator DeathRoutine;
 	IEnumerator HitRoutine;
+	IEnumerator DashFOVRoutine;
 
     // Use this for initialization
     void Start()
@@ -99,6 +105,7 @@ public class CameraController : MonoBehaviour
 		PlayerHealth.OnPlayerDeath += DisableCamWhenDead;
 		PlayerHealth.OnPlayerRespawn += ResetCam;
 		PlayerHealth.OnPlayerRespawn += ReenableCamWhenRespawn;
+		PlayerMovement.OnPlayerDash += ChangeDashFOV;
 
 		deathMark.SetActive(false);
 		hitMark.SetActive(false);
@@ -252,6 +259,28 @@ public class CameraController : MonoBehaviour
 	{
 		crosshair.localScale = crosshair.localScale * shootCrosshairMultiplier;
 		//Debug.Log(crosshair.localScale);
+	}
+
+	void ChangeDashFOV()
+	{
+		DashFOVRoutine = DashScreenRoutine();
+
+		if(DashFOVRoutine != null)
+			StartCoroutine(DashFOVRoutine);
+	}
+
+	IEnumerator DashScreenRoutine()
+	{
+
+		float percent = 0f;
+		float speed = 1f / dashDuration;
+
+		while(percent < 1f)
+		{
+			percent += Time.deltaTime * speed;
+			m_camera.fieldOfView = Mathf.Lerp(m_initFOV,dashFOV, dashAnimCurve.Evaluate(percent));
+			yield return null;
+		}
 	}
 
 	void ResetCam()
