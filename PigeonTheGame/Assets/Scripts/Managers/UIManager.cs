@@ -5,8 +5,17 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-
 	public Image playerDashScreen;
+
+	[Header("Player Death")]
+
+	public Image playerDeathScreen;
+	
+	public float deathDuration;
+
+	public Vector2 deathMinMaxSize;
+
+	public AnimationCurve deathScreenCurve;
 
 	[Header("Player Health")]
 
@@ -45,6 +54,7 @@ public class UIManager : MonoBehaviour
 	{
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
 		m_playerHealth.OnPlayerLoseHealth += ChangeImage;
+		PlayerHealth.OnPlayerDeath += ShowDeathScreen;
 		m_playerHealth.OnPlayerReachCheckPoint += ResetHealthImages;
 	}
 
@@ -75,6 +85,11 @@ public class UIManager : MonoBehaviour
 		StartCoroutine(ShowHitScreen(playerDashScreen));
 	}
 
+	void ShowDeathScreen()
+	{
+		StartCoroutine(ShowDeathScreenRoutine(playerDeathScreen));
+	}
+
 	void ResetHealthImages()
     {
 			foreach(Image liveImage in livesImages)
@@ -97,6 +112,34 @@ public class UIManager : MonoBehaviour
 			var hitScreenColor = image.color;
 			hitScreenColor.a = Mathf.Lerp(0f,1f, hitScreenCurve.Evaluate(percent));
 			image.color = hitScreenColor;
+			yield return null;
+		}
+
+		image.gameObject.SetActive(false);
+	}
+
+	IEnumerator ShowDeathScreenRoutine(Image image)
+	{
+
+		float percent = 0f;
+		float speed = 1f / showDuration;
+
+		image.gameObject.SetActive(true);
+
+		while(percent < 1f)
+		{
+			percent += Time.deltaTime * speed;
+
+			var hitScreenColor = image.color;
+			hitScreenColor.a = Mathf.Lerp(0,1f, deathScreenCurve.Evaluate(percent));
+			image.color = hitScreenColor;
+
+			image.transform.localScale = Vector3.Lerp(deathMinMaxSize.x * Vector3.one, deathMinMaxSize.y  * Vector3.one, deathScreenCurve.Evaluate(percent));
+
+			var imageEulerAngles = image.transform.localEulerAngles;
+			imageEulerAngles.z = Mathf.Lerp(0f, 360f, deathScreenCurve.Evaluate(percent));
+			image.transform.localEulerAngles = imageEulerAngles;
+
 			yield return null;
 		}
 
