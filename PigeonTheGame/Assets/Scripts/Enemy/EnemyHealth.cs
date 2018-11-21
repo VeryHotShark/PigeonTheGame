@@ -10,6 +10,8 @@ public class EnemyHealth : Health
     public event System.Action<EnemyHealth> OnEnemyDeath; // public event OnEnemyDeath
     public event System.Action OnEnemyHalfHealth; // public event OnEnemyDeath
 
+    public event System.Action OnBossDeath; // public event OnEnemyDeath
+
     public static event System.Action OnEnemyTakeDamage; // public event OnEnemyDeath
     public static event System.Action OnAnyEnemyDeath; // public event OnEnemyDeath
 
@@ -39,6 +41,9 @@ public class EnemyHealth : Health
 
     public override void TakeDamage(int damage, ContactPoint hit)
     {
+        if(m_isDead)
+            return;
+
         if (hitVFX != null)
         {
             GameObject vfx = Instantiate(hitVFX, hit.point, Quaternion.identity);
@@ -57,7 +62,7 @@ public class EnemyHealth : Health
 
         base.TakeDamage(damage);
 
-        if (m_health <= 0)
+        if (m_health <= 0 )
         {
             if (deathVFX != null)
             {
@@ -89,6 +94,9 @@ public class EnemyHealth : Health
 
     public override void Die()
     {
+        if(OnBossDeath != null)
+            OnBossDeath();
+
         if (OnAnyEnemyDeath != null)
             OnAnyEnemyDeath(); // call OnEnemyDeath if someone is subscribe to that event
 

@@ -2,7 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class PropClass
+{
+    public Rigidbody rigid;
 
+    [HideInInspector]
+    public Vector3 pos;
+
+    [HideInInspector]
+    public Quaternion rot;
+}
 
 public enum RoomIndex
 {
@@ -20,6 +30,9 @@ public enum RoomIndex
 
 public class RoomManager : MonoBehaviour
 {
+
+    public List<PropClass> propsList = new List<PropClass>();
+
     public static RoomManager instance;
 
     RoomIndex m_playerCurrentRoom;
@@ -38,9 +51,33 @@ public class RoomManager : MonoBehaviour
         Singleton();
     }
 
+    void SavePropsInitialValues()
+    {
+        foreach(PropClass prop in propsList)
+        {
+            prop.pos = prop.rigid.transform.position ;
+            prop.rot = prop.rigid.transform.rotation;
+        }
+    }
+
+    void ResetPropsValues()
+    {
+        foreach(PropClass prop in propsList)
+        {
+            prop.rigid.isKinematic = true;
+
+            prop.rigid.transform.position = prop.pos;
+            prop.rigid.transform.rotation = prop.rot;
+
+            prop.rigid.isKinematic = false;
+        }
+    }
+
     void Start()
     {
+        SavePropsInitialValues();
         PlayerHealth.OnPlayerDeath += ResetPlayerInRoom;
+        PlayerHealth.OnPlayerRespawn += ResetPropsValues;
     }
 
     private void Singleton()

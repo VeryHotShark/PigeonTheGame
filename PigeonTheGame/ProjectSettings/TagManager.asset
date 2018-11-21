@@ -24,9 +24,9 @@ TagManager:
   - EnemyProjectile
   - Shell
   - Owl
-  - 
-  - 
-  - 
+  - SpinningTrap
+  - LaunchPlatform
+  - AnchorTrap
   - 
   - 
   - 

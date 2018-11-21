@@ -55,7 +55,7 @@ public class EnemyMelee : Enemy
             return;
         }
 
-        if (delayWaited == false) // if we haven't waited for some delay when player came into room
+        if (delayWaited == false && delayRoutine == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
         if (!m_playerHealth.IsDead() && !m_health.IsDead() && delayWaited)
@@ -82,9 +82,9 @@ public class EnemyMelee : Enemy
     {
         float refreshRate = 0.2f;
 
-        while (!m_playerHealth.IsDead())
+        while (!m_playerHealth.IsDead() )
         {
-            if (currentState == State.Chase && RoomManager.instance.PlayerInRoom) // if we are in room and our state is Chasing
+            if (currentState == State.Chase && RoomManager.instance.PlayerInRoom && delayWaited) // if we are in room and our state is Chasing
             {
                 Vector3 dirToTarget = (m_playerTransform.position - transform.position).normalized; // we calculate the dirToTarget
                 Vector3 targetPosition = m_playerTransform.position - (dirToTarget * stopDistance); // and substract small amount from our playerPosition so our enemy won't go through our Player
@@ -118,7 +118,8 @@ public class EnemyMelee : Enemy
 
     public void DealDamage()
     {
-        m_playerHealth.TakeDamage(1); // we make it take one damage
+        if(Vector3.Distance(m_playerTransform.position, transform.position) < attackRange)
+            m_playerHealth.TakeDamage(1); // we make it take one damage
                                       //Debug.Log("EVENT");
         AudioManager.instance.PlayClipAt("EnemyMeleeAttack", transform.position);
     }

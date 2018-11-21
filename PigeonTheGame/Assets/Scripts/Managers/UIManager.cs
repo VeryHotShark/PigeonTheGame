@@ -5,144 +5,166 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-	public Image playerDashScreen;
+    public Image playerDashScreen;
 
-	[Header("Player Death")]
+    [Header("Player Death")]
 
-	public Image playerDeathScreen;
-	
-	public float deathDuration;
+    public Image playerDeathScreen;
+    public Image playerDeathScreenBG;
 
-	public Vector2 deathMinMaxSize;
+    public float waitDelay;
+    public float deathDuration;
 
-	public AnimationCurve deathScreenCurve;
+    public Vector2 deathMinMaxSize;
 
-	[Header("Player Health")]
+    public AnimationCurve deathScreenCurve;
+    public AnimationCurve deathScreenAlphaCurve;
 
-	public Image playerHitScreen;
+    [Header("Player Health")]
 
-	public float showDuration;
+    public Image playerHitScreen;
 
-	public AnimationCurve hitScreenCurve;
+    public float showDuration;
 
-	[Space]
-	public Transform healthUI;
+    public AnimationCurve hitScreenCurve;
 
-	public Sprite aliveSprite;
-	public Sprite deadSprite;
+    [Space]
+    public Transform healthUI;
 
-	PlayerHealth m_playerHealth;
+    public Sprite aliveSprite;
+    public Sprite deadSprite;
 
-	Image[] livesImages;
+    PlayerHealth m_playerHealth;
 
-	IEnumerator m_hitScreenRoutine;
+    Image[] livesImages;
+
+    IEnumerator m_hitScreenRoutine;
 
     // Use this for initialization
     void Awake()
     {
-		GetComponents();
+        GetComponents();
 
-		playerHitScreen.gameObject.SetActive(false);
-		playerDashScreen.gameObject.SetActive(false);
-		
-		livesImages = healthUI.GetComponentsInChildren<Image>().ToArray();
+        playerHitScreen.gameObject.SetActive(false);
+        playerDashScreen.gameObject.SetActive(false);
 
-		//PlayerMovement.OnPlayerDash += ShowDashScreen;
+        livesImages = healthUI.GetComponentsInChildren<Image>().ToArray();
+
+        //PlayerMovement.OnPlayerDash += ShowDashScreen;
     }
 
-	void GetComponents()
-	{
-		m_playerHealth = FindObjectOfType<PlayerHealth>();
-		m_playerHealth.OnPlayerLoseHealth += ChangeImage;
-		PlayerHealth.OnPlayerDeath += ShowDeathScreen;
-		m_playerHealth.OnPlayerReachCheckPoint += ResetHealthImages;
-	}
+    void GetComponents()
+    {
+        m_playerHealth = FindObjectOfType<PlayerHealth>();
+        m_playerHealth.OnPlayerLoseHealth += ChangeImage;
+        PlayerHealth.OnPlayerDeath += ShowDeathScreen;
+        m_playerHealth.OnPlayerReachCheckPoint += ResetHealthImages;
+        PlayerHealth.OnPlayerRespawn += ResetHealthImages;
+    }
 
     void ChangeImage(int playerCurrentHealth)
     {
-		m_hitScreenRoutine = ShowHitScreen(playerHitScreen);
+        m_hitScreenRoutine = ShowHitScreen(playerHitScreen);
 
-		if(m_hitScreenRoutine != null)
-			StartCoroutine(m_hitScreenRoutine);
+        if (m_hitScreenRoutine != null)
+            StartCoroutine(m_hitScreenRoutine);
 
-		if(playerCurrentHealth > 0)
-		{
-			int imageIndex = playerCurrentHealth;
-			livesImages[imageIndex].sprite = deadSprite;
-		}
-		else
-		{
-			foreach(Image liveImage in livesImages)
-			{
-				liveImage.sprite = aliveSprite;
-			}
-		}
+        if (playerCurrentHealth >= 0)
+        {
+            int imageIndex = playerCurrentHealth;
+            livesImages[imageIndex].sprite = deadSprite;
+
+            if (imageIndex == 0)
+            {
+                livesImages[1].sprite = deadSprite;
+                livesImages[2].sprite = deadSprite;
+            }
+
+            if (imageIndex == 1)
+                livesImages[2].sprite = deadSprite;
+        }
+        else
+        {
+            foreach (Image liveImage in livesImages)
+            {
+                liveImage.sprite = aliveSprite;
+            }
+        }
 
     }
 
-	void ShowDashScreen()
-	{
-		StartCoroutine(ShowHitScreen(playerDashScreen));
-	}
-
-	void ShowDeathScreen()
-	{
-		StartCoroutine(ShowDeathScreenRoutine(playerDeathScreen));
-	}
-
-	void ResetHealthImages()
+    void ShowDashScreen()
     {
-			foreach(Image liveImage in livesImages)
-			{
-				liveImage.sprite = aliveSprite;
-			}
+        StartCoroutine(ShowHitScreen(playerDashScreen));
     }
 
-	IEnumerator ShowHitScreen(Image image)
-	{
+    void ShowDeathScreen()
+    {
+        StartCoroutine(ShowDeathScreenRoutine(playerDeathScreen, playerDeathScreenBG));
+    }
 
-		float percent = 0f;
-		float speed = 1f / showDuration;
+    void ResetHealthImages()
+    {
+        foreach (Image liveImage in livesImages)
+        {
+            liveImage.sprite = aliveSprite;
+        }
+    }
 
-		image.gameObject.SetActive(true);
+    IEnumerator ShowHitScreen(Image image)
+    {
 
-		while(percent < 1f)
-		{
-			percent += Time.deltaTime * speed;
-			var hitScreenColor = image.color;
-			hitScreenColor.a = Mathf.Lerp(0f,1f, hitScreenCurve.Evaluate(percent));
-			image.color = hitScreenColor;
-			yield return null;
-		}
+        float percent = 0f;
+        float speed = 1f / showDuration;
 
-		image.gameObject.SetActive(false);
-	}
+        image.gameObject.SetActive(true);
 
-	IEnumerator ShowDeathScreenRoutine(Image image)
-	{
+        while (percent < 1f)
+        {
+            percent += Time.deltaTime * speed;
+            var hitScreenColor = image.color;
+            hitScreenColor.a = Mathf.Lerp(0f, 1f, hitScreenCurve.Evaluate(percent));
+            image.color = hitScreenColor;
+            yield return null;
+        }
 
-		float percent = 0f;
-		float speed = 1f / showDuration;
+        image.gameObject.SetActive(false);
+    }
 
-		image.gameObject.SetActive(true);
+    IEnumerator ShowDeathScreenRoutine(Image image, Image bg)
+    {
 
-		while(percent < 1f)
-		{
-			percent += Time.deltaTime * speed;
+        yield return new WaitForSeconds(waitDelay);
 
-			var hitScreenColor = image.color;
-			hitScreenColor.a = Mathf.Lerp(0,1f, deathScreenCurve.Evaluate(percent));
-			image.color = hitScreenColor;
+        float percent = 0f;
+        float speed = 1f / deathDuration;
 
-			image.transform.localScale = Vector3.Lerp(deathMinMaxSize.x * Vector3.one, deathMinMaxSize.y  * Vector3.one, deathScreenCurve.Evaluate(percent));
+        image.gameObject.SetActive(true);
+        bg.gameObject.SetActive(true);
 
-			var imageEulerAngles = image.transform.localEulerAngles;
-			imageEulerAngles.z = Mathf.Lerp(0f, 360f, deathScreenCurve.Evaluate(percent));
-			image.transform.localEulerAngles = imageEulerAngles;
+        while (percent < 1f)
+        {
+            percent += Time.deltaTime * speed;
 
-			yield return null;
-		}
+            var hitScreenColor = image.color;
+            hitScreenColor.a = Mathf.Lerp(0, 1f, deathScreenAlphaCurve.Evaluate(percent));
+            image.color = hitScreenColor;
 
-		image.gameObject.SetActive(false);
-	}
+            image.transform.localScale = Vector3.Lerp(deathMinMaxSize.x * Vector3.one, deathMinMaxSize.y * Vector3.one, deathScreenCurve.Evaluate(percent));
+
+            var bgScreenColor = bg.color;
+            bgScreenColor.a = Mathf.Lerp(0, 1f, deathScreenAlphaCurve.Evaluate(percent));
+            bg.color = bgScreenColor;
+
+            //var imageEulerAngles = image.transform.localEulerAngles;
+            //imageEulerAngles.z = Mathf.Lerp(0f, 180, deathScreenCurve.Evaluate(percent));
+            //image.transform.localEulerAngles = imageEulerAngles;
+
+            yield return null;
+        }
+
+        image.gameObject.SetActive(false);
+        bg.gameObject.SetActive(false);
+
+    }
 }

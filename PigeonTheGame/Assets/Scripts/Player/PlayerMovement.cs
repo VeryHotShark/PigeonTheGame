@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     public float aimMoveSpeed;
     public float smoothTime;
     public float turnSpeed;
+    public float slopeAngle;
+    public float slideSpeed;
 
     [Space]
     [Header("Player Dash")]
@@ -59,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
     float m_angle;
 
-    bool m_isGrounded;
+    bool m_isGrounded = true;
     bool m_dashing;
     bool m_dashedInAir;
     bool m_allowDash;
@@ -138,13 +140,14 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        CheckIfGrounded();
-        CalculateMovePosition();
+            CheckIfGrounded();
+            CalculateMovePosition();
 
-        if (m_playerInput.InputEnabled)
-            m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
+            if (m_playerInput.InputEnabled)
+                m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
 
-        UpdateRotation();
+            UpdateRotation();
+
     }
 
     void UpdateRotation()
@@ -152,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
         Quaternion desiredRot = m_CameraController.transform.rotation; // our player desired rot is cam rot
 
         if (!snapToCamera) // smooth our rotation if bool is false
-            desiredRot = Quaternion.Slerp(transform.rotation, m_CameraController.transform.rotation, smoothRotateSpeed * Time.fixedDeltaTime);
+            desiredRot = Quaternion.Slerp(transform.rotation, desiredRot, smoothRotateSpeed * Time.fixedDeltaTime);
 
         m_rigid.MoveRotation(desiredRot); // actually rotate our player
     }
@@ -161,11 +164,21 @@ public class PlayerMovement : MonoBehaviour
     {
         // Cast ray downwards to check if we are on ground
 
-        Ray ray = new Ray(transform.position - transform.forward, Vector3.down);
+        Ray ray = new Ray(transform.position, -transform.up);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 1f, groundLayerMask))
+        if (Physics.Raycast(ray, out hit, 1.2f, groundLayerMask))
         {
+            m_moveDir = Vector3.ProjectOnPlane(m_moveDir, hit.normal);
+            
+            Vector3 cross = Vector3.Cross(transform.right, hit.normal); // we get the cross product of our right vector and ground normal
+            Quaternion desiredRot = Quaternion.LookRotation(cross); // we create a a look rotation by passing our cross product
+            Vector3 tiltEulerRot = desiredRot.eulerAngles; // we convert it to euler Angles
+            transform.rotation = Quaternion.Euler( new Vector3(tiltEulerRot.x, transform.eulerAngles.y, tiltEulerRot.z))/* Quaternion.Euler(tiltEulerRot.x, transform.rotation.eulerAngles.y, tiltEulerRot.z)*/;
+
+            CheckSlopeAngle(hit);
+            Debug.DrawRay(transform.position,-transform.up, Color.cyan, 1f);
+
             m_anim.SetBool(m_inAirHash, false);
             m_playerInput.InputEnabled = true;
             m_allowDash = true;
@@ -187,6 +200,24 @@ public class PlayerMovement : MonoBehaviour
             m_landed = false;
             m_anim.SetBool(m_inAirHash, true);
         }
+    }
+
+    void CheckSlopeAngle(RaycastHit hit)
+    {
+        float angle = Vector3.Angle(Vector3.up, hit.normal);
+
+        if(angle > slopeAngle)
+        {
+            Debug.Log(angle);
+            //m_playerInput.InputEnabled = false;
+            Vector3 rigidVel = m_rigid.velocity;
+
+            rigidVel.x += (1f - hit.normal.y) * hit.normal.x * slideSpeed;
+            rigidVel.z += (1f - hit.normal.y) * hit.normal.z * slideSpeed;
+
+            m_rigid.velocity = rigidVel;
+        }
+
     }
 
     void PlayerDash()
@@ -382,6 +413,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("HitEnter");
             m_playerInput.InputEnabled = false; // we disabel player input so we won't push into the wall
         }
+
     }
 
     /*

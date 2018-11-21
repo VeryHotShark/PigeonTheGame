@@ -49,6 +49,7 @@ public abstract class Enemy : MonoBehaviour
     public float waitTimeWhenPlayerGetShot = 1f;
 
     protected bool delayWaited = false;
+    protected bool delayRoutine;
     protected bool m_isAttacking;
     protected bool m_playerRested = true;
     protected bool m_reset = false;
@@ -81,7 +82,7 @@ public abstract class Enemy : MonoBehaviour
         m_health.OnEnemyDeath += EnemyDied;
 
         m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-        PlayerHealth.OnPlayerRespawn += ResetVariables;
+        //PlayerHealth.OnPlayerRespawn += ResetVariables;
 
         m_health.Init();
 
@@ -184,13 +185,14 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual IEnumerator WaitTimeCoroutine() // wait for some delay before attacking player
     {
+        delayRoutine = true;
         yield return new WaitForSeconds(waitTimeWhenEnter);
         delayWaited = true;
     }
 
     public virtual void yieldForGivenTime(int playerHealth)
     {
-        if (playerHealth > 0 && !m_health.IsDead())
+        if (playerHealth > 0 && !m_health.IsDead() && gameObject.activeSelf)
             StartCoroutine(YieldForPlayer());
     }
 
@@ -208,7 +210,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void UnsubscribeFromPlayer(EnemyHealth enemy)
     {
-        PlayerHealth.OnPlayerRespawn -= ResetVariables;
+        //PlayerHealth.OnPlayerRespawn -= ResetVariables;
         m_playerHealth.OnPlayerLoseHealth -= yieldForGivenTime;
 
 
@@ -222,7 +224,6 @@ public abstract class Enemy : MonoBehaviour
         {
             spawnPoint.EnemyAlive = false;
             StopAllCoroutines();
-            Debug.Log(gameObject.name);
             
             if(m_agent!= null)
                 m_agent.ResetPath();
@@ -239,6 +240,7 @@ public abstract class Enemy : MonoBehaviour
         }
 
         delayWaited = false;
+        delayRoutine = false;
 
         transform.position = m_spawnPoint.transform.position;
         transform.rotation = m_spawnPoint.transform.rotation;
@@ -248,6 +250,23 @@ public abstract class Enemy : MonoBehaviour
 
 
         Init();
+    }
+
+    public virtual void ResetAdditionalSpawnValues()
+    {
+        if (spawnPoint != null)
+        {
+            UnsubscribeFromPlayer(m_health);
+            
+            spawnPoint.EnemyAlive = false;
+            spawnPoint.MyEnemy = null;
+            StopAllCoroutines();
+
+            if(m_agent!= null)
+                m_agent.ResetPath();
+
+            gameObject.SetActive(false);
+        }
     }
 
 }

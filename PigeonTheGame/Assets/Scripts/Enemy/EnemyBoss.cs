@@ -69,6 +69,7 @@ public class EnemyBoss : Enemy
             m_health.OnEnemyDeath += UnsubscribeFromPlayer;
             m_health.OnEnemyDeath += EnemyDied;
             m_health.OnEnemyHalfHealth += ChangeState;
+            m_health.OnBossDeath += ChangeGameState;
 
             m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
             PlayerHealth.OnPlayerRespawn += ResetVariables;
@@ -127,6 +128,14 @@ public class EnemyBoss : Enemy
     {
         if (m_currentStage == BossStage.StageOne)
             m_currentStage = BossStage.StageTwo;
+    }
+
+    void ChangeGameState()
+    {
+        GameManager.instance.GameIsOver = true;
+        GameManager.instance.Boss = transform;
+        
+        GameManager.instance.InvokeEvent();
     }
 
     IEnumerator Rise()

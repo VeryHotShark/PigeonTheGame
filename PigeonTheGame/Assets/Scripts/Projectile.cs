@@ -83,8 +83,6 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
     public virtual void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
     {
-        if (richochet)
-            ReflectBullet(other);
 
         Health otherHealth = other.gameObject.GetComponent<Health>();
 
@@ -118,6 +116,10 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             Destroy(gameObject);
         }
 
+        if (richochet)
+            ReflectBullet(other);
+        else
+             Destroy(gameObject);
     }
 
     void ReflectBullet(Collision other)

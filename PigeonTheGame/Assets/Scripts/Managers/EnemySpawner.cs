@@ -32,6 +32,8 @@ public class EnemySpawner : MonoBehaviour
             Destroy(gameObject);
     }
     
+    public GameObject spawnVFX;
+
     public List<EnemyPool> enemyPools = new List<EnemyPool>();
     public Dictionary<EnemyType,Queue<Enemy>> poolDictionary = new Dictionary<EnemyType, Queue<Enemy>>();
     GameObject parentTransform;
@@ -41,6 +43,7 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         PlayerHealth.OnPlayerRespawn += RespawnDeadEnemies;
+        RoomTrigger.OnPlayerEnterRoom += SpawnAdditionalEnemies;
 
         spawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         parentTransform = CreateParent();
@@ -52,7 +55,8 @@ public class EnemySpawner : MonoBehaviour
 
         foreach(SpawnPoint spawnPoint in spawnPoints)
         {
-            ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
+            if(!spawnPoint.additionalSpawn)
+                ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
         }
     }
 
@@ -85,16 +89,30 @@ public class EnemySpawner : MonoBehaviour
         {
             if(spawnPoint.roomIndex == RoomManager.instance.PlayerCurrentRoom)
             {
-                if(!spawnPoint.EnemyAlive)
+                if(!spawnPoint.additionalSpawn)
                 {
-                    //spawnPoint.MyEnemy
-                    ReuseObject(spawnPoint.enemyType,spawnPoint.transform.position,spawnPoint.transform.rotation,spawnPoint);
+                    if(!spawnPoint.EnemyAlive)
+                    {
+                        //spawnPoint.MyEnemy
+                        ReuseObject(spawnPoint.enemyType,spawnPoint.transform.position,spawnPoint.transform.rotation,spawnPoint);
+                    }
+                    else
+                    {
+                        spawnPoint.MyEnemy.ResetVariables();
+                        //spawnPoint.MyEnemy.Init();
+                    }
                 }
-                else
-                {
-                    spawnPoint.MyEnemy.ResetVariables();
-                    //spawnPoint.MyEnemy.Init();
-                }
+                
+                    else
+                    {
+                        if(spawnPoint.EnemyAlive)
+                        {
+                            //spawnPoint.MyEnemy.EnemyDied(spawnPoint.MyEnemy.enemyHealth);
+                            spawnPoint.MyEnemy.ResetAdditionalSpawnValues();
+                        }
+                
+                    }
+                 
             }
         }
     }
@@ -130,6 +148,28 @@ public class EnemySpawner : MonoBehaviour
 
             poolDictionary[enemyType].Enqueue(objToReuse);
         }
+    }
+
+    void SpawnAdditionalEnemies()
+    {
+        foreach(SpawnPoint spawnPoint in spawnPoints)
+        {
+            if(spawnPoint.additionalSpawn && spawnPoint.roomIndex == RoomManager.instance.PlayerCurrentRoom)
+                StartCoroutine(SpawnAdditionalEnemiesRoutine(spawnPoint));
+                //ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
+        }
+    }
+
+    IEnumerator SpawnAdditionalEnemiesRoutine(SpawnPoint sp)
+    {
+        yield return new WaitForSeconds(sp.spawnDelay);
+
+        GameObject spawnVFXInstance = Instantiate(spawnVFX,sp.transform.position,Quaternion.identity);
+        Destroy(spawnVFXInstance, 1.5f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        ReuseObject(sp.enemyType, sp.transform.position,sp.transform.rotation, sp);
     }
 
 }

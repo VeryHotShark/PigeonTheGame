@@ -64,7 +64,7 @@ public class EnemyRange : Enemy
             return;
         }
 
-        if (delayWaited == false) // if we haven't waited for some delay when player came into room
+        if (delayWaited == false && delayRoutine == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
         if (!m_playerHealth.IsDead() && delayWaited && !m_health.IsDead()) // if player is not dead and we waited some delay

@@ -72,6 +72,9 @@ public class PlayerHealth : Health
 
     public override void TakeDamage(int damage)
     {
+        if (m_isDead)
+            return;
+
         CameraShake.isShaking = true; // when we take damage we make our cam Shake
         base.TakeDamage(damage);
 
@@ -83,28 +86,31 @@ public class PlayerHealth : Health
 
         if (!GodMode)
         {
-
             if (OnPlayerLoseHealth != null)
                 OnPlayerLoseHealth(m_health); // we invoke this event
 
             if (m_health <= 0)
             {
-                if(bigHealth > 0)
+                if (bigHealth > 0)
                 {
                     Die();
                     bigHealth--;
                 }
                 else
                 {
-                    if(OnPlayerBigDeath != null)
+                    if (OnPlayerBigDeath != null)
                         OnPlayerBigDeath();
                 }
             }
+
         }
     }
 
     public override void TakeDamage(int damage, ContactPoint point)
     {
+        if (m_isDead)
+            return;
+
         CameraShake.isShaking = true; // when we take damage we make our cam Shake
         base.TakeDamage(damage);
 
@@ -120,16 +126,16 @@ public class PlayerHealth : Health
             if (OnPlayerLoseHealth != null)
                 OnPlayerLoseHealth(m_health); // we invoke this event
 
-             if (m_health <= 0)
+            if (m_health <= 0)
             {
-                if(bigHealth > 0)
+                if (bigHealth > 0)
                 {
                     Die();
                     bigHealth--;
                 }
-                else 
+                else
                 {
-                    if(OnPlayerBigDeath != null)
+                    if (OnPlayerBigDeath != null)
                         OnPlayerBigDeath();
                 }
             }
@@ -171,21 +177,29 @@ public class PlayerHealth : Health
 
     }
 
-    public void Update()
-    {
-        if (transform.position.y < -20f) // if we fall below -10f respawn
-        {
-            if (OnPlayerDeath != null)
-                OnPlayerDeath();
+    // public void Update()
+    // {
+    //     if (transform.position.y < -20f) // if we fall below -10f respawn
+    //     {
+    //         if (OnPlayerDeath != null)
+    //             OnPlayerDeath();
 
-            Respawn();
-        }
-    }
+    //         Respawn();
+    //     }
+    // }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Trap"))
             TakeDamage(3);
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("SpinningTrap") && !m_justGotHit)
+        {
+            TakeDamage(1);
+            m_justGotHit = true;
+
+            StartCoroutine(ImmuneDuration());
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -194,7 +208,7 @@ public class PlayerHealth : Health
 
         if (roomTrigger != null)
         {
-            if(m_health != startHealth && roomTrigger.HealthResetted == false)
+            if (m_health != startHealth && roomTrigger.HealthResetted == false)
             {
                 m_health = startHealth;
 
@@ -252,11 +266,28 @@ public class PlayerHealth : Health
             }
         }
 
+        
+        if (other.gameObject.layer == LayerMask.NameToLayer("SpinningTrap") && !m_justGotHit)
+        {
+            TakeDamage(1);
+            m_justGotHit = true;
+
+            StartCoroutine(ImmuneDuration());
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("AnchorTrap") && !m_justGotHit)
+        {
+            TakeDamage(3);
+            m_justGotHit = true;
+
+            StartCoroutine(ImmuneDuration());
+        }
+
     }
 
     IEnumerator ImmuneDuration()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         m_justGotHit = false;
     }

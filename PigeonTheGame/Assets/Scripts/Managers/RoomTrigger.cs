@@ -29,6 +29,10 @@ public class RoomTrigger : MonoBehaviour
 
     public bool HealthResetted { get { return m_healthResetted; } }
 
+    public static event System.Action OnPlayerEnterRoom;
+
+    bool m_roomEntered;
+
     void Start()
     {
         if(doors != null)
@@ -37,7 +41,7 @@ public class RoomTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && !m_roomEntered)
         {
             switch (type)
             {
@@ -46,6 +50,10 @@ public class RoomTrigger : MonoBehaviour
                         RoomManager.instance.PlayerInRoom = true;
                         RoomManager.instance.PlayerInCorridor = false;
                         RoomManager.instance.PlayerCurrentRoom = roomIndex;
+                        m_roomEntered = true;
+
+                        if(OnPlayerEnterRoom != null)
+                            OnPlayerEnterRoom();
                     }
                     break;
 
@@ -71,6 +79,10 @@ public class RoomTrigger : MonoBehaviour
                         RoomManager.instance.PlayerCurrentRoom = roomIndex;
                         CheckpointManager.instance.m_currentCheckpoint = null;
                         CheckpointManager.instance.m_currentCheckpoint = this;
+                        m_roomEntered = true;
+
+                        if(OnPlayerEnterRoom != null)
+                            OnPlayerEnterRoom();
                     }
                     break;
 
@@ -108,6 +120,7 @@ public class RoomTrigger : MonoBehaviour
 
     void ResetDoor()
     {
+        m_roomEntered = false;
         doorTriggered = false;
         m_healthResetted = false;
 

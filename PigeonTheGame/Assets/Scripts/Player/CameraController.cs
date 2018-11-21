@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
 
 	public Transform targetToFollow;
 	public Transform targetWhenDead;
+	Transform targetWhenWin;
 	public Transform yawTransform;
 	public float sensitivity = 1f;
 	public bool invertY = false;
@@ -107,6 +108,8 @@ public class CameraController : MonoBehaviour
 		PlayerHealth.OnPlayerRespawn += ReenableCamWhenRespawn;
 		PlayerMovement.OnPlayerDash += ChangeDashFOV;
 
+		GameManager.instance.OnGameOver += CamWhenWin;
+
 		deathMark.SetActive(false);
 		hitMark.SetActive(false);
 		EnemyHealth.OnEnemyTakeDamage += ShowHitMark;
@@ -165,6 +168,17 @@ public class CameraController : MonoBehaviour
 		m_playerInput.MouseEnabled = false;
 		m_playerInput.InputEnabled = false;
 		m_target = targetWhenDead;
+	}
+
+	void CamWhenWin()
+	{
+		
+		targetWhenWin = GameManager.instance.Boss.transform;
+
+		m_playerInput.MouseEnabled = false;
+		m_playerInput.InputEnabled = false;
+		
+		//m_camera.transform.LookAt(targetWhenWin);
 	}
 
 	void ReenableCamWhenRespawn()

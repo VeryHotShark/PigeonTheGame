@@ -59,6 +59,19 @@ public class PlayerInput : MonoBehaviour
             m_zoomInput = Input.GetMouseButton(1);
             m_holdingJumpInput = Input.GetKey(KeyCode.Space);
         }
+        else
+        {
+            
+            m_h = 0f;
+            m_v = 0f;
+
+            m_shootInput = false;
+            m_jumpInput = false;
+            m_dashInput =false;
+
+            m_zoomInput = false;
+            m_holdingJumpInput = false;
+        }
 
 		if(m_mouseEnabled)
 		{			

@@ -8,6 +8,8 @@ public class SpawnPoint : MonoBehaviour
 	public RoomIndex roomIndex;
 
 	public float waitDelay;
+	public float spawnDelay;
+	public bool additionalSpawn = false;
 
     bool enemyAlive;
     Enemy m_enemy;

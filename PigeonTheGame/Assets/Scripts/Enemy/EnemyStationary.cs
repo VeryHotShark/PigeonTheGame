@@ -43,7 +43,7 @@ public class EnemyStationary : Enemy
             return;
         }
 
-        if (delayWaited == false)    // if we haven't waited for some delay when player came into room
+        if (delayWaited == false && delayRoutine == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
 
@@ -71,7 +71,7 @@ public class EnemyStationary : Enemy
             AudioManager.instance.PlayClipAt("EnemyShoot", transform.position);
             m_anim.SetTrigger(m_shooting);
             m_enemyWeapon.ShootProjectile(m_playerTransform.position); // shoot projectile
-            
+
             amountToShoot--; // decrement by one
             yield return new WaitForSeconds(attackRate); // wait for some delay and repeat while amount is > 0
         }
