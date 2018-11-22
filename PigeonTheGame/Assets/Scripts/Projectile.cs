@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     public AnimationCurve lifeSizeCurve;
 
     public bool richochet;
+    public bool resizeBullet;
 
     float lifePercent;
 
@@ -31,6 +32,8 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
     protected AudioSource m_audioSource;
     protected float m_trailStartWidth;
 
+    IEnumerator ResizeBulletRoutine;
+
     // Use this for initialization
     public virtual void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
@@ -43,7 +46,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
         m_dir = dir;
 
-        GetComponents();
+        //GetComponents();
         if (m_trailRenderer)
         {
             m_trailStartWidth = m_trailRenderer.startWidth;
@@ -56,30 +59,28 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         m_distance = lifeTime;
         m_lifeTime = lifeTime;
 
-        StartCoroutine(SizeOverLifetime());
+        if(resizeBullet)
+        {
+            if(ResizeBulletRoutine != null)
+                StopCoroutine(ResizeBulletRoutine);
+
+            ResizeBulletRoutine = SizeOverLifetime();
+
+            StartCoroutine(ResizeBulletRoutine);
+        }
     }
 
-    void GetComponents()
+    public void GetComponents()
     {
         m_rigid = GetComponent<Rigidbody>();
         m_trailRenderer = GetComponent<TrailRenderer>();
         m_audioSource = GetComponent<AudioSource>();
     }
-    //void Update()
-    //{
-    // (transform.position - m_startPos).sqrMagnitude || CHANGE TO THIS LATER TODO zmień sposób liczenia dystansu bo teraz on liczy jak dalkeo jest od spawnPointu a nie ile już drogi przeleciał, ale żeby zrobić żebyśmy znali dystans jaki przemieszcza się co klatkę to trzeba by było albo zrobić kalkulacje jego pozycji tearzniejszej klatki odciąć z poprzednią i tego wyliczyć dystans przebyty i dodać do sumy dystans albo jak zmienić żeby projectile leciał Transform.Translate to wtedy możesz wyliczyć dystans który przybędzie do następnej klatki tak : dystans = speed * Time.deltaTime  
-    //Vector3.Distance(m_startPos, transform.position)
-
-    //transform.Translate(transform.InverseTransformDirection(m_dir) * m_speed * Time.deltaTime);
-
-    /*
-        if( Vector3.Distance(m_startPos, transform.position) > m_distance)
-        {
-            Destroy(gameObject);
-        }
-     */
-    //}
-
+   
+    public void ResetVariables()
+    {
+        transform.localScale = m_startSize;
+    }
 
     public virtual void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
     {
@@ -113,13 +114,15 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             else
                 otherHealth.TakeDamage(m_damage, other.contacts[0]);
 
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
 
         if (richochet)
             ReflectBullet(other);
         else
-             Destroy(gameObject);
+            gameObject.SetActive(false);
+             //Destroy(gameObject);
     }
 
     void ReflectBullet(Collision other)
@@ -157,6 +160,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             yield return null;
         }
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

@@ -1503,6 +1503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f87f12a620dc41428c574b01eb938c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletType: 2
   damage: 1
   speed: 70
   projectileLife: 1.5

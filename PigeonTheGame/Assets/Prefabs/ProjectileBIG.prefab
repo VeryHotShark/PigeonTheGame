@@ -132,6 +132,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   richochet: 0
+  resizeBullet: 1
   explosionVFX: {fileID: 1275546315148578, guid: 90455374e0253ef49bbcee15a097a066,
     type: 2}
   layerMask:

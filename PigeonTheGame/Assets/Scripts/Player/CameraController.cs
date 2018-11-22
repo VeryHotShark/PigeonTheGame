@@ -175,8 +175,8 @@ public class CameraController : MonoBehaviour
 		
 		targetWhenWin = GameManager.instance.Boss.transform;
 
-		m_playerInput.MouseEnabled = false;
-		m_playerInput.InputEnabled = false;
+		//m_playerInput.MouseEnabled = false;
+		//m_playerInput.InputEnabled = false;
 		
 		//m_camera.transform.LookAt(targetWhenWin);
 	}

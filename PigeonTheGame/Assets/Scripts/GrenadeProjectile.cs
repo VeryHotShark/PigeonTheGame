@@ -33,7 +33,8 @@ public class GrenadeProjectile : Projectile
         CheckIfCollided();
 
         Destroy(vfxInstance, 2f);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 
     public override void OnCollisionEnter(Collision other)

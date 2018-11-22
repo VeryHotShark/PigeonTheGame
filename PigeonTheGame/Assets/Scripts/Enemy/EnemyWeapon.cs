@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour
 {
+    public BulletType bulletType;
 	public int damage;
     public float speed;
     public float projectileLife = 3f;
@@ -15,7 +16,8 @@ public class EnemyWeapon : MonoBehaviour
     // Update is called once per frame
     public void ShootProjectile(Vector3 playerPos) // public Function to instantiate our projectile and set it parameters
     {
-        Projectile obj = Instantiate(projectile, spawnPoint.position, Quaternion.identity) as Projectile;
+        //Projectile obj = Instantiate(projectile, spawnPoint.position, Quaternion.identity) as Projectile;
+        Projectile obj = BulletPooler.instance.ReuseObject(bulletType,spawnPoint.position,spawnPoint.rotation);
         obj.OnProjectileSpawn((playerPos - spawnPoint.position).normalized, speed, damage, projectileLife, transform.gameObject);
     }
 }

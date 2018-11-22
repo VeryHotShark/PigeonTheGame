@@ -366,3 +366,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   richochet: 1
+  resizeBullet: 1

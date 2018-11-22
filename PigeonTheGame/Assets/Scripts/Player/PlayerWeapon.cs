@@ -131,8 +131,9 @@ public class PlayerWeapon : MonoBehaviour
 							shootDir = (randomHitPoint - spawnPoint.position).normalized; // and now it will be our shootDireciton
 						}
 
-						Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile; // we spawn projectile
-						
+						//Projectile obj = Instantiate(projectile,spawnPoint.position, spawnPoint.rotation) as Projectile; // we spawn projectile
+						Projectile obj = BulletPooler.instance.ReuseObject(BulletType.PlayerBullet,spawnPoint.position, spawnPoint.rotation);
+
 						obj.OnProjectileSpawn(shootDir, force, damage, projectileLife, transform.gameObject); // and we give it that direction ,force, damage etc
 					}
 				}
