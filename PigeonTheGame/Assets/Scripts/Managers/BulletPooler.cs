@@ -8,6 +8,7 @@ public enum BulletType
     PlayerBullet,
     EnemyBullet,
     HeavyBullet,
+    WallGunBullet,
     None
 }
 
@@ -35,9 +36,13 @@ public class BulletPooler : MonoBehaviour
     public List<BulletPool> bulletsPools = new List<BulletPool>();
     public Dictionary<BulletType, Queue<Projectile>> poolDictionary = new Dictionary<BulletType, Queue<Projectile>>();
 
+    GameObject parentTransform;
+
     // Use this for initialization
     void Start()
     {
+        parentTransform = CreateParent();
+
         foreach (BulletPool bulletPool in bulletsPools)
         {
             CreatePool(bulletPool.projectile, bulletPool.size, bulletPool.bulletType);
@@ -56,7 +61,7 @@ public class BulletPooler : MonoBehaviour
             for(int i = 0 ; i < poolSize ; i++)
             {
                 Projectile projectileObj = Instantiate(projectile) as Projectile;
-                //projectileObj.gameObject.transform.parent = parentTransform.transform;
+                projectileObj.gameObject.transform.parent = parentTransform.transform;
 
 				projectileObj.GetComponents();
                 projectileObj.gameObject.SetActive(false);
@@ -73,11 +78,12 @@ public class BulletPooler : MonoBehaviour
         {
             Projectile objToReuse = poolDictionary[bulletType].Dequeue();
 
-            objToReuse.gameObject.SetActive(true);
-            objToReuse.ResetVariables();
-
+            //objToReuse.ResetVariables();
             objToReuse.transform.position = position;
-            objToReuse.transform.rotation = rotation;
+            //objToReuse.transform.rotation = rotation;
+
+            objToReuse.gameObject.SetActive(true);
+
 
             //objToReuse.Init();
 
@@ -86,5 +92,11 @@ public class BulletPooler : MonoBehaviour
         }
         else
             return null;
+    }
+
+    GameObject CreateParent(/*RoomIndex roomIndex*/)
+    {
+        //string parentName = roomIndex.ToString();
+        return new GameObject("Bullets");
     }
 }

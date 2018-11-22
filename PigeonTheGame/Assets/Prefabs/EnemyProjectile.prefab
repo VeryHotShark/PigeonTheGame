@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d994745d6c51044895288371e6221f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitVFX: {fileID: 0}
+  hitVFX: {fileID: 1762200141059494, guid: cf5f384b8521f134396412f221e8dfc4, type: 2}
   lifeSizeCurve:
     serializedVersion: 2
     m_Curve: []
@@ -234,3 +234,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   richochet: 1
+  resizeBullet: 1

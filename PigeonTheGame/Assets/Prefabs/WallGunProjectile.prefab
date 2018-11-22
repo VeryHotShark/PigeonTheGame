@@ -138,6 +138,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   richochet: 0
+  resizeBullet: 1
 --- !u!135 &135053976071564332
 SphereCollider:
   m_ObjectHideFlags: 1

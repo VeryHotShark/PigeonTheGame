@@ -34,24 +34,21 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
 
     IEnumerator ResizeBulletRoutine;
 
+    public Vector3 StartSize { get { return m_startSize; } set { m_startSize = value; } }
+    protected float TrailStartWidth { get { return m_trailStartWidth; } set { m_trailStartWidth = value; } }
+
     // Use this for initialization
     public virtual void OnProjectileSpawn(Vector3 dir, float force, int damage, float lifeTime, GameObject objectShotFrom)
     {
         transform.rotation = Quaternion.LookRotation(dir);
 
-        m_startSize = transform.localScale;
+        ResetVariables();
+
         m_startPos = transform.position;
         myForce = force;
         m_speed = force;
 
         m_dir = dir;
-
-        //GetComponents();
-        if (m_trailRenderer)
-        {
-            m_trailStartWidth = m_trailRenderer.startWidth;
-            m_trailRenderer.startWidth = m_startSize.x - 0.1f;
-        }
 
         m_objectShotFrom = objectShotFrom;
         m_damage = damage;
@@ -59,9 +56,9 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         m_distance = lifeTime;
         m_lifeTime = lifeTime;
 
-        if(resizeBullet)
+        if (resizeBullet)
         {
-            if(ResizeBulletRoutine != null)
+            if (ResizeBulletRoutine != null)
                 StopCoroutine(ResizeBulletRoutine);
 
             ResizeBulletRoutine = SizeOverLifetime();
@@ -75,11 +72,22 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         m_rigid = GetComponent<Rigidbody>();
         m_trailRenderer = GetComponent<TrailRenderer>();
         m_audioSource = GetComponent<AudioSource>();
+        m_startSize = transform.localScale;
+        if (m_trailRenderer)
+            m_trailStartWidth = m_trailRenderer.startWidth;
     }
-   
+
     public void ResetVariables()
     {
+        //Debug.Log(m_startSize);
         transform.localScale = m_startSize;
+        if (m_trailRenderer)
+        {
+            m_trailRenderer.startWidth = m_trailStartWidth;
+            m_trailRenderer.startWidth = m_startSize.x - 0.1f;
+        }
+
+        m_rigid.velocity = Vector3.zero;
     }
 
     public virtual void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
@@ -115,14 +123,27 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
                 otherHealth.TakeDamage(m_damage, other.contacts[0]);
 
             gameObject.SetActive(false);
+
+            if (resizeBullet)
+            {
+                if (ResizeBulletRoutine != null)
+                    StopCoroutine(ResizeBulletRoutine);
+            }
             //Destroy(gameObject);
         }
 
         if (richochet)
             ReflectBullet(other);
         else
+        {
             gameObject.SetActive(false);
-             //Destroy(gameObject);
+            if (resizeBullet)
+            {
+                if (ResizeBulletRoutine != null)
+                    StopCoroutine(ResizeBulletRoutine);
+            }
+        }
+        //Destroy(gameObject);
     }
 
     void ReflectBullet(Collision other)
