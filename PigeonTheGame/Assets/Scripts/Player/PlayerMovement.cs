@@ -190,8 +190,12 @@ public class PlayerMovement : MonoBehaviour
 
                 //AudioManager.instance.Play("PlayerJump");
 
-                GameObject landVFXInstance = Instantiate(landVFX,transform.position - Vector3.up * 0.1f,Quaternion.identity);
-                Destroy(landVFXInstance,1.5f);
+                /*
+                    GameObject landVFXInstance = Instantiate(landVFX,transform.position - Vector3.up * 0.1f,Quaternion.identity);
+                    Destroy(landVFXInstance,1.5f);
+                 */
+
+                 GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Land,transform.position - Vector3.up * 0.5f,Quaternion.identity);
             }
         }
         else

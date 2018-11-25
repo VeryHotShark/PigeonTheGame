@@ -175,9 +175,14 @@ public class PlayerWeapon : MonoBehaviour
 
 	void SpawnVFX()
 	{
-		GameObject vfx = Instantiate(muzzleflashVFX,m_middleSpawnPoint.position,playerWeapon.transform.rotation) as GameObject;
+		/*
+			GameObject vfx = Instantiate(muzzleflashVFX,m_middleSpawnPoint.position,playerWeapon.transform.rotation) as GameObject;
+			vfx.transform.parent = playerWeapon.transform;
+			Destroy(vfx,2f);
+		 */
+
+		GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.MuzzleFlash,m_middleSpawnPoint.position,playerWeapon.transform.rotation);
 		vfx.transform.parent = playerWeapon.transform;
-		Destroy(vfx,2f);
 
 		GameObject shellVFX = Instantiate(shell,shellTransform.position,shellTransform.rotation) as GameObject;
 		//vfx.transform.parent = playerWeapon.transform;

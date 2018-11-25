@@ -29,10 +29,15 @@ public class GrenadeProjectile : Projectile
             yield return null;
         }
 
+    /*
         GameObject vfxInstance = Instantiate(explosionVFX, transform.position, Quaternion.identity);
+        Destroy(vfxInstance, 2f);
+     */
+
+        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Explosion,transform.position,Quaternion.identity);
+
         CheckIfCollided();
 
-        Destroy(vfxInstance, 2f);
         gameObject.SetActive(false);
         //Destroy(gameObject);
     }

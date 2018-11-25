@@ -5,7 +5,27 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-    public Image playerDashScreen;
+    [Header("PopUpWinScreen")]
+    public GameObject popUpScreenParent;
+    public float popUpDuration;
+    public float waveDuration;
+    public float popUpWaitDelay;
+    [Range(0f,1f)]
+    public float percentTransition;
+    public Vector2 popUpMinMaxSize;
+    public Vector2 popUpParentMinMaxSize;
+    public AnimationCurve popUpScreenCurve;
+    public AnimationCurve popUpScreenCurveBG;
+    public AnimationCurve popUpScreenWaveCurve;
+    Image[] m_images;
+
+    [Header("Player Win")]
+    public Image playerWinScreen;
+    public AnimationCurve playerWinScreenCurve;
+    public float winScreenDuration;
+
+    public Color startColor;
+    public Color endColor;
 
     [Header("Player Death")]
 
@@ -13,6 +33,7 @@ public class UIManager : MonoBehaviour
     public Image playerDeathScreenBG;
 
     public float waitDelay;
+
     public float deathDuration;
 
     public Vector2 deathMinMaxSize;
@@ -43,12 +64,7 @@ public class UIManager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        GetComponents();
-
-        playerHitScreen.gameObject.SetActive(false);
-        playerDashScreen.gameObject.SetActive(false);
-
-        livesImages = healthUI.GetComponentsInChildren<Image>().ToArray();
+     
 
         //PlayerMovement.OnPlayerDash += ShowDashScreen;
     }
@@ -60,11 +76,31 @@ public class UIManager : MonoBehaviour
         PlayerHealth.OnPlayerDeath += ShowDeathScreen;
         m_playerHealth.OnPlayerReachCheckPoint += ResetHealthImages;
         PlayerHealth.OnPlayerRespawn += ResetHealthImages;
+
+    }
+
+    void Start()
+    {
+
+        GetComponents();
+
+        playerHitScreen.gameObject.SetActive(false);
+        playerWinScreen.gameObject.SetActive(false);
+
+        livesImages = healthUI.GetComponentsInChildren<Image>().ToArray();
+        m_images = popUpScreenParent.GetComponentsInChildren<Image>();
+
+        foreach(Image image in m_images)
+        {
+            image.gameObject.SetActive(false);
+        }
+
+        GameManager.instance.OnGameOver += ShowWinScreen;
     }
 
     void ChangeImage(int playerCurrentHealth)
     {
-        m_hitScreenRoutine = ShowHitScreen(playerHitScreen);
+        m_hitScreenRoutine = ShowHitScreenRoutine(playerHitScreen,false);
 
         if (m_hitScreenRoutine != null)
             StartCoroutine(m_hitScreenRoutine);
@@ -93,9 +129,14 @@ public class UIManager : MonoBehaviour
 
     }
 
-    void ShowDashScreen()
+    void ShowHitScreen()
     {
-        StartCoroutine(ShowHitScreen(playerDashScreen));
+        StartCoroutine(ShowHitScreenRoutine(playerHitScreen, false));
+    }
+
+    void ShowWinScreen()
+    {
+        StartCoroutine(ShowHitScreenRoutine(playerWinScreen, true));
     }
 
     void ShowDeathScreen()
@@ -111,11 +152,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    IEnumerator ShowHitScreen(Image image)
+    IEnumerator ShowHitScreenRoutine(Image image,bool winScreen)
     {
 
         float percent = 0f;
-        float speed = 1f / showDuration;
+        float speed = 1f / (winScreen ? winScreenDuration : showDuration);
 
         image.gameObject.SetActive(true);
 
@@ -123,12 +164,96 @@ public class UIManager : MonoBehaviour
         {
             percent += Time.deltaTime * speed;
             var hitScreenColor = image.color;
-            hitScreenColor.a = Mathf.Lerp(0f, 1f, hitScreenCurve.Evaluate(percent));
+
+            //if(winScreen)
+                //hitScreenColor = Color.Lerp(startColor, endColor,percent);
+
+            hitScreenColor.a = Mathf.Lerp(0f, 1f, (winScreen ? playerWinScreenCurve.Evaluate(percent) :hitScreenCurve.Evaluate(percent)));
+
             image.color = hitScreenColor;
             yield return null;
         }
 
         image.gameObject.SetActive(false);
+
+        if(winScreen)
+            StartCoroutine(ShowPopUpRoutine(0));
+    }
+
+    IEnumerator ShowPopUpRoutine(int index)
+    {
+        if(index == 0)
+        {
+            yield return new WaitForSeconds(popUpWaitDelay);
+            playerDeathScreenBG.gameObject.SetActive(true);
+            healthUI.gameObject.SetActive(false);
+            AudioManager.instance.Play("Win");
+        }
+
+        float percent = 0f;
+        float speed = 1f / popUpDuration;
+
+        bool showNext = false;
+
+        m_images[index].gameObject.SetActive(true);
+
+        while(percent < 1f)
+        {
+            percent += Time.deltaTime * speed;
+
+            if(index == 0)
+            {
+                var bgScreenColor = playerDeathScreenBG.color;
+                bgScreenColor.a = Mathf.Lerp(0, 1f, popUpScreenCurveBG.Evaluate(percent));
+                playerDeathScreenBG.color = bgScreenColor;
+            }
+
+
+            m_images[index].rectTransform.localScale = Vector3.Lerp(popUpMinMaxSize.x * Vector3.one, popUpMinMaxSize.y * Vector3.one, popUpScreenCurve.Evaluate(percent));
+
+            if(percent >= percentTransition)
+            {
+                if(!showNext)
+                {
+                    showNext = true;
+                    if(index < m_images.Length - 1)
+                        StartCoroutine(ShowPopUpRoutine(index + 1));
+                    else
+                        StartCoroutine(WaveAnimationRoutine());
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator WaveAnimationRoutine()
+    {
+        float percent = 0f;
+        float speed = 1f / waveDuration;
+
+        bool fadeOut = false;
+
+        while(percent >= 0f)
+        {
+            percent += Time.deltaTime * speed;
+
+            popUpScreenParent.transform.localScale = Vector3.Lerp(popUpParentMinMaxSize.x * Vector3.one, popUpParentMinMaxSize.y * Vector3.one, popUpScreenWaveCurve.Evaluate(percent));
+
+            if(percent > 4f && !fadeOut)
+            {
+                fadeOut = true;
+                StartCoroutine(ReturnToMenu());
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator ReturnToMenu()
+    {
+        yield return Fade.instance.StartCoroutine(Fade.instance.FadeOut());
+        GameManager.instance.LoadMenu();
     }
 
     IEnumerator ShowDeathScreenRoutine(Image image, Image bg)

@@ -1276,6 +1276,7 @@ MonoBehaviour:
   waitTimeWhenPlayerGetShot: 1
   hitGroundVFX: {fileID: 1506188917974344, guid: 5da96d35bb437b249b8f749389ffb99b,
     type: 2}
+  jumpVFX: {fileID: 0}
   GFX: {fileID: 1902900235275542}
   localGFXOffset: {x: 0, y: -4.8, z: 0.1}
   jumpDuration: 0.3
@@ -1287,7 +1288,7 @@ MonoBehaviour:
   projectileAmountVariation: 2
   projectileAmountAtOnce: 7
   spreadAmount: 5
-  waitTimeBeforeNextShootSeries: 0.5
+  waitTimeBeforeNextShootSeries: 0.1
 --- !u!114 &114767698418795256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1299,8 +1300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f87f12a620dc41428c574b01eb938c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletType: 4
   damage: 1
-  speed: 70
+  speed: 80
   projectileLife: 2
   projectile: {fileID: 114844909270329674, guid: 00bc29f49b1a24a4f992bf9d7f60fa44,
     type: 2}

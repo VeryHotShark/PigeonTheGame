@@ -23,7 +23,7 @@ public class RoomTrigger : MonoBehaviour
     public DoorMovement[] doors;
 
     bool doorTriggered;
-    public bool healthReset;
+    bool healthReset;
 
     bool m_healthResetted;
 

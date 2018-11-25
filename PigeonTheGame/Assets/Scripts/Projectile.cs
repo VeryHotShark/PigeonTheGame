@@ -88,6 +88,7 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
         }
 
         m_rigid.velocity = Vector3.zero;
+        m_rigid.angularVelocity = Vector3.zero;
     }
 
     public virtual void OnCollisionEnter(Collision other) // ZMIEN NA RAYCAST, żeby to był projectile zamiast bullet albo pól na pól, że leci sobie i raycast jest na początku Bulletu i on wykrywa zamiast Kolizji
@@ -104,9 +105,13 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             if (m_audioSource != null)
                 m_audioSource.Play();
 
-            GameObject vfx = Instantiate(hitVFX, other.contacts[0].point, Quaternion.identity);
-            vfx.transform.rotation = Quaternion.Euler(other.contacts[0].normal);
-            Destroy(vfx, 1f);
+            /*
+              GameObject vfx = Instantiate(hitVFX, other.contacts[0].point, Quaternion.identity);
+              vfx.transform.rotation = Quaternion.Euler(other.contacts[0].normal);
+              Destroy(vfx, 1f);
+             */
+
+            GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.HitProp,other.contacts[0].point,Quaternion.Euler(other.contacts[0].normal));
         }
 
         if (otherHealth != null && other.gameObject != m_objectShotFrom)

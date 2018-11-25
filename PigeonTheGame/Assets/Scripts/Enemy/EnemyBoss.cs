@@ -18,6 +18,7 @@ public class EnemyBoss : Enemy
     [Space]
 
     public GameObject hitGroundVFX;
+    public GameObject jumpVFX;
 
 
     [Header("BOSS")]
@@ -140,7 +141,7 @@ public class EnemyBoss : Enemy
 
     IEnumerator Rise()
     {
-
+        AudioManager.instance.PlayClipAt("OwlJump", transform.position);
 
         GFX.transform.localPosition = Vector3.zero;
         FaceTarget();
@@ -155,6 +156,8 @@ public class EnemyBoss : Enemy
 
         m_anim.SetTrigger(m_rise);
         yield return new WaitForSeconds(0.4f);
+
+        GameObject jumpInstance = VFXPooler.instance.ReuseObject(VFXType.OwlJump,transform.position,Quaternion.identity);
 
         Vector3 startPos = transform.position;
         Vector3 desiredPos = startPos + Vector3.up * jumpHeight;
@@ -189,6 +192,8 @@ public class EnemyBoss : Enemy
     {
         FaceTarget();
 
+        AudioManager.instance.PlayClipAt("OwlAttack", transform.position);
+
         m_collider.direction = 2;
         m_anim.SetBool(m_attack, true);
 
@@ -210,8 +215,13 @@ public class EnemyBoss : Enemy
             yield return null;
         }
 
+        AudioManager.instance.PlayClipAt("OwlHitGround", transform.position);
+
+    /*
         GameObject vfx = Instantiate(hitGroundVFX, transform.position, Quaternion.identity);
         Destroy(vfx, 3f);
+     */
+        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.HitGround,transform.position ,Quaternion.identity);
 
         yield return new WaitForSeconds(waitAtGround);
 
@@ -254,6 +264,7 @@ public class EnemyBoss : Enemy
         {
             FaceTarget();
             m_anim.SetTrigger(m_shoot);
+            AudioManager.instance.PlayClipAt("OwlShoot", transform.position);
 
             int amountToShoot = Random.Range(projectileAmountAtOnce - projectileAmountVariation, projectileAmountAtOnce + projectileAmountVariation + 1); // calculate how many projectiles will be shot
 

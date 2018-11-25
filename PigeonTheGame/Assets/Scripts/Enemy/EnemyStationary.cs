@@ -9,6 +9,8 @@ public class EnemyStationary : Enemy
     {
         base.ResetVariables();
 
+        m_agent.Warp(m_spawnPoint.transform.position);
+
         m_duringRoutine = false;
     }
 

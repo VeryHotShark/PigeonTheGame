@@ -23,6 +23,11 @@ public class DoorMovement : MonoBehaviour
     Vector3 startPos;
     Vector3 endPos;
 
+    void Start()
+    {
+        startPos = transform.localPosition;
+    }
+
     public void InitDoor()
     {
         Init();

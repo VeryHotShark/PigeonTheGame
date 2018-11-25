@@ -11,7 +11,16 @@ public class EnemyRange : Enemy
     {
         base.ResetVariables();
 
-        delayWaited = false;
+        
+         m_agent.Warp(m_spawnPoint.transform.position);
+
+        transform.position = m_spawnPoint.transform.position;
+        transform.rotation = m_spawnPoint.transform.rotation;
+
+        
+
+
+        //delayWaited = false;
 
         m_anim.SetBool(m_moving, false);
     }
@@ -100,6 +109,7 @@ public class EnemyRange : Enemy
 
     IEnumerator UpdatePath()
     {
+        m_agent.updatePosition = true;
         float refreshRate = 0.25f;
 
         while (!m_playerHealth.IsDead())
@@ -141,6 +151,7 @@ public class EnemyRange : Enemy
 
     IEnumerator MoveToRandomPos()
     {
+        m_agent.updatePosition = true;
 
         m_anim.SetBool(m_moving, true);
         currentState = State.Moving; // change our state to moving

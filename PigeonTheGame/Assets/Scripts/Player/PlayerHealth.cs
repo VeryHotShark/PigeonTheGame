@@ -81,8 +81,11 @@ public class PlayerHealth : Health
         AudioManager.instance.Play("PlayerHit");
         m_playerMovement.Anim.SetTrigger(m_hitHash);
 
+    /*
         GameObject playerHitVFX = Instantiate(hitVFX, transform.position + Vector3.up, Quaternion.identity);
         Destroy(playerHitVFX, 0.3f);
+     */
+        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Hit,transform.position + Vector3.up,Quaternion.identity);
 
         if (!GodMode)
         {
@@ -117,8 +120,12 @@ public class PlayerHealth : Health
         AudioManager.instance.Play("PlayerHit");
         m_playerMovement.Anim.SetTrigger(m_hitHash);
 
+    /*
         GameObject playerHitVFX = Instantiate(hitVFX, point.point, Quaternion.identity);
         Destroy(playerHitVFX, 0.3f);
+     */
+
+        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Hit,point.point ,Quaternion.identity);
 
         if (!GodMode)
         {
@@ -217,9 +224,14 @@ public class PlayerHealth : Health
 
                 AudioManager.instance.Play("PlayerHeal");
 
+            /*
                 GameObject healVFXInstance = Instantiate(healVFX, transform.position + Vector3.up, Quaternion.identity);
                 healVFXInstance.transform.parent = transform;
                 Destroy(healVFXInstance, 1.5f);
+             */
+
+                GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Heal,transform.position + Vector3.up ,Quaternion.identity);
+                vfx.transform.parent = transform;
             }
         }
     }

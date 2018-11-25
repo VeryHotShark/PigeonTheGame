@@ -9,6 +9,7 @@ public enum BulletType
     EnemyBullet,
     HeavyBullet,
     WallGunBullet,
+    OwlBullet,
     None
 }
 
