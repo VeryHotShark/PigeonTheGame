@@ -109,6 +109,7 @@ public class CameraController : MonoBehaviour
 		PlayerMovement.OnPlayerDash += ChangeDashFOV;
 
 		GameManager.instance.OnGameOver += CamWhenWin;
+		GameManager.instance.OnGameOver += Unsubscribe;
 
 		deathMark.SetActive(false);
 		hitMark.SetActive(false);
@@ -123,6 +124,21 @@ public class CameraController : MonoBehaviour
 
 		lookAngle.x -= Mathf.Abs(m_camera.transform.eulerAngles.x);
 		lookAngle.y -= Mathf.Abs(m_camera.transform.eulerAngles.x);
+	}
+
+	void Unsubscribe()
+	{
+		GameManager.instance.OnGameOver -= CamWhenWin;
+		GameManager.instance.OnGameOver -= Unsubscribe;
+
+		PlayerWeapon.OnPlayerShoot -= ZoomCrosshair; // we zoom our crosshair when playter shoot
+		PlayerHealth.OnPlayerDeath -= DisableCamWhenDead;
+		PlayerHealth.OnPlayerRespawn -= ResetCam;
+		PlayerHealth.OnPlayerRespawn -= ReenableCamWhenRespawn;
+		PlayerMovement.OnPlayerDash -= ChangeDashFOV;
+
+		EnemyHealth.OnEnemyTakeDamage -= ShowHitMark;
+		EnemyHealth.OnAnyEnemyDeath -= ShowDeathMark;
 	}
 
 	void GetComponents()
@@ -271,7 +287,8 @@ public class CameraController : MonoBehaviour
 
 	void ZoomCrosshair() // zoom crosshair when shoot
 	{
-		crosshair.localScale = crosshair.localScale * shootCrosshairMultiplier;
+		if(crosshair != null)
+			crosshair.localScale = crosshair.localScale * shootCrosshairMultiplier;
 		//Debug.Log(crosshair.localScale);
 	}
 

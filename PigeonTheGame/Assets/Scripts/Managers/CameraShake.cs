@@ -43,7 +43,14 @@ public class CameraShake : MonoBehaviour
 		initEulerRot = initialRotation.eulerAngles;
 
 		PlayerWeapon.OnPlayerShoot += TiltCamera;
+		GameManager.instance.OnGameOver += Unsubscribe;
     }
+
+	void Unsubscribe()
+	{
+		GameManager.instance.OnGameOver -= Unsubscribe;
+		PlayerWeapon.OnPlayerShoot -= TiltCamera;
+	}
 
     // Update is called once per frame
     void Update()
@@ -84,6 +91,7 @@ public class CameraShake : MonoBehaviour
 
 	void TiltCamera()
 	{
-		transform.localRotation = desiredCamRot.localRotation;
+		if(this != null)
+			transform.localRotation = desiredCamRot.localRotation;
 	}
 }

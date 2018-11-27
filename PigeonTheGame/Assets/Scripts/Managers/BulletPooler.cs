@@ -81,7 +81,7 @@ public class BulletPooler : MonoBehaviour
 
             //objToReuse.ResetVariables();
             objToReuse.transform.position = position;
-            //objToReuse.transform.rotation = rotation;
+            objToReuse.transform.rotation = rotation;
 
             objToReuse.gameObject.SetActive(true);
 

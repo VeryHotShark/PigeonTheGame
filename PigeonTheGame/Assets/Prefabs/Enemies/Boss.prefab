@@ -1270,7 +1270,7 @@ MonoBehaviour:
   stopDistance: 1.5
   attackPower: 1
   attackRange: 1
-  attackRate: 1
+  attackRate: 0.7
   waitTimeWhenEnter: 1
   waitTimeOnWaypoint: 1
   waitTimeWhenPlayerGetShot: 1
@@ -1288,7 +1288,7 @@ MonoBehaviour:
   projectileAmountVariation: 2
   projectileAmountAtOnce: 7
   spreadAmount: 5
-  waitTimeBeforeNextShootSeries: 0.1
+  waitTimeBeforeNextShootSeries: 1
 --- !u!114 &114767698418795256
 MonoBehaviour:
   m_ObjectHideFlags: 1

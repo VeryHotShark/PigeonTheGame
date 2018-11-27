@@ -101,17 +101,16 @@ public class EnemyHealth : Health
 
     public override void Die()
     {
+        m_isDead = true;
+
         if(OnBossDeath != null)
             OnBossDeath();
 
         if (OnAnyEnemyDeath != null)
             OnAnyEnemyDeath(); // call OnEnemyDeath if someone is subscribe to that event
 
-
         if (OnEnemyDeath != null)
             OnEnemyDeath(this); // call OnEnemyDeath if someone is subscribe to that event
-
-        m_isDead = true;
 
         if (ragdoll)
             RagdollToggle(true);
@@ -122,9 +121,11 @@ public class EnemyHealth : Health
     public void Deactivate()
     {
         if (m_isDead)
+        {
             gameObject.SetActive(false);
+            PlayerHealth.OnPlayerRespawn -= Deactivate;
+        }
 
-        PlayerHealth.OnPlayerRespawn -= Deactivate;
     }
 
 

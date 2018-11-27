@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 96733064665227438}
   - component: {fileID: 54985420822875220}
   - component: {fileID: 114122693679560738}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: HeavyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1576918944654600}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -60.13, y: -5.128, z: 252.042}
+  m_LocalPosition: {x: -72.76037, y: -11.46, z: 232.29582}
   m_LocalScale: {x: 10, y: 10, z: 7.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -60,7 +60,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: d73677484df54fc4e9284b2642b0d787, type: 2}
+  - {fileID: 2100000, guid: 4e29b0c1362e3b142b140ec657456a0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

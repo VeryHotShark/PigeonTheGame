@@ -127,13 +127,14 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             else
                 otherHealth.TakeDamage(m_damage, other.contacts[0]);
 
-            gameObject.SetActive(false);
 
             if (resizeBullet)
             {
                 if (ResizeBulletRoutine != null)
                     StopCoroutine(ResizeBulletRoutine);
             }
+
+            gameObject.SetActive(false);
             //Destroy(gameObject);
         }
 
@@ -141,12 +142,13 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             ReflectBullet(other);
         else
         {
-            gameObject.SetActive(false);
             if (resizeBullet)
             {
                 if (ResizeBulletRoutine != null)
                     StopCoroutine(ResizeBulletRoutine);
             }
+            
+            gameObject.SetActive(false);
         }
         //Destroy(gameObject);
     }

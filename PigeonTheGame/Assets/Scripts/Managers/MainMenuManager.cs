@@ -5,23 +5,30 @@ using UnityEngine;
 public class MainMenuManager : MonoBehaviour
 {
 
-	public Texture2D cursor;
+    public Texture2D cursor;
 
     public AudioMixer audioMixer;
 
+    public Animator idleAnim;
+    public AudioSource menuMusic;
 
+    public GameObject[] childrens;
 
     public bool pauseGame;
-	public bool invertY;
+    public bool invertY;
 
     public float currentSensitivity = 2f;
-    [Range(0,2)]public int currentQualityLevel = 2;
+    [Range(0, 2)] public int currentQualityLevel = 2;
 
     float normalTimeScale;
 
     public event System.Action OnPausePress;
 
     public static MainMenuManager instance;
+
+    private bool gameOver;
+
+    public bool GameOver { get { return gameOver; } set { gameOver = value; } }
 
     public void Awake()
     {
@@ -32,23 +39,25 @@ public class MainMenuManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
 
-		float xSpot = cursor.width/2;
-        float ySpot =cursor.height/2;
-        Vector2 hotSpot = new Vector2(xSpot,ySpot);
+        float xSpot = cursor.width / 2;
+        float ySpot = cursor.height / 2;
+        Vector2 hotSpot = new Vector2(xSpot, ySpot);
 
-		Cursor.SetCursor(cursor,hotSpot,CursorMode.ForceSoftware);
-		Cursor.lockState = CursorLockMode.None;
-		Cursor.visible = true;
+        Cursor.SetCursor(cursor, hotSpot, CursorMode.ForceSoftware);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         //qualityDropdown.value = currentQualityLevel;
         //sensitivitySlider.value = currentSensitivity;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().buildIndex != 0)
+        if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-            if(Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
             {
                 Pause();
             }
@@ -57,14 +66,14 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetMouseInvert(bool invert)
     {
-		invertY = invert;
+        invertY = invert;
     }
 
     // Use this for initialization
     public void StartGame()
     {
-        SceneManager.LoadScene(1);	
-	}
+        SceneManager.LoadScene(1);
+    }
 
     public void GoToMenu()
     {
@@ -74,8 +83,8 @@ public class MainMenuManager : MonoBehaviour
     // Update is called once per frame
     public void QuitGame()
     {
-        Application.Quit();	
-	}
+        Application.Quit();
+    }
 
     public void SetQualityLevel(int level)
     {
@@ -84,7 +93,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetSensitivity(float sensitivity)
     {
-		currentSensitivity = sensitivity;
+        currentSensitivity = sensitivity;
     }
 
     public void SetVolume(float volume)
@@ -100,7 +109,7 @@ public class MainMenuManager : MonoBehaviour
         pauseGame = !pauseGame;
         //pauseScreen.SetActive(pauseGame);
 
-        if(pauseGame)
+        if (pauseGame)
         {
             normalTimeScale = Time.timeScale;
             Time.timeScale = 0f;
@@ -109,6 +118,24 @@ public class MainMenuManager : MonoBehaviour
         {
             Time.timeScale = normalTimeScale;
         }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene == SceneManager.GetSceneByBuildIndex(0) && GameOver)
+        {
+            foreach(GameObject child in childrens)
+                child.SetActive(true);
+
+            //idleAnim["Idle"].speed = 45f;
+            idleAnim = FindObjectOfType<Animator>();
+            idleAnim.speed = 20f;
+
+            menuMusic = Camera.main.GetComponent<AudioSource>();
+            menuMusic.pitch = 2f;
+        }
+        else
+            GameOver = false;
     }
 
 }

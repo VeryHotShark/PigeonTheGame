@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 
 	public void LoadMenu()
 	{
+		MainMenuManager.instance.GameOver = true;
 		SceneManager.LoadScene(0);
 	}
 

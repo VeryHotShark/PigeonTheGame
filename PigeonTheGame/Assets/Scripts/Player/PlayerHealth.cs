@@ -94,16 +94,16 @@ public class PlayerHealth : Health
 
             if (m_health <= 0)
             {
-                if (bigHealth > 0)
-                {
+                //if (bigHealth > 0)
+               // {
                     Die();
-                    bigHealth--;
-                }
-                else
-                {
-                    if (OnPlayerBigDeath != null)
-                        OnPlayerBigDeath();
-                }
+               //     bigHealth--;
+               // }
+               // else
+               // {
+               //     if (OnPlayerBigDeath != null)
+               //         OnPlayerBigDeath();
+               // }
             }
 
         }

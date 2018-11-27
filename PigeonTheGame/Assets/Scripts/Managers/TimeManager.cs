@@ -19,7 +19,13 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
 		EnemyHealth.OnAnyEnemyDeath += StartSlowDown;
+        GameManager.instance.OnGameOver += Unsubscribe;
+    }
 
+    void Unsubscribe()
+    {
+    
+        GameManager.instance.OnGameOver -= Unsubscribe;
     }
 
     void StartSlowDown()
@@ -51,6 +57,9 @@ public class TimeManager : MonoBehaviour
             Debug.Log(Time.timeScale);
             yield return null;
         }
+
+        if(GameManager.instance.GameIsOver)
+            EnemyHealth.OnAnyEnemyDeath -= StartSlowDown;
 
     }
 }

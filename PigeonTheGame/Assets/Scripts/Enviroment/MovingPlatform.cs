@@ -72,13 +72,23 @@ public class MovingPlatform : MonoBehaviour
         m_rigid = GetComponent<Rigidbody>();
 
         if (falling)
+        {
             PlayerHealth.OnPlayerDeath += Reset;
+            GameManager.instance.OnGameOver += Unsubscribe;
+        }
 
         m_startPos = transform.position;
         m_startRot = transform.rotation;
 
+
         Init();
 
+    }
+
+    void Unsubscribe()
+    {
+        PlayerHealth.OnPlayerDeath -= Reset;
+        GameManager.instance.OnGameOver -= Unsubscribe;
     }
 
     void Init()

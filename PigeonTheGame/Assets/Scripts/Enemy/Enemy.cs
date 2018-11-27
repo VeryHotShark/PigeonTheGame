@@ -223,6 +223,7 @@ public abstract class Enemy : MonoBehaviour
         if (spawnPoint != null)
         {
             spawnPoint.EnemyAlive = false;
+            spawnPoint.MyEnemy = null;
             StopAllCoroutines();
             
             if(m_agent!= null)

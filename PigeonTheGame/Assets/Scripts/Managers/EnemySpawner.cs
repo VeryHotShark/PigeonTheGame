@@ -44,6 +44,7 @@ public class EnemySpawner : MonoBehaviour
     {
         PlayerHealth.OnPlayerRespawn += RespawnDeadEnemies;
         RoomTrigger.OnPlayerEnterRoom += SpawnAdditionalEnemies;
+        GameManager.instance.OnGameOver += Unsubscribe;
 
         spawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         parentTransform = CreateParent();
@@ -58,6 +59,13 @@ public class EnemySpawner : MonoBehaviour
             if (!spawnPoint.additionalSpawn)
                 ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position, spawnPoint.transform.rotation, spawnPoint);
         }
+    }
+
+    void Unsubscribe()
+    {
+        PlayerHealth.OnPlayerRespawn -= RespawnDeadEnemies;
+        RoomTrigger.OnPlayerEnterRoom -= SpawnAdditionalEnemies;
+        GameManager.instance.OnGameOver -= Unsubscribe;
     }
 
     void CreatePool(Enemy enemy, int poolSize, EnemyType enemyType)

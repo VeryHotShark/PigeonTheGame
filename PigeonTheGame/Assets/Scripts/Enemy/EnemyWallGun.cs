@@ -22,7 +22,7 @@ public class EnemyWallGun : MonoBehaviour
 	{
 		GetComponents();
 
-		m_shootDir = transform.forward;
+		m_shootDir = m_enemyWeapon.spawnPoint.position + m_enemyWeapon.spawnPoint.forward;
 
 
 		StartCoroutine(StartShootRoutine());

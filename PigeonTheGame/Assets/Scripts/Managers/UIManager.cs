@@ -62,12 +62,6 @@ public class UIManager : MonoBehaviour
     IEnumerator m_hitScreenRoutine;
 
     // Use this for initialization
-    void Awake()
-    {
-     
-
-        //PlayerMovement.OnPlayerDash += ShowDashScreen;
-    }
 
     void GetComponents()
     {
@@ -76,7 +70,17 @@ public class UIManager : MonoBehaviour
         PlayerHealth.OnPlayerDeath += ShowDeathScreen;
         m_playerHealth.OnPlayerReachCheckPoint += ResetHealthImages;
         PlayerHealth.OnPlayerRespawn += ResetHealthImages;
+        GameManager.instance.OnGameOver += Unsubscribe;
 
+    }
+
+    void Unsubscribe()
+    {
+        m_playerHealth.OnPlayerLoseHealth -= ChangeImage;
+        PlayerHealth.OnPlayerDeath -= ShowDeathScreen;
+        m_playerHealth.OnPlayerReachCheckPoint -= ResetHealthImages;
+        PlayerHealth.OnPlayerRespawn -= ResetHealthImages;
+        GameManager.instance.OnGameOver -= Unsubscribe;
     }
 
     void Start()

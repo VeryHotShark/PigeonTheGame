@@ -212,6 +212,12 @@ public class EnemyBoss : Enemy
             percent += Time.deltaTime * speed;
             transform.position = Vector3.Lerp(startPos, desiredPos, percent);
 
+            if(percent < 0.65f)
+            {
+                FaceTarget();
+                desiredPos = m_playerTransform.position;
+            }
+
             yield return null;
         }
 
@@ -315,6 +321,14 @@ public class EnemyBoss : Enemy
             else
                 StartCoroutine(Rise());
          */
+    }
+
+    public override void ResetVariables()
+    {
+        base.ResetVariables();
+
+        GFX.transform.localPosition = Vector3.zero;
+        m_collider.direction = 1;
     }
 
 
