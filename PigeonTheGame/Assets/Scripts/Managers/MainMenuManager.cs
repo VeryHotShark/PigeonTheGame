@@ -7,10 +7,15 @@ public class MainMenuManager : MonoBehaviour
 
     public Texture2D cursor;
 
-    public AudioMixer audioMixer;
+    //public AudioMixer audioMixer;
 
     public Animator idleAnim;
-    public AudioSource menuMusic;
+    public AudioSource menuAudioSource;
+
+    public AudioClip menuMusic;
+    public AudioClip fightMusic;
+    public AudioClip corridorMusic;
+    public AudioClip bossMusic;
 
     public GameObject[] childrens;
 
@@ -51,6 +56,9 @@ public class MainMenuManager : MonoBehaviour
         //sensitivitySlider.value = currentSensitivity;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        menuAudioSource.clip = menuMusic;
+        menuAudioSource.Play();
     }
 
     private void Update()
@@ -98,7 +106,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        audioMixer.SetFloat("Volume", volume);
+        //audioMixer.SetFloat("Volume", volume);
     }
 
     public void Pause()
@@ -131,11 +139,37 @@ public class MainMenuManager : MonoBehaviour
             idleAnim = FindObjectOfType<Animator>();
             idleAnim.speed = 20f;
 
-            menuMusic = Camera.main.GetComponent<AudioSource>();
-            menuMusic.pitch = 2f;
+            //menuAudioSource = GetComponent<AudioSource>();
+            menuAudioSource.clip = menuMusic;
+            menuAudioSource.pitch = 2f;
         }
-        else
+        else if(scene == SceneManager.GetSceneByBuildIndex(1))
+        {
             GameOver = false;
+            menuAudioSource.pitch = 1f;
+            menuAudioSource.volume = 0.2f;
+            menuAudioSource.clip = corridorMusic;
+            menuAudioSource.Play();
+
+            RoomTrigger.OnPlayerEnterRoom += ChangeToFightMusic;
+            RoomTrigger.OnPlayerExitRoom += ChangeToCorridorMusic;
+        }
+    }
+
+    void ChangeToFightMusic()
+    {
+            menuAudioSource.pitch = 1f;
+            menuAudioSource.volume = 0.5f;
+            menuAudioSource.clip = fightMusic;
+            menuAudioSource.Play();
+    }
+
+    void ChangeToCorridorMusic()
+    {
+            menuAudioSource.pitch = 1f;
+            menuAudioSource.volume = 0.5f;
+            menuAudioSource.clip = corridorMusic;
+            menuAudioSource.Play();
     }
 
 }

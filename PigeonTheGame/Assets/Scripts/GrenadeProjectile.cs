@@ -38,13 +38,13 @@ public class GrenadeProjectile : Projectile
 
         CheckIfCollided();
 
-        gameObject.SetActive(false);
         //Destroy(gameObject);
     }
 
     public override void OnCollisionEnter(Collision other)
     {
-        // Make Sound
+        if(other.collider.gameObject.tag == "Player")
+            CheckIfCollided();
     }
 
     public void CheckIfCollided()
@@ -63,6 +63,8 @@ public class GrenadeProjectile : Projectile
             }
 
         }
+
+         gameObject.SetActive(false);
     }
 
     void OnDrawGizmos()

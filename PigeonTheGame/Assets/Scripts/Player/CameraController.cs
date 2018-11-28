@@ -58,6 +58,9 @@ public class CameraController : MonoBehaviour
 	public float dashDuration;
 	public AnimationCurve dashAnimCurve;
 
+	bool m_duringFOVChange;
+
+
 	float m_initFOV;
 	Vector3 m_cameraStartPos;
 	Vector3 m_crosshairInitScale;
@@ -70,6 +73,7 @@ public class CameraController : MonoBehaviour
 
 	public Camera GetCamera { get { return m_camera;}}
     public bool ZoomingFinish { get { return m_zoomingFinish; } set { m_zoomingFinish = value; } }
+    public bool DuringFOVChange { get { return m_duringFOVChange; } set { m_duringFOVChange = value; } }
 
     float m_yaw;
 	float m_pitch;
@@ -302,6 +306,7 @@ public class CameraController : MonoBehaviour
 
 	IEnumerator DashScreenRoutine()
 	{
+		m_duringFOVChange = true;
 
 		float percent = 0f;
 		float speed = 1f / dashDuration;
@@ -312,6 +317,8 @@ public class CameraController : MonoBehaviour
 			m_camera.fieldOfView = Mathf.Lerp(m_initFOV,dashFOV, dashAnimCurve.Evaluate(percent));
 			yield return null;
 		}
+
+		m_duringFOVChange = false;
 	}
 
 	void ResetCam()

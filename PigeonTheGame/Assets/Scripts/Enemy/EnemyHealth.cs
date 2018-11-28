@@ -8,9 +8,10 @@ public class EnemyHealth : Health
     public GameObject deathVFX;
 
     public event System.Action<EnemyHealth> OnEnemyDeath; // public event OnEnemyDeath
-    public event System.Action OnEnemyHalfHealth; // public event OnEnemyDeath
 
     public event System.Action OnBossDeath; // public event OnEnemyDeath
+
+    public event System.Action OnEnemyHalfHealth;
 
     public static event System.Action OnEnemyTakeDamage; // public event OnEnemyDeath
     public static event System.Action OnAnyEnemyDeath; // public event OnEnemyDeath

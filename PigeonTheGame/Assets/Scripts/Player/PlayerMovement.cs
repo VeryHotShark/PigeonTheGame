@@ -245,7 +245,7 @@ public class PlayerMovement : MonoBehaviour
         if (m_playerInput.DashInput && !m_playerInput.NoInput())
         {
 
-            if (m_allowDash)
+            if (m_allowDash && !m_CameraController.DuringFOVChange)
             {
                 if(OnPlayerDash != null && !m_playerInput.ZoomInput)
                     OnPlayerDash();
