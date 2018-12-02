@@ -113,15 +113,18 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void SetNavMeshAgent()
     {
-        m_agent.isStopped = true;
-        m_agent.ResetPath();
+        if(m_agent)
+        {
+            m_agent.isStopped = true;
+            m_agent.ResetPath();
 
-        m_agent.isStopped = false;
+            m_agent.isStopped = false;
 
-        int randomiseSpeed = UnityEngine.Random.Range(-3,4);
+            int randomiseSpeed = UnityEngine.Random.Range(-3,4);
 
-        m_agent.speed = moveSpeed + randomiseSpeed;
-        m_agent.acceleration = moveSpeed + 10f + randomiseSpeed;
+            m_agent.speed = moveSpeed + randomiseSpeed;
+            m_agent.acceleration = moveSpeed + 10f + randomiseSpeed;
+        }
     }
 
 
@@ -278,6 +281,7 @@ public abstract class Enemy : MonoBehaviour
                 m_agent.ResetPath();
 
             gameObject.SetActive(false);
+            
         }
     }
 

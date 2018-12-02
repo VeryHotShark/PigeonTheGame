@@ -40,6 +40,8 @@ public class EnemySpawner : MonoBehaviour
 
     List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
 
+    public static event System.Action OnAllEnemyDeadInRoom;
+
     void Start()
     {
         PlayerHealth.OnPlayerRespawn += RespawnDeadEnemies;
@@ -138,6 +140,7 @@ public class EnemySpawner : MonoBehaviour
             Enemy objToReuse = poolDictionary[enemyType].Dequeue();
             
             objToReuse.OnEnemyDie += CheckIfAllEnemiesOnRoomAreDead;
+            objToReuse.gameObject.SetActive(true);
 
             objToReuse.spawnPoint = spawnPoint;
             objToReuse.spawnPoint.EnemyAlive = true;
@@ -146,7 +149,6 @@ public class EnemySpawner : MonoBehaviour
             objToReuse.roomIndex = spawnPoint.roomIndex;
             objToReuse.waitTimeWhenEnter = spawnPoint.waitDelay;
 
-            objToReuse.gameObject.SetActive(true);
             objToReuse.enemyHealth.RagdollToggle(false);
             objToReuse.enemyHealth.ResetRagdollTransform();
 
@@ -200,6 +202,9 @@ public class EnemySpawner : MonoBehaviour
             } 
         }
         
+        if(OnAllEnemyDeadInRoom != null)
+            OnAllEnemyDeadInRoom();
+            
         return true;
     }
 

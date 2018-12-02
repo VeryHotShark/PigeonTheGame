@@ -42,6 +42,10 @@ public class EnemyRange : Enemy
 
         if (m_audioSource != null)
             StartCoroutine(StepSoundRoutine());
+
+        m_agent.ResetPath();
+        m_agent.updatePosition = true;
+        m_agent.isStopped = false;
     }
 
     IEnumerator StepSoundRoutine()

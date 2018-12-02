@@ -65,6 +65,7 @@ public class MovingPlatform : MonoBehaviour
 
     Rigidbody m_rigid;
 
+    IEnumerator moveRoutine;
 
     // Use this for initialization
     void Start()
@@ -77,6 +78,9 @@ public class MovingPlatform : MonoBehaviour
             GameManager.instance.OnGameOver += Unsubscribe;
         }
 
+        if(waypoints != null)
+            PlayerHealth.OnPlayerRespawn += ResetMovingPlatform;
+
         m_startPos = transform.position;
         m_startRot = transform.rotation;
 
@@ -85,9 +89,21 @@ public class MovingPlatform : MonoBehaviour
 
     }
 
+    void ResetMovingPlatform()
+    {
+        if(moveRoutine != null)
+            StopCoroutine(moveRoutine);
+
+        transform.position = m_startPos;
+        m_currentWaypoint = waypoints.waypointsArray[0].position;
+
+        MoveToNextWaypoint();
+    }
+
     void Unsubscribe()
     {
         PlayerHealth.OnPlayerDeath -= Reset;
+         PlayerHealth.OnPlayerRespawn -= ResetMovingPlatform;
         GameManager.instance.OnGameOver -= Unsubscribe;
     }
 
@@ -159,8 +175,12 @@ public class MovingPlatform : MonoBehaviour
 
     void MoveToNextWaypoint()
     {
+        //System.GC.Collect();
+
+
         GetNextWaypoint();
-        StartCoroutine(MoveToNextWaypointRoutine());
+        moveRoutine = MoveToNextWaypointRoutine();
+        StartCoroutine(moveRoutine);
     }
 
     IEnumerator MoveToNextWaypointRoutine()
@@ -179,8 +199,8 @@ public class MovingPlatform : MonoBehaviour
             yield return null;
         }
 
-        if (waitDuration > 0)
-            yield return new WaitForSeconds(waitDuration);
+        
+        yield return new WaitForSeconds(waitDuration);
 
         //m_currentWaypoint = m_targetWaypoint;
         MoveToNextWaypoint();
@@ -231,15 +251,18 @@ public class MovingPlatform : MonoBehaviour
         transform.position = m_startPos;
         transform.rotation = m_startRot;
 
+
         if (m_rigid != null)
         {
+            alreadyFall = false;
+
             m_rigid.isKinematic = true;
             m_rigid.useGravity = false;
+
+            Init();
         }
 
-        alreadyFall = false;
 
-        Init();
     }
 
 }

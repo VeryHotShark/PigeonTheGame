@@ -132,7 +132,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (scene == SceneManager.GetSceneByBuildIndex(0) && GameOver)
         {
-            foreach(GameObject child in childrens)
+            foreach (GameObject child in childrens)
                 child.SetActive(true);
 
             //idleAnim["Idle"].speed = 45f;
@@ -142,8 +142,13 @@ public class MainMenuManager : MonoBehaviour
             //menuAudioSource = GetComponent<AudioSource>();
             menuAudioSource.clip = menuMusic;
             menuAudioSource.pitch = 2f;
+
+            RoomTrigger.OnPlayerEnterRoom -= ChangeToFightMusic;
+            RoomTrigger.OnPlayerExitRoom -= ChangeToCorridorMusic;
+             PlayerHealth.OnPlayerRespawn -= ChangeToCorridorMusic;
+            EnemySpawner.OnAllEnemyDeadInRoom -= ChangeToCorridorMusic;
         }
-        else if(scene == SceneManager.GetSceneByBuildIndex(1))
+        else if (scene == SceneManager.GetSceneByBuildIndex(1))
         {
             GameOver = false;
             menuAudioSource.pitch = 1f;
@@ -153,23 +158,31 @@ public class MainMenuManager : MonoBehaviour
 
             RoomTrigger.OnPlayerEnterRoom += ChangeToFightMusic;
             RoomTrigger.OnPlayerExitRoom += ChangeToCorridorMusic;
+            PlayerHealth.OnPlayerRespawn += ChangeToCorridorMusic;
+            EnemySpawner.OnAllEnemyDeadInRoom += ChangeToCorridorMusic;
         }
     }
 
     void ChangeToFightMusic()
     {
+        if (menuAudioSource.clip != fightMusic)
+        {
             menuAudioSource.pitch = 1f;
             menuAudioSource.volume = 0.5f;
             menuAudioSource.clip = fightMusic;
             menuAudioSource.Play();
+        }
     }
 
     void ChangeToCorridorMusic()
     {
+        if (menuAudioSource.clip != corridorMusic)
+        {
             menuAudioSource.pitch = 1f;
             menuAudioSource.volume = 0.5f;
             menuAudioSource.clip = corridorMusic;
             menuAudioSource.Play();
+        }
     }
 
 }

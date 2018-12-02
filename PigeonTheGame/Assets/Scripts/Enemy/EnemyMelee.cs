@@ -13,29 +13,36 @@ public class EnemyMelee : Enemy
     {
         base.Init();
 
-        if (!m_playerHealth.IsDead())
-        {
+        //if (!m_playerHealth.IsDead())
+        //{
             currentState = State.Chase;
             StartCoroutine(UpdatePath()); // Start our routine to chase our player
-        }
+        //}
 
+        /*
         if (waypoints != null)
         {
             currentState = State.Patrol;
             StartCoroutine(GoToNextWaypoint());
         }
+         */
 
         m_isAttacking = false;
 
         if(m_audioSource != null)
             StartCoroutine(StepSoundRoutine());
+
+        m_agent.Warp(m_spawnPoint.transform.transform.position);
+        m_agent.ResetPath();
+        m_agent.updatePosition = true;
+        m_agent.isStopped = false;
     }
 
     IEnumerator StepSoundRoutine()
     {
-        while (!m_playerHealth.IsDead())
+        while (!m_playerHealth.IsDead() && !m_health.IsDead())
         {
-            if (!m_health.IsDead() && RoomManager.instance.PlayerInRoom && currentState != State.Attack)
+            if ( RoomManager.instance.PlayerInRoom && currentState != State.Attack)
             {
                 m_audioSource.Play();
                 yield return new WaitForSeconds(0.2f);
@@ -61,7 +68,7 @@ public class EnemyMelee : Enemy
         if (!m_playerHealth.IsDead() && !m_health.IsDead() && delayWaited)
         {
 
-            if (Vector3.Distance(m_playerTransform.position, transform.position) < attackRange && RoomManager.instance.PlayerInRoom) // if player is within attackRange and in room attack the player
+            if (Vector3.Distance(m_playerTransform.position, transform.position) < attackRange &&RoomManager.instance.PlayerCurrentRoom == roomIndex) // if player is within attackRange and in room attack the player
             {
                 if (currentState != State.Attack) // if we are not already attacking TODO Chnage this to use State.Attack instead of bool m_isAttacking
                 {
@@ -84,7 +91,7 @@ public class EnemyMelee : Enemy
 
         while (!m_playerHealth.IsDead() )
         {
-            if (currentState == State.Chase && RoomManager.instance.PlayerInRoom && delayWaited) // if we are in room and our state is Chasing
+            if (currentState == State.Chase && RoomManager.instance.PlayerCurrentRoom == roomIndex && delayWaited) // if we are in room and our state is Chasing
             {
                 Vector3 dirToTarget = (m_playerTransform.position - transform.position).normalized; // we calculate the dirToTarget
                 Vector3 targetPosition = m_playerTransform.position - (dirToTarget * stopDistance); // and substract small amount from our playerPosition so our enemy won't go through our Player

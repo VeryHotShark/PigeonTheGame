@@ -120,8 +120,11 @@ public class Projectile : MonoBehaviour // TODO zamien to na abstract classe bo 
             {
                 if (m_objectShotFrom.GetComponent<Enemy>() == null)
                 {
-                    AudioManager.instance.Play("PlayerHitMark");
-                    otherHealth.TakeDamage(m_damage, other.contacts[0]);
+                    if(!otherHealth.IsDead())
+                    {
+                        AudioManager.instance.Play("PlayerHitMark");
+                        otherHealth.TakeDamage(m_damage, other.contacts[0]);
+                    }
                 }
             }
             else

@@ -77,7 +77,13 @@ public class RoomManager : MonoBehaviour
     {
         SavePropsInitialValues();
         PlayerHealth.OnPlayerDeath += ResetPlayerInRoom;
+        PlayerHealth.OnPlayerDeath += CleanUpGC;
         PlayerHealth.OnPlayerRespawn += ResetPropsValues;
+    }
+
+    void CleanUpGC()
+    {
+        System.GC.Collect();
     }
 
     private void Singleton()

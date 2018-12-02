@@ -163,6 +163,7 @@ public class PlayerHealth : Health
     void Respawn()
     {
         m_isDead = false;
+        gameObject.transform.parent = null;
 
         if (OnPlayerRespawn != null)
             OnPlayerRespawn();
@@ -215,7 +216,7 @@ public class PlayerHealth : Health
 
         if (roomTrigger != null)
         {
-            if (m_health != startHealth && roomTrigger.HealthResetted == false)
+            if (m_health != startHealth && roomTrigger.HealthResetted == false && roomTrigger.healthReset)
             {
                 m_health = startHealth;
 
