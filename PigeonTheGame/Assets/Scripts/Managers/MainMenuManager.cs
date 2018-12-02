@@ -144,7 +144,7 @@ public class MainMenuManager : MonoBehaviour
             menuAudioSource.pitch = 2f;
 
             RoomTrigger.OnPlayerEnterRoom -= ChangeToFightMusic;
-            RoomTrigger.OnPlayerExitRoom -= ChangeToCorridorMusic;
+            //RoomTrigger.OnPlayerExitRoom -= ChangeToCorridorMusic;
              PlayerHealth.OnPlayerRespawn -= ChangeToCorridorMusic;
             EnemySpawner.OnAllEnemyDeadInRoom -= ChangeToCorridorMusic;
         }
@@ -157,7 +157,7 @@ public class MainMenuManager : MonoBehaviour
             menuAudioSource.Play();
 
             RoomTrigger.OnPlayerEnterRoom += ChangeToFightMusic;
-            RoomTrigger.OnPlayerExitRoom += ChangeToCorridorMusic;
+            //RoomTrigger.OnPlayerExitRoom += ChangeToCorridorMusic;
             PlayerHealth.OnPlayerRespawn += ChangeToCorridorMusic;
             EnemySpawner.OnAllEnemyDeadInRoom += ChangeToCorridorMusic;
         }

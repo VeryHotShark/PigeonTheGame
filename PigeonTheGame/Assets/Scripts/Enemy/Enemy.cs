@@ -9,7 +9,8 @@ public abstract class Enemy : MonoBehaviour
     public WaypointNetwork waypoints; // Waypoint our enemy will move on when patrolling
     public RoomIndex roomIndex;
 
-    public event System.Func<RoomIndex,bool> OnEnemyDie;
+    //public event System.Func<RoomIndex,bool> OnEnemyDie;
+    public event System.Action<RoomIndex> OnEnemyDie;
 
     public enum State  // States our enemy can be in
     {
@@ -229,12 +230,12 @@ public abstract class Enemy : MonoBehaviour
     {
         if (spawnPoint != null)
         {
+            spawnPoint.EnemyAlive = false;
+            spawnPoint.MyEnemy = null;
 
             if(OnEnemyDie!= null)
                 OnEnemyDie(roomIndex);
 
-            spawnPoint.EnemyAlive = false;
-            spawnPoint.MyEnemy = null;
             StopAllCoroutines();
             
             if(m_agent!= null)

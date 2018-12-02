@@ -139,7 +139,7 @@ public class EnemySpawner : MonoBehaviour
         {
             Enemy objToReuse = poolDictionary[enemyType].Dequeue();
             
-            objToReuse.OnEnemyDie += CheckIfAllEnemiesOnRoomAreDead;
+            objToReuse.OnEnemyDie += CheckIfAllDead;
             objToReuse.gameObject.SetActive(true);
 
             objToReuse.spawnPoint = spawnPoint;
@@ -202,10 +202,24 @@ public class EnemySpawner : MonoBehaviour
             } 
         }
         
+        return true;
+    }
+
+    void CheckIfAllDead(RoomIndex index)
+    {
+        foreach(SpawnPoint spawnPoint in spawnPoints)
+        {
+            if(spawnPoint.roomIndex == index)
+            {
+                if(spawnPoint.EnemyAlive == false)
+                    continue;
+                else
+                    return;
+            } 
+        }
+
         if(OnAllEnemyDeadInRoom != null)
             OnAllEnemyDeadInRoom();
-            
-        return true;
     }
 
 }
