@@ -43,7 +43,7 @@ public class EnemyHeavy : Enemy
     public void Update()
     {
 
-        if (RoomManager.instance.PlayerInCorridor) // if player is in corridor just do nothing
+        if (RoomManager.instance.PlayerInCorridor || RoomManager.instance.PlayerCurrentRoom != roomIndex) // if player is in corridor just do nothing
         {
             currentState = State.Idle;
             return;

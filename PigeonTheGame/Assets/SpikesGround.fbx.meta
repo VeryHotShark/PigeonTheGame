@@ -1,26 +1,49 @@
 fileFormatVersion: 2
-guid: 57b1279fbc322c740847c9c72c980d0c
+guid: 744bb69f68424c14781dbb74249e9fa5
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Podloga
-    100004: Podloga.001
-    400000: //RootNode
-    400002: Podloga
-    400004: Podloga.001
-    2100000: No Name
-    2300000: //RootNode
-    2300002: Podloga
-    2300004: Podloga.001
-    3300000: //RootNode
-    3300002: Podloga
-    3300004: Podloga.001
-    4300000: Podloga
-    4300002: Podloga.001
-  externalObjects: {}
+    100000: Cylinder.003
+    100002: Cylinder.006
+    100004: Cylinder.007
+    100006: Cylinder.008
+    100008: Cylinder.009
+    100010: Cylinder.010
+    100012: //RootNode
+    400000: Cylinder.003
+    400002: Cylinder.006
+    400004: Cylinder.007
+    400006: Cylinder.008
+    400008: Cylinder.009
+    400010: Cylinder.010
+    400012: //RootNode
+    2100000: Material.001
+    2300000: Cylinder.003
+    2300002: Cylinder.006
+    2300004: Cylinder.007
+    2300006: Cylinder.008
+    2300008: Cylinder.009
+    2300010: Cylinder.010
+    3300000: Cylinder.003
+    3300002: Cylinder.006
+    3300004: Cylinder.007
+    3300006: Cylinder.008
+    3300008: Cylinder.009
+    3300010: Cylinder.010
+    4300000: Cylinder.010
+    4300002: Cylinder.009
+    4300004: Cylinder.008
+    4300006: Cylinder.007
+    4300008: Cylinder.006
+    4300010: Cylinder.003
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: dd218420dadedc84e8edbceb69b26889, type: 2}
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1

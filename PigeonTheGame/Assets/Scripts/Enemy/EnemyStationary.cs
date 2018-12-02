@@ -39,7 +39,7 @@ public class EnemyStationary : Enemy
     public void Update()
     {
 
-        if (RoomManager.instance.PlayerInCorridor)
+        if (RoomManager.instance.PlayerInCorridor || RoomManager.instance.PlayerCurrentRoom != roomIndex)
         {
             currentState = State.Idle;
             return;

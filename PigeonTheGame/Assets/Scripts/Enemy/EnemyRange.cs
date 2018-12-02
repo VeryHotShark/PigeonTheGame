@@ -67,7 +67,7 @@ public class EnemyRange : Enemy
     public void Update()
     {
 
-        if (RoomManager.instance.PlayerInCorridor) // if player is in corridor do nothing
+        if (RoomManager.instance.PlayerInCorridor || RoomManager.instance.PlayerCurrentRoom != roomIndex) // if player is in corridor do nothing
         {
             currentState = State.Idle;
             return;

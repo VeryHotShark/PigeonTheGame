@@ -53,8 +53,11 @@ public class TrapMovement : MonoBehaviour
 		Vector3 start = isReturning ? endPos : startPos;
 		Vector3 end = isReturning ? startPos : endPos;
 		
-		m_audioSource.clip = isReturning ? spikesOut : spikesIn;
-		m_audioSource.Play();
+		if(m_audioSource != null)
+		{
+			m_audioSource.clip = isReturning ? spikesOut : spikesIn;
+			m_audioSource.Play();
+		}
 		
 		while(percent < 1f)
 		{

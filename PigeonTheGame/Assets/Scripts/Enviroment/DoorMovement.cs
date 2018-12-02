@@ -10,7 +10,9 @@ public class DoorMovement : MonoBehaviour
         Up,
         Down,
         Left,
-        Right
+        Right,
+        Forward,
+        Backward
     }
 
     public MoveDirection moveDirection;
@@ -43,9 +45,13 @@ public class DoorMovement : MonoBehaviour
         else if (moveDirection == MoveDirection.Up)
             endPos = startPos + transform.up * moveUnit;
         else if (moveDirection == MoveDirection.Left)
-            endPos = startPos - transform.right * moveUnit;
+            endPos = startPos - transform.TransformDirection(transform.right) * moveUnit;
+        else if (moveDirection == MoveDirection.Right)
+            endPos = startPos + transform.TransformDirection(transform.right) * moveUnit;
+        else if (moveDirection == MoveDirection.Forward)
+            endPos = startPos + transform.forward * moveUnit;
         else
-            endPos = startPos + transform.right * moveUnit;
+            endPos = startPos - transform.forward * moveUnit;
     }
 
     IEnumerator StartYieldTime()

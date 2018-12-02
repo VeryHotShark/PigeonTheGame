@@ -95,7 +95,9 @@ public abstract class Enemy : MonoBehaviour
         }
 
         currentState = State.Idle;
-        SetNavMeshAgent();
+
+        if(m_agent != null)
+            SetNavMeshAgent();
     }
 
     public virtual void GetComponents()
@@ -239,16 +241,17 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void ResetVariables()
     {
+        transform.position = m_spawnPoint.transform.position;
+        transform.rotation = m_spawnPoint.transform.rotation;
 
         if(m_agent != null)
         {
             m_agent.isStopped = true;
             m_agent.ResetPath();
             m_agent.isStopped = false;
+            m_agent.Warp(m_spawnPoint.transform.transform.position);
         }
 
-        transform.position = m_spawnPoint.transform.position;
-        transform.rotation = m_spawnPoint.transform.rotation;
 
         delayWaited = false;
         delayRoutine = false;
