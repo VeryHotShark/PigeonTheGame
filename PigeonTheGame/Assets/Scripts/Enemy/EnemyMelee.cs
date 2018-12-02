@@ -89,7 +89,7 @@ public class EnemyMelee : Enemy
     {
         float refreshRate = 0.2f;
 
-        while (!m_playerHealth.IsDead() )
+		while (!m_health.IsDead())
         {
             if (currentState == State.Chase && RoomManager.instance.PlayerCurrentRoom == roomIndex && delayWaited) // if we are in room and our state is Chasing
             {
