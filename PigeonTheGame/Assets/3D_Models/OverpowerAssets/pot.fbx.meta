@@ -1,20 +1,20 @@
 fileFormatVersion: 2
-guid: de5089a5248478a4084a743f14a8fc27
+guid: 32c3583f9cfb0a24b839a2e2d08863b6
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: sink
+    2100000: pot
     2300000: //RootNode
     3300000: //RootNode
-    4300000: sink.001
+    4300000: pot cover
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: sink
-    second: {fileID: 2100000, guid: 553edd8507bda5348baf120092bcfebd, type: 2}
+      name: pot
+    second: {fileID: 2100000, guid: ad7f74d953fcb0c47907e4f93ca20538, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -45,7 +45,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1

@@ -1,20 +1,20 @@
 fileFormatVersion: 2
-guid: de5089a5248478a4084a743f14a8fc27
+guid: 1ba79fb76e77af141ba62041dea6441f
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: sink
+    2100000: okno kolor
     2300000: //RootNode
     3300000: //RootNode
-    4300000: sink.001
+    4300000: Plane
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: sink
-    second: {fileID: 2100000, guid: 553edd8507bda5348baf120092bcfebd, type: 2}
+      name: okno kolor
+    second: {fileID: 2100000, guid: 00138e2825265a54887413468320095d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -45,7 +45,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
