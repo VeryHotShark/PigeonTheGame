@@ -20,8 +20,9 @@ public class ResetHinge : MonoBehaviour
     // Update is called once per frame
     void Reset()
     {
-		transform.rotation = startRot;
-		m_rigid.velocity = Vector3.zero;
+			transform.rotation = startRot;
+			m_rigid.velocity = Vector3.zero;
+			m_rigid.angularVelocity = Vector3.zero;
     }
 
 	void Unsubscribe()

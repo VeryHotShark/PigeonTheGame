@@ -162,11 +162,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    void SpawnAdditionalEnemies()
+    void SpawnAdditionalEnemies(RoomIndex index)
     {
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
-            if (spawnPoint.additionalSpawn && spawnPoint.roomIndex == RoomManager.instance.PlayerCurrentRoom)
+            if (spawnPoint.additionalSpawn && spawnPoint.roomIndex == index/* RoomManager.instance.PlayerCurrentRoom */)
                 StartCoroutine(SpawnAdditionalEnemiesRoutine(spawnPoint));
             //ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
         }

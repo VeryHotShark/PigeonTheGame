@@ -142,10 +142,11 @@ public class MainMenuManager : MonoBehaviour
             //menuAudioSource = GetComponent<AudioSource>();
             menuAudioSource.clip = menuMusic;
             menuAudioSource.pitch = 2f;
+            menuAudioSource.Play();
 
             RoomTrigger.OnPlayerEnterRoom -= ChangeToFightMusic;
             //RoomTrigger.OnPlayerExitRoom -= ChangeToCorridorMusic;
-             PlayerHealth.OnPlayerRespawn -= ChangeToCorridorMusic;
+            PlayerHealth.OnPlayerRespawn -= ChangeToCorridorMusic;
             EnemySpawner.OnAllEnemyDeadInRoom -= ChangeToCorridorMusic;
         }
         else if (scene == SceneManager.GetSceneByBuildIndex(1))
@@ -163,26 +164,38 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    void ChangeToFightMusic()
+    void ChangeToFightMusic(RoomIndex index)
     {
-        if (menuAudioSource.clip != fightMusic)
+        if (menuAudioSource.clip != fightMusic && index != RoomIndex.Fifth)
         {
             menuAudioSource.pitch = 1f;
             menuAudioSource.volume = 0.5f;
             menuAudioSource.clip = fightMusic;
             menuAudioSource.Play();
         }
+        else
+        {
+            menuAudioSource.pitch = 1f;
+            menuAudioSource.volume = 0.5f;
+            menuAudioSource.clip = bossMusic;
+            menuAudioSource.Play();
+        }
     }
 
     void ChangeToCorridorMusic()
     {
-        if (menuAudioSource.clip != corridorMusic)
+        if (menuAudioSource.clip != corridorMusic && !GameManager.instance.GameIsOver)
         {
             menuAudioSource.pitch = 1f;
             menuAudioSource.volume = 0.5f;
             menuAudioSource.clip = corridorMusic;
             menuAudioSource.Play();
         }
+    }
+
+    void TransitionBetweenSongs()
+    {
+
     }
 
 }

@@ -789,7 +789,7 @@ MonoBehaviour:
   menuMusic: {fileID: 8300000, guid: 324d5c1201a99f644a06f058839afd90, type: 3}
   fightMusic: {fileID: 8300000, guid: 51ea5e044f489004da2c408a804ce2ae, type: 3}
   corridorMusic: {fileID: 8300000, guid: 8650fe06434b5754fbbc6d88a9fcf590, type: 3}
-  bossMusic: {fileID: 0}
+  bossMusic: {fileID: 8300000, guid: b0c1b03b5dbc24445893082c6187df15, type: 3}
   childrens:
   - {fileID: 1642911019}
   - {fileID: 1137418299}

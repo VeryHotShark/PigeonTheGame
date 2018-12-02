@@ -29,7 +29,7 @@ public class RoomTrigger : MonoBehaviour
 
     public bool HealthResetted { get { return m_healthResetted; } }
 
-    public static event System.Action OnPlayerEnterRoom;
+    public static event System.Action<RoomIndex> OnPlayerEnterRoom;
     public static event System.Action OnPlayerExitRoom;
 
     bool m_roomEntered;
@@ -54,7 +54,7 @@ public class RoomTrigger : MonoBehaviour
                         m_roomEntered = true;
 
                         if (OnPlayerEnterRoom != null)
-                            OnPlayerEnterRoom();
+                            OnPlayerEnterRoom(roomIndex);
                     }
                     break;
 
@@ -86,7 +86,7 @@ public class RoomTrigger : MonoBehaviour
                         m_roomEntered = true;
 
                         if (OnPlayerEnterRoom != null)
-                            OnPlayerEnterRoom();
+                            OnPlayerEnterRoom(roomIndex);
                     }
                     break;
 
