@@ -34,6 +34,8 @@ public class EnemyBoss : Enemy
     public float waitAtPeak;
     public float waitAtGround;
     public float attackDuration;
+    [Range(0f,1f)]
+    public float  difficulty = 0.55f;
 
     [Header("Stage Two")]
     [Space]
@@ -42,6 +44,7 @@ public class EnemyBoss : Enemy
 
     public int projectileAmountAtOnce = 5;
     public float spreadAmount;
+    
     public float waitTimeBeforeNextShootSeries;
 
 
@@ -212,7 +215,7 @@ public class EnemyBoss : Enemy
             percent += Time.deltaTime * speed;
             transform.position = Vector3.Lerp(startPos, desiredPos, percent);
 
-            if(percent < 0.65f)
+            if(percent < difficulty)
             {
                 FaceTarget();
                 desiredPos = m_playerTransform.position;

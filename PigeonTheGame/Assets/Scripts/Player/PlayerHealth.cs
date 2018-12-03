@@ -218,6 +218,7 @@ public class PlayerHealth : Health
         {
             if (m_health != startHealth && roomTrigger.HealthResetted == false && roomTrigger.healthReset)
             {
+                roomTrigger.HealthResetted = true;
                 m_health = startHealth;
 
                 if (OnPlayerReachCheckPoint != null)

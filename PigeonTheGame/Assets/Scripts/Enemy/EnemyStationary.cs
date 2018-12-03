@@ -68,7 +68,7 @@ public class EnemyStationary : Enemy
 
         int amountToShoot = Random.Range(projectileAmount - projectileAmountVariation, projectileAmount + projectileAmountVariation + 1); // calculate how many projectile will be spawn
 
-        while (amountToShoot > 0 && m_playerRested) // while projectile amount is > 0
+        while (amountToShoot > 0 && m_playerRested && RoomManager.instance.PlayerInRoom) // while projectile amount is > 0
         {
             AudioManager.instance.PlayClipAt("EnemyShoot", transform.position);
             m_anim.SetTrigger(m_shooting);

@@ -27,7 +27,7 @@ public class RoomTrigger : MonoBehaviour
 
     bool m_healthResetted;
 
-    public bool HealthResetted { get { return m_healthResetted; } }
+    public bool HealthResetted { get { return m_healthResetted; } set { m_healthResetted = value; } }
 
     public static event System.Action<RoomIndex> OnPlayerEnterRoom;
     public static event System.Action OnPlayerExitRoom;
@@ -38,6 +38,23 @@ public class RoomTrigger : MonoBehaviour
     {
         if (doors != null)
             PlayerHealth.OnPlayerRespawn += ResetDoor;
+
+        if (healthReset)
+            PlayerHealth.OnPlayerRespawn += ResetCheckpoint;
+
+        if (healthReset || doors != null)
+            GameManager.instance.OnGameOver += Unsubscribe;
+    }
+
+    void Unsubscribe()
+    {
+        GameManager.instance.OnGameOver -= Unsubscribe;
+
+        if (doors != null)
+            PlayerHealth.OnPlayerRespawn -= ResetDoor;
+
+        if (healthReset)
+            PlayerHealth.OnPlayerRespawn -= ResetCheckpoint;
     }
 
     void OnTriggerExit(Collider other)
@@ -104,9 +121,6 @@ public class RoomTrigger : MonoBehaviour
                     break;
             }
 
-            if (healthReset && !m_healthResetted)
-                m_healthResetted = true;
-
         }
     }
 
@@ -134,6 +148,11 @@ public class RoomTrigger : MonoBehaviour
         if (doors != null)
             foreach (DoorMovement door in doors)
                 door.ResetPos();
+    }
+
+    void ResetCheckpoint()
+    {
+        m_healthResetted = false;
     }
 
 }

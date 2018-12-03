@@ -17,6 +17,9 @@ public class TriggerJumpAnim : MonoBehaviour
 	void OnCollisionEnter(Collision other)
 	{
 		if(other.gameObject.tag == "Player")
+		{
+			AudioManager.instance.PlayClipAt("JumpPad",transform.position);
 			m_anim.SetTrigger("Jump");
+		}
 	}
 }

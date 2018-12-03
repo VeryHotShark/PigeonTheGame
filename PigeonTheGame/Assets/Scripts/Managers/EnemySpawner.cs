@@ -166,7 +166,7 @@ public class EnemySpawner : MonoBehaviour
     {
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
-            if (spawnPoint.additionalSpawn && spawnPoint.roomIndex == index/* RoomManager.instance.PlayerCurrentRoom */)
+            if (spawnPoint.additionalSpawn && spawnPoint.roomIndex == index/* RoomManager.instance.PlayerCurrentRoom */ && RoomManager.instance.PlayerInRoom)
                 StartCoroutine(SpawnAdditionalEnemiesRoutine(spawnPoint));
             //ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
         }
