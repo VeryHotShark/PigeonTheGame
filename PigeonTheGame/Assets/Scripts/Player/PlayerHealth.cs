@@ -299,9 +299,11 @@ public class PlayerHealth : Health
 
     }
 
+    WaitForSeconds yieldImmune = new WaitForSeconds(0.2f);
+
     IEnumerator ImmuneDuration()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return yieldImmune;
 
         m_justGotHit = false;
     }

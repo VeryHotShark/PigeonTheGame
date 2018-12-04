@@ -23,6 +23,10 @@ public class TrapMovement : MonoBehaviour
 
 	AudioSource m_audioSource;
 
+	WaitForSeconds yieldTime;
+	WaitForSeconds yieldReturnTime;
+	WaitForSeconds yieldDestinationTime;
+
 	void Start()
 	{
 		Init();
@@ -34,12 +38,16 @@ public class TrapMovement : MonoBehaviour
 		startPos = transform.localPosition;
 		endPos = startPos + transform.forward * moveUnit;
 
+		yieldTime = new WaitForSeconds(startYieldTime);
+		yieldReturnTime = new WaitForSeconds(returnWaitTime);
+		yieldDestinationTime = new WaitForSeconds(destinationYieldTime);
+
 		m_audioSource = GetComponent<AudioSource>();
     }
 
 	IEnumerator StartYieldTime()
 	{
-		yield return new WaitForSeconds(startYieldTime);
+		yield return yieldTime;
 		StartCoroutine(MoveToDestination(returning));
 	}
 
@@ -69,7 +77,9 @@ public class TrapMovement : MonoBehaviour
 			yield return null;
 		}
 
-		yield return new WaitForSeconds(isReturning ? returnWaitTime : destinationYieldTime);
+		
+
+		yield return (isReturning ? yieldReturnTime : yieldDestinationTime);
 
 		returning = !returning;
 

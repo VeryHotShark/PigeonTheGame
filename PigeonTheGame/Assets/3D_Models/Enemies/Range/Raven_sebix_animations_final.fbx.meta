@@ -97,7 +97,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material.002
-    second: {fileID: 2100000, guid: 7792bb79efefafc41ab5f36a2da080b6, type: 3}
+    second: {fileID: 2100000, guid: 31d3abe5bbf9b4c41bc487d2c50c8eea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: texture raven
+    second: {fileID: 2100000, guid: 50a08261f445d6f42bd2617b1c9bb11a, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -237,7 +242,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 3
+    tangentImportMode: 2
     normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0

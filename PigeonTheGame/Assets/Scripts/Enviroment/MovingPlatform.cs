@@ -67,6 +67,9 @@ public class MovingPlatform : MonoBehaviour
 
     IEnumerator moveRoutine;
 
+    WaitForSeconds yieldFalling;
+    WaitForSeconds yieldDestination;
+
     // Use this for initialization
     void Start()
     {
@@ -76,10 +79,16 @@ public class MovingPlatform : MonoBehaviour
         {
             PlayerHealth.OnPlayerDeath += Reset;
             GameManager.instance.OnGameOver += Unsubscribe;
+            
+            yieldFalling = new WaitForSeconds(fallingDelay);
         }
 
         if(waypoints != null)
+        {
             PlayerHealth.OnPlayerRespawn += ResetMovingPlatform;
+            yieldDestination = new WaitForSeconds(waitDuration);
+            moveRoutine = MoveToNextWaypointRoutine();
+        }
 
         m_startPos = transform.position;
         m_startRot = transform.rotation;
@@ -179,7 +188,6 @@ public class MovingPlatform : MonoBehaviour
 
 
         GetNextWaypoint();
-        moveRoutine = MoveToNextWaypointRoutine();
         StartCoroutine(moveRoutine);
     }
 
@@ -200,7 +208,7 @@ public class MovingPlatform : MonoBehaviour
         }
 
         
-        yield return new WaitForSeconds(waitDuration);
+        yield return yieldDestination;
 
         //m_currentWaypoint = m_targetWaypoint;
         MoveToNextWaypoint();
@@ -236,7 +244,7 @@ public class MovingPlatform : MonoBehaviour
     {
         AudioManager.instance.PlayClipAt("FallingPlatform", transform.position);
 
-        yield return new WaitForSeconds(fallingDelay);
+        yield return yieldFalling;
 
         go.gameObject.transform.parent = null;
 

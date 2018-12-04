@@ -109,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         GameManager.instance.OnGameOver += Unsubscribe;
+        yieldDash = new WaitForSeconds(dashTime);
     }
 
     void Unsubscribe()
@@ -308,10 +309,12 @@ public class PlayerMovement : MonoBehaviour
         //m_playerInput.InputEnabled = false;
     }
 
+    WaitForSeconds yieldDash;
+
     IEnumerator StopDashVFX()
     {
         dashVFX.emitting = true;
-        yield return new WaitForSeconds(dashTime);
+        yield return yieldDash;
         dashVFX.emitting = false;
     }
 
@@ -408,6 +411,8 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(StepSoundRoutine());
     }
 
+    WaitForSeconds yieldStep = new WaitForSeconds(0.28f);
+
     IEnumerator StepSoundRoutine()
     {
         while(!m_playerHealth.IsDead())
@@ -415,7 +420,7 @@ public class PlayerMovement : MonoBehaviour
             if(!m_playerInput.NoInput() && m_isGrounded)
             {
                 AudioManager.instance.Play("PlayerStep");
-                yield return new WaitForSeconds(0.28f);
+                yield return yieldStep;
             }
 
             yield return null;

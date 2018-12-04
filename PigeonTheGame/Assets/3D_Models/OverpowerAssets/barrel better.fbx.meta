@@ -70,9 +70,9 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 180
     normalImportMode: 1
-    tangentImportMode: 3
+    tangentImportMode: 2
     normalCalculationMode: 4
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
