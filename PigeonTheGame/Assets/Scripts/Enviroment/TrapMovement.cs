@@ -77,8 +77,6 @@ public class TrapMovement : MonoBehaviour
 			yield return null;
 		}
 
-		
-
 		yield return (isReturning ? yieldReturnTime : yieldDestinationTime);
 
 		returning = !returning;
