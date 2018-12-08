@@ -80,6 +80,7 @@ public class MainMenuManager : MonoBehaviour
     // Use this for initialization
     public void StartGame()
     {
+        Cursor.visible = false;
         SceneManager.LoadScene(1);
     }
 

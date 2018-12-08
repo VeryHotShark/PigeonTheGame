@@ -97,16 +97,16 @@ public class EnemyHeavy : Enemy
             yield return new WaitForSeconds(attackRate); // and we wait for some time between shots
         }
 
-        yield return StartCoroutine(WaitIdle()); // after shootSeries we can optionally wait for few seconds ex. for enemy to reload or something
+        StartCoroutine(WaitIdle()); // after shootSeries we can optionally wait for few seconds ex. for enemy to reload or something
     }
 
     IEnumerator WaitIdle()
     {
-        m_duringRoutine = false; // set our bool to false
         currentState = State.Idle; // change our state to idle
 
         yield return new WaitForSeconds(waitTimeBeforeNextShootSeries); // wait for some delay
 
         currentState = State.Chase; // we change our state to Chase so we can Attack again if player is still within AttackRange
+        m_duringRoutine = false; // set our bool to false
     }
 }

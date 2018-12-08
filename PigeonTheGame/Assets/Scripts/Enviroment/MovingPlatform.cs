@@ -85,7 +85,6 @@ public class MovingPlatform : MonoBehaviour
 
         if(waypoints != null)
         {
-            PlayerHealth.OnPlayerRespawn += ResetMovingPlatform;
             yieldDestination = new WaitForSeconds(waitDuration);
             moveRoutine = MoveToNextWaypointRoutine();
         }
@@ -94,25 +93,13 @@ public class MovingPlatform : MonoBehaviour
         m_startRot = transform.rotation;
 
 
-        Init();
+       Init();
 
-    }
-
-    void ResetMovingPlatform()
-    {
-        if(moveRoutine != null)
-            StopCoroutine(moveRoutine);
-
-        transform.position = m_startPos;
-        m_currentWaypoint = waypoints.waypointsArray[0].position;
-
-        MoveToNextWaypoint();
     }
 
     void Unsubscribe()
     {
         PlayerHealth.OnPlayerDeath -= Reset;
-         PlayerHealth.OnPlayerRespawn -= ResetMovingPlatform;
         GameManager.instance.OnGameOver -= Unsubscribe;
     }
 
@@ -164,6 +151,7 @@ public class MovingPlatform : MonoBehaviour
 
                         if (m_currentWaypointIndex == waypoints.waypointsArray.Length - 1)
                         {
+                            Debug.Log("REVERSE");
                             Array.Reverse(waypoints.waypointsArray);
                             m_currentWaypointIndex = 0;
                         }
@@ -188,7 +176,8 @@ public class MovingPlatform : MonoBehaviour
 
 
         GetNextWaypoint();
-        StartCoroutine(moveRoutine);
+
+        StartCoroutine(MoveToNextWaypointRoutine());
     }
 
     IEnumerator MoveToNextWaypointRoutine()

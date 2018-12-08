@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4547341047368290
 Transform:
   m_ObjectHideFlags: 1
@@ -242,6 +242,6 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0.11732602
       outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
+    m_PreInfinity: 1
+    m_PostInfinity: 1
     m_RotationOrder: 4

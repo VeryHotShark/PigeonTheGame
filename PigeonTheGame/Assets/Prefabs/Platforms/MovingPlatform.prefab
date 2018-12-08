@@ -29,7 +29,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4156117622130390
 Transform:
   m_ObjectHideFlags: 1
@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveType: 0
+  falling: 0
+  fallingDelay: 1
   moveCurve:
     serializedVersion: 2
     m_Curve:
@@ -133,8 +135,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  falling: 0
-  fallingDelay: 1
   waypoints: {fileID: 0}
   moveDuration: 2
   waitDuration: 0.5
+  rotateAxis: 0
+  rotateSpeed: 0
+  launchForce: 0

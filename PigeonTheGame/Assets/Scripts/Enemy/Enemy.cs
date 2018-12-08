@@ -89,16 +89,21 @@ public abstract class Enemy : MonoBehaviour
 
         m_health.Init();
 
-        if (waypoints != null)
-        {
-            waypoints.waypointsArray[m_currentWaypointIndex].position = transform.position;
-            m_currentWaypoint = waypoints.waypointsArray[0].position;
-        }
-
         currentState = State.Idle;
 
         if(m_agent != null)
             SetNavMeshAgent();
+    }
+
+    
+    public virtual void UnsubscribeFromPlayer(EnemyHealth enemy)
+    {
+        //PlayerHealth.OnPlayerRespawn -= ResetVariables;
+        m_playerHealth.OnPlayerLoseHealth -= yieldForGivenTime;
+
+
+        enemy.OnEnemyDeath -= EnemyDied;
+        enemy.OnEnemyDeath -= UnsubscribeFromPlayer;
     }
 
     public virtual void GetComponents()
@@ -121,7 +126,7 @@ public abstract class Enemy : MonoBehaviour
 
             m_agent.isStopped = false;
 
-            int randomiseSpeed = UnityEngine.Random.Range(-3,4);
+            int randomiseSpeed = UnityEngine.Random.Range(-1,2);
 
             m_agent.speed = moveSpeed + randomiseSpeed;
             m_agent.acceleration = moveSpeed + 10f + randomiseSpeed;
@@ -133,62 +138,6 @@ public abstract class Enemy : MonoBehaviour
     {
         Quaternion lookRotation = Quaternion.LookRotation((m_playerTransform.position - transform.position).normalized); // rotate our enemy to look at player
         transform.rotation = lookRotation;
-    }
-
-    public virtual IEnumerator GoToNextWaypoint()
-    {
-        GetNextWaypoint();
-        yield return new WaitForSeconds(waitTimeOnWaypoint);
-        StartCoroutine(GoToWaypoint());
-    }
-
-    public virtual void GetNextWaypoint()
-    {
-        m_currentWaypoint = transform.position; // set our current waypoint to be our position
-
-        // depending on moveType we calculate what our next waypoint should be	
-        switch (moveType)
-        {
-            case MoveType.PingPong: // if it is PingPong
-                {
-                    if (m_currentWaypointIndex < waypoints.waypointsArray.Length - 1) // if our current waypoint index is less than the length of our waypoints array
-                    {
-                        m_currentWaypointIndex++; // we increment our waypointIndex
-
-                        if (m_currentWaypointIndex == waypoints.waypointsArray.Length - 1) // if we are at the end of our path (waypointNetwork)
-                        {
-                            Array.Reverse(waypoints.waypointsArray); // we reverse our waypointArray
-                            m_currentWaypointIndex = 0; // and reset our waypoint Index
-                        }
-                    }
-                }
-                break;
-
-            case MoveType.Loop: // if it is Loop
-                {
-                    m_currentWaypointIndex = (m_currentWaypointIndex + 1) % waypoints.waypointsArray.Length; // we set our waypoint Index to be the modulo ( rest from the division) of our waypointArray length. So when for example index is 3 and array length is 3 the rest will be 0 so basically we go back to beginning
-                }
-                break;
-        }
-
-        m_targetWaypoint = waypoints.waypointsArray[m_currentWaypointIndex].position; // Set our targetWaypoint to be nextWaypoint in our waypointsArray based on our waypointIndex we calculate before
-
-    }
-
-    public virtual IEnumerator GoToWaypoint()
-    {
-        m_agent.SetDestination(m_targetWaypoint);
-
-        while (Vector3.Distance(transform.position, m_targetWaypoint) > 2f && RoomManager.instance.PlayerInCorridor)
-        {
-
-            if (RoomManager.instance.PlayerInRoom)
-                yield break;
-
-            yield return null;
-        }
-
-        StartCoroutine(GoToNextWaypoint());
     }
 
     public virtual IEnumerator WaitTimeCoroutine() // wait for some delay before attacking player
@@ -216,15 +165,6 @@ public abstract class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    public virtual void UnsubscribeFromPlayer(EnemyHealth enemy)
-    {
-        //PlayerHealth.OnPlayerRespawn -= ResetVariables;
-        m_playerHealth.OnPlayerLoseHealth -= yieldForGivenTime;
-
-
-        enemy.OnEnemyDeath -= EnemyDied;
-        enemy.OnEnemyDeath -= UnsubscribeFromPlayer;
-    }
 
     public virtual void EnemyDied(EnemyHealth enemy)
     {
@@ -236,7 +176,9 @@ public abstract class Enemy : MonoBehaviour
             if(OnEnemyDie!= null)
                 OnEnemyDie(roomIndex);
 
-            StopAllCoroutines();
+            OnEnemyDie -= EnemySpawner.instance.CheckIfAllDead;
+
+            //StopAllCoroutines();
             
             if(m_agent!= null)
                 m_agent.ResetPath();
@@ -256,6 +198,7 @@ public abstract class Enemy : MonoBehaviour
             m_agent.Warp(m_spawnPoint.transform.transform.position);
         }
 
+        //StopAllCoroutines();
 
         delayWaited = false;
         delayRoutine = false;
@@ -268,6 +211,26 @@ public abstract class Enemy : MonoBehaviour
         Init();
     }
 
+    public virtual void ResetAliveVariables()
+    {
+
+        transform.position = m_spawnPoint.transform.position;
+        transform.rotation = m_spawnPoint.transform.rotation;
+
+        delayWaited = false;
+        delayRoutine = false;
+
+        if(m_agent != null)
+        {
+            m_agent.isStopped = true;
+            m_agent.ResetPath();
+            m_agent.isStopped = false;
+            m_agent.Warp(m_spawnPoint.transform.transform.position);
+        }
+
+        m_health.Init();
+    }
+
     public virtual void ResetAdditionalSpawnValues()
     {
         if (spawnPoint != null)
@@ -276,7 +239,7 @@ public abstract class Enemy : MonoBehaviour
             
             spawnPoint.EnemyAlive = false;
             spawnPoint.MyEnemy = null;
-            StopAllCoroutines();
+            
 
             if(m_agent!= null)
                 m_agent.ResetPath();

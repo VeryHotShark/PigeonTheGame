@@ -78,17 +78,17 @@ public class EnemyStationary : Enemy
             yield return new WaitForSeconds(attackRate); // wait for some delay and repeat while amount is > 0
         }
 
-        yield return StartCoroutine(WaitIdle()); // after enemy finish shooting we can optinally wait for few seconds for example to make enemy reload
+        StartCoroutine(WaitIdle()); // after enemy finish shooting we can optinally wait for few seconds for example to make enemy reload
     }
 
     IEnumerator WaitIdle()
     {
-        m_duringRoutine = false; // set during routine to false
         currentState = State.Idle; // change state to idle
 
         yield return new WaitForSeconds(waitTimeBeforeNextShootSeries); // wait for given time
 
         currentState = State.Chase; // change state to Chase si we can attack again
+        m_duringRoutine = false; // set during routine to false
     }
 
 

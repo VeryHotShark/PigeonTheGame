@@ -7,23 +7,30 @@ using UnityEngine.AI;
 public class EnemyRange : Enemy
 {
 
-    public override void ResetVariables()
+    public override void ResetAliveVariables()
     {
-        base.ResetVariables();
+        base.ResetAliveVariables();
 
         
          m_agent.Warp(m_spawnPoint.transform.position);
-
-        transform.position = m_spawnPoint.transform.position;
-        transform.rotation = m_spawnPoint.transform.rotation;
-
-        
-
 
         //delayWaited = false;
 
         m_anim.SetBool(m_moving, false);
     }
+
+     public override void ResetVariables()
+    {
+        base.ResetVariables();
+
+        
+         m_agent.Warp(m_spawnPoint.transform.position);
+        //delayWaited = false;
+
+        m_anim.SetBool(m_moving, false);
+    }
+
+
 
     //public WaypointNetwork patrolPath;
 
@@ -36,11 +43,13 @@ public class EnemyRange : Enemy
     int m_moving = Animator.StringToHash("Moving");
     int m_shooting = Animator.StringToHash("Shooting");
 
+    bool m_stepSound;
+
     public override void Init()
     {
         base.Init();
 
-        if (m_audioSource != null)
+        if (m_audioSource != null && m_stepSound == false)
             StartCoroutine(StepSoundRoutine());
 
         m_agent.ResetPath();
@@ -50,16 +59,17 @@ public class EnemyRange : Enemy
 
     IEnumerator StepSoundRoutine()
     {
-        while (!m_playerHealth.IsDead())
-        {
-            if (!m_health.IsDead() && RoomManager.instance.PlayerInRoom && currentState == State.Moving)
-            {
-                m_audioSource.Play();
-                yield return new WaitForSeconds(0.4f);
-            }
+        m_stepSound = true;
 
-            yield return null;
+        while (!m_health.IsDead())
+        {
+            if(RoomManager.instance.PlayerCurrentRoom == roomIndex && currentState == State.Moving)
+                m_audioSource.Play();
+            
+            yield return new WaitForSeconds(0.4f);
         }
+
+        m_stepSound = false;
     }
     public override void GetComponents()
     {

@@ -32,8 +32,6 @@ public class EnemySpawner : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public GameObject spawnVFX;
-
     public List<EnemyPool> enemyPools = new List<EnemyPool>();
     public Dictionary<EnemyType, Queue<Enemy>> poolDictionary = new Dictionary<EnemyType, Queue<Enemy>>();
     GameObject parentTransform;
@@ -95,6 +93,9 @@ public class EnemySpawner : MonoBehaviour
 
     void RespawnDeadEnemies()
     {
+        if(RoomManager.instance.PlayerInCorridor)
+            return;
+
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
             if (spawnPoint.roomIndex == RoomManager.instance.PlayerCurrentRoom)
@@ -108,11 +109,10 @@ public class EnemySpawner : MonoBehaviour
                     }
                     else
                     {
-                        spawnPoint.MyEnemy.ResetVariables();
+                        spawnPoint.MyEnemy.ResetAliveVariables();
                         //spawnPoint.MyEnemy.Init();
                     }
                 }
-
                 else
                 {
                     if (spawnPoint.EnemyAlive)
@@ -166,7 +166,7 @@ public class EnemySpawner : MonoBehaviour
     {
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
-            if (spawnPoint.additionalSpawn && spawnPoint.roomIndex == index/* RoomManager.instance.PlayerCurrentRoom */ && RoomManager.instance.PlayerInRoom)
+            if (spawnPoint.additionalSpawn && spawnPoint.roomIndex == index && RoomManager.instance.PlayerInRoom)
                 StartCoroutine(SpawnAdditionalEnemiesRoutine(spawnPoint));
             //ReuseObject(spawnPoint.enemyType, spawnPoint.transform.position,spawnPoint.transform.rotation, spawnPoint);
         }
@@ -176,10 +176,8 @@ public class EnemySpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(sp.spawnDelay);
 
-        /*
-            GameObject spawnVFXInstance = Instantiate(spawnVFX,sp.transform.position,Quaternion.identity);
-            Destroy(spawnVFXInstance, 1.5f);
-         */
+       if(RoomManager.instance.PlayerInCorridor)
+         yield break;
 
         AudioManager.instance.PlayClipAt("Spawn", sp.transform.position);
         GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.AppearSmoke,sp.transform.position,Quaternion.identity);
@@ -205,7 +203,7 @@ public class EnemySpawner : MonoBehaviour
         return true;
     }
 
-    void CheckIfAllDead(RoomIndex index)
+    public void CheckIfAllDead(RoomIndex index)
     {
         foreach(SpawnPoint spawnPoint in spawnPoints)
         {

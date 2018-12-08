@@ -47,11 +47,6 @@ public class EnemyHealth : Health
 
         if (hitVFX != null)
         {
-            /*
-                GameObject vfx = Instantiate(hitVFX, hit.point, Quaternion.identity);
-                vfx.transform.rotation = Quaternion.LookRotation(hit.normal);
-                Destroy(vfx, 2f);
-             */
 
             GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Hit,hit.point ,Quaternion.LookRotation(hit.normal));
         }
@@ -71,11 +66,6 @@ public class EnemyHealth : Health
         {
             if (deathVFX != null)
             {
-                /*
-                    GameObject vfxInstance = Instantiate(deathVFX, hit.point, Quaternion.identity);
-                    vfxInstance.transform.rotation = Quaternion.LookRotation(-hit.normal);
-                    Destroy(vfxInstance, 2f);
-                 */
                  GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.HitDead,hit.point ,Quaternion.LookRotation(hit.normal));
             }
             Die();

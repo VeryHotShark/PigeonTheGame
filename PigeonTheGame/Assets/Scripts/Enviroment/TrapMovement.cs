@@ -30,7 +30,7 @@ public class TrapMovement : MonoBehaviour
 	void Start()
 	{
 		Init();
-		StartCoroutine(StartYieldTime());
+		StartCoroutine(SpikesRoutine());
 	}
 
     void Init()
@@ -48,22 +48,34 @@ public class TrapMovement : MonoBehaviour
 	IEnumerator StartYieldTime()
 	{
 		yield return yieldTime;
-		StartCoroutine(MoveToDestination(returning));
+		StartCoroutine(SpikesRoutine());
 	}
 
-    // Update is called once per frame
-    IEnumerator MoveToDestination(bool isReturning)
+	IEnumerator SpikesRoutine()
+	{
+		yield return yieldTime;
+
+		while(true)
+		{
+			yield return StartCoroutine(MoveRoutine());
+			yield return StartCoroutine(WaitRoutine());
+		}
+
+	}
+    
+	/*
+    IEnumerator MoveToDestination()
     {
 		float curvedPercent = 0f;
 		float percent = 0f;
-		float speed = 1f / (isReturning ? returnTime : moveTime);
+		float speed = 1f / (returning ? returnTime : moveTime);
 
-		Vector3 start = isReturning ? endPos : startPos;
-		Vector3 end = isReturning ? startPos : endPos;
+		Vector3 start = returning ? endPos : startPos;
+		Vector3 end = returning ? startPos : endPos;
 		
 		if(m_audioSource != null)
 		{
-			m_audioSource.clip = isReturning ? spikesOut : spikesIn;
+			m_audioSource.clip = returning ? spikesOut : spikesIn;
 			m_audioSource.Play();
 		}
 		
@@ -71,16 +83,49 @@ public class TrapMovement : MonoBehaviour
 		{
 			percent += Time.deltaTime * speed;
 			curvedPercent = moveCurve.Evaluate(percent);
-			transform.localPosition = Vector3.Lerp(start, end, isReturning ? percent : curvedPercent);
+			transform.localPosition = Vector3.Lerp(start, end, returning ? percent : curvedPercent);
 
 
 			yield return null;
 		}
 
-		yield return (isReturning ? yieldReturnTime : yieldDestinationTime);
+		yield return (returning ? yieldReturnTime : yieldDestinationTime);
 
 		returning = !returning;
 
-		StartCoroutine(MoveToDestination(returning));
+		StartCoroutine(MoveToDestination());
     }
+	*/
+
+	IEnumerator WaitRoutine()
+	{
+		yield return (returning ? yieldReturnTime : yieldDestinationTime);
+		returning = !returning;
+	}
+
+	IEnumerator MoveRoutine()
+	{
+		float curvedPercent = 0f;
+		float percent = 0f;
+		float speed = 1f / (returning ? returnTime : moveTime);
+
+		Vector3 start = returning ? endPos : startPos;
+		Vector3 end = returning ? startPos : endPos;
+		
+		if(m_audioSource != null)
+		{
+			m_audioSource.clip = returning ? spikesOut : spikesIn;
+			m_audioSource.Play();
+		}
+		
+		while(percent < 1f)
+		{
+			percent += Time.deltaTime * speed;
+			curvedPercent = moveCurve.Evaluate(percent);
+			transform.localPosition = Vector3.Lerp(start, end, returning ? percent : curvedPercent);
+
+
+			yield return null;
+		}
+	}
 }

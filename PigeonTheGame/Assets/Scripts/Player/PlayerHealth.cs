@@ -10,8 +10,6 @@ public class PlayerHealth : Health
 
     public GameObject hitVFX;
     public GameObject healVFX;
-
-    public int bigHealth = 3;
     public float respawnDelay;
 
     public event System.Action<int> OnPlayerLoseHealth; // public event our UI is subscribe to so it can change our UI Health base on plyaer current health
@@ -94,16 +92,7 @@ public class PlayerHealth : Health
 
             if (m_health <= 0)
             {
-                //if (bigHealth > 0)
-               // {
-                    Die();
-               //     bigHealth--;
-               // }
-               // else
-               // {
-               //     if (OnPlayerBigDeath != null)
-               //         OnPlayerBigDeath();
-               // }
+                Die();
             }
 
         }
@@ -135,16 +124,7 @@ public class PlayerHealth : Health
 
             if (m_health <= 0)
             {
-                if (bigHealth > 0)
-                {
-                    Die();
-                    bigHealth--;
-                }
-                else
-                {
-                    if (OnPlayerBigDeath != null)
-                        OnPlayerBigDeath();
-                }
+              Die();
             }
         }
     }
@@ -185,16 +165,13 @@ public class PlayerHealth : Health
 
     }
 
-    // public void Update()
-    // {
-    //     if (transform.position.y < -20f) // if we fall below -10f respawn
-    //     {
-    //         if (OnPlayerDeath != null)
-    //             OnPlayerDeath();
-
-    //         Respawn();
-    //     }
-    // }
+    public void Update()
+    {
+         if (Input.GetKeyDown(KeyCode.T)) // if we fall below -10f respawn
+         {
+            TakeDamage(3);
+         }
+    }
 
     void OnTriggerEnter(Collider other)
     {
