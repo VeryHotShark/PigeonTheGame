@@ -2680,7 +2680,7 @@ MonoBehaviour:
   doors:
   - {fileID: 1201577432}
   - {fileID: 1201577431}
-  healthReset: 1
+  healthReset: 0
 --- !u!65 &126532442
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -48248,21 +48248,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.27, y: 2.7310503, z: 0.38}
   m_Center: {x: -0.000015758022, y: -0.046069123, z: 0.31}
---- !u!54 &1603750854
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1603750847}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!4 &1603767379 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4123473838507780, guid: 6a62e7c2941b1ca4cb234b3c8526c061,
@@ -53390,6 +53375,11 @@ Prefab:
         type: 2}
       propertyPath: m_ConnectedAnchor.z
       value: -0.13194697
+      objectReference: {fileID: 0}
+    - target: {fileID: 114812643827990586, guid: a522eeb5a58c62c48925bebf2acdc9e2,
+        type: 2}
+      propertyPath: dashLayerMask.m_Bits
+      value: 2115383
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a522eeb5a58c62c48925bebf2acdc9e2, type: 2}
@@ -61433,21 +61423,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.165871, y: 0.46, z: 8.390607}
   m_Center: {x: -0.0000004992326, y: -1.07, z: 4.233944}
---- !u!54 &1769844176
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1769844168}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1770819120
 GameObject:
   m_ObjectHideFlags: 0

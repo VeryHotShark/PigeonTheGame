@@ -75,8 +75,8 @@ public class EnemyBoss : Enemy
             m_health.OnEnemyHalfHealth += ChangeState;
             m_health.OnBossDeath += ChangeGameState;
 
-            m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-            PlayerHealth.OnPlayerRespawn += ResetVariables;
+            //m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
+            //PlayerHealth.OnPlayerRespawn += ResetAliveVariables;
         }
 
         StopAllCoroutines();
@@ -90,6 +90,14 @@ public class EnemyBoss : Enemy
 
         m_collider.enabled = true;
 
+    }
+
+    public override void UnsubscribeFromPlayer(EnemyHealth enemy)
+    {
+        base.UnsubscribeFromPlayer(enemy);
+
+        m_health.OnEnemyHalfHealth -= ChangeState;
+        m_health.OnBossDeath -= ChangeGameState;
     }
 
     public override void GetComponents()
@@ -326,9 +334,9 @@ public class EnemyBoss : Enemy
          */
     }
 
-    public override void ResetVariables()
+    public override void ResetAliveVariables()
     {
-        base.ResetVariables();
+        base.ResetAliveVariables();
 
         GFX.transform.localPosition = Vector3.zero;
         m_collider.direction = 1;

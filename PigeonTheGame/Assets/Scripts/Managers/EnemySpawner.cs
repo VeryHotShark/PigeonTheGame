@@ -93,8 +93,8 @@ public class EnemySpawner : MonoBehaviour
 
     void RespawnDeadEnemies()
     {
-        if(RoomManager.instance.PlayerInCorridor)
-            return;
+        //if(RoomManager.instance.PlayerInCorridor)
+           // return;
 
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
@@ -174,10 +174,19 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnAdditionalEnemiesRoutine(SpawnPoint sp)
     {
-        yield return new WaitForSeconds(sp.spawnDelay);
+        //yield return new WaitForSeconds(sp.spawnDelay);
 
-       if(RoomManager.instance.PlayerInCorridor)
-         yield break;
+        float timer = sp.spawnDelay;
+
+        while(timer > 0)
+        {
+            if(RoomManager.instance.PlayerInCorridor)
+                yield break;
+
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+      
 
         AudioManager.instance.PlayClipAt("Spawn", sp.transform.position);
         GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.AppearSmoke,sp.transform.position,Quaternion.identity);

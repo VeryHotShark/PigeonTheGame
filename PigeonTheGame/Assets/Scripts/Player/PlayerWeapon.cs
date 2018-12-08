@@ -51,6 +51,7 @@ public class PlayerWeapon : MonoBehaviour
 	public float force;
 
 	PlayerInput m_playerInput;
+	PlayerHealth m_playerHealth;
 	CameraController m_cameraController;
 	Camera m_camera;
 
@@ -61,6 +62,8 @@ public class PlayerWeapon : MonoBehaviour
 	int m_shootHash = Animator.StringToHash("Shoot");
 
 	float timer;
+
+
 
 	// Use this for initialization
 	void Start ()
@@ -76,9 +79,11 @@ public class PlayerWeapon : MonoBehaviour
 	void GetComponents()
 	{
 		m_playerInput = GetComponent<PlayerInput>();
+		m_playerHealth = GetComponent<PlayerHealth>();
 		m_cameraController = FindObjectOfType<CameraController>();
 		m_camera = m_cameraController.GetComponentInChildren<Camera>();
 		m_anim = GetComponentInChildren<Animator>();
+		
 	}
 	
 	// Update is called once per frame
@@ -94,7 +99,7 @@ public class PlayerWeapon : MonoBehaviour
 
 		timer -= Time.deltaTime;
 
-		if(m_playerInput.ShootInput)	
+		if(m_playerInput.ShootInput && !m_playerHealth.IsDead())	
 		{
 			if(timer <= 0f)
 			{
