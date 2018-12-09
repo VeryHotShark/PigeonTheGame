@@ -70,6 +70,9 @@ public class EnemyStationary : Enemy
 
         while (amountToShoot > 0 && m_playerRested && RoomManager.instance.PlayerInRoom) // while projectile amount is > 0
         {
+            if(m_health.IsDead())
+                yield break;
+
             AudioManager.instance.PlayClipAt("EnemyShoot", transform.position);
             m_anim.SetTrigger(m_shooting);
             m_enemyWeapon.ShootProjectile(m_playerTransform.position); // shoot projectile

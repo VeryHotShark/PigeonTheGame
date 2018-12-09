@@ -34,7 +34,12 @@ public class PlayerMovement : MonoBehaviour
     public float jumpPower = 10f;
     public float gravityMultiplier = 2f;
     public float lowFallMultiplier = 3f;
+
+    public float groundDetecionThreshold = 1.2f;
     public LayerMask groundLayerMask;
+
+    public float wallDetectionThreshold;
+    public LayerMask wallLayerMask;
     //public int wallLayerMask = 1 << 9;
 
     [Space]
@@ -89,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector3 LastMoveVector { get { return m_lastMoveDir; } set { m_lastMoveDir = value; } }
 
-    public PlayerHealth playerHealth { get { return m_playerHealth; }}
+    public PlayerHealth playerHealth { get { return m_playerHealth; } }
 
     void Awake()
     {
@@ -98,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerHealth.OnPlayerDeath += DisableSmoke;
         PlayerHealth.OnPlayerRespawn += ReenableSmoke;
         PlayerHealth.OnPlayerRespawn += StartStepRoutine;
-        
+
 
         aimMoveSpeed = moveSpeed / 2f; // speed is slower 2 times when aiming TODO change to variable
         dashVFX.emitting = false;
@@ -153,15 +158,21 @@ public class PlayerMovement : MonoBehaviour
         particle.gameObject.SetActive(true);
     }
 
+    Vector3 tempVelocity;
+
     void FixedUpdate()
     {
-            CheckIfGrounded();
-            CalculateMovePosition();
+        CheckIfGrounded();
+        CalculateMovePosition();
 
-            if (m_playerInput.InputEnabled)
-                m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
+        if (m_playerInput.InputEnabled /* && !wallCollided*/)
+        {
+            //m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
+            tempVelocity = (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector); // velocity base movement
+            m_rigid.velocity = new Vector3(tempVelocity.x, m_rigid.velocity.y, tempVelocity.z); // VELocity based movement
+        }
 
-            UpdateRotation();
+        UpdateRotation();
 
     }
 
@@ -172,7 +183,8 @@ public class PlayerMovement : MonoBehaviour
         if (!snapToCamera) // smooth our rotation if bool is false
             desiredRot = Quaternion.Slerp(transform.rotation, desiredRot, smoothRotateSpeed * Time.fixedDeltaTime);
 
-        m_rigid.MoveRotation(desiredRot); // actually rotate our player
+        //m_rigid.MoveRotation(desiredRot); // actually rotate our player
+        transform.rotation = desiredRot; // VELocity based movement
     }
 
     void CheckIfGrounded()
@@ -180,37 +192,41 @@ public class PlayerMovement : MonoBehaviour
         // Cast ray downwards to check if we are on ground
 
         Ray ray = new Ray(transform.position, -transform.up);
+        Ray rayLT = new Ray(transform.position - (transform.right  - transform.forward) / 2f, -transform.up);
+        Ray rayLB = new Ray(transform.position - (transform.right  + transform.forward) / 2f, -transform.up);
+        Ray rayRT = new Ray(transform.position + (transform.right  + transform.forward) / 2f, -transform.up);
+        Ray rayRB = new Ray(transform.position + (transform.right  - transform.forward) / 2f, -transform.up);
+
+        //Debug.DrawRay(transform.position + (transform.right  + transform.forward) / 2f, -transform.up, Color.cyan, 1f);
+
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 1.2f, groundLayerMask))
+        bool groundCollided = Physics.Raycast(ray, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayLT, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayLB, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayRT, out hit, groundDetecionThreshold, groundLayerMask)|| Physics.Raycast(rayRB, out hit, groundDetecionThreshold, groundLayerMask);
+
+        if (groundCollided)
         {
             m_moveDir = Vector3.ProjectOnPlane(m_moveDir, hit.normal);
-            
+
             Vector3 cross = Vector3.Cross(transform.right, hit.normal); // we get the cross product of our right vector and ground normal
             Quaternion desiredRot = Quaternion.LookRotation(cross); // we create a a look rotation by passing our cross product
             Vector3 tiltEulerRot = desiredRot.eulerAngles; // we convert it to euler Angles
-            transform.rotation = Quaternion.Euler( new Vector3(tiltEulerRot.x, transform.eulerAngles.y, tiltEulerRot.z))/* Quaternion.Euler(tiltEulerRot.x, transform.rotation.eulerAngles.y, tiltEulerRot.z)*/;
+            transform.rotation = Quaternion.Euler(new Vector3(tiltEulerRot.x, transform.eulerAngles.y, tiltEulerRot.z))/* Quaternion.Euler(tiltEulerRot.x, transform.rotation.eulerAngles.y, tiltEulerRot.z)*/;
 
             CheckSlopeAngle(hit);
-            Debug.DrawRay(transform.position,-transform.up, Color.cyan, 1f);
+            Debug.DrawRay(transform.position, -transform.up, Color.cyan, 1f);
 
             m_anim.SetBool(m_inAirHash, false);
             m_playerInput.InputEnabled = true;
             m_allowDash = true;
             m_isGrounded = true;
+            wallCollided = false;
 
-            if(m_isGrounded && !m_landed)
+            if (m_isGrounded && !m_landed)
             {
                 m_landed = true;
 
                 //AudioManager.instance.Play("PlayerJump");
-
-                /*
-                    GameObject landVFXInstance = Instantiate(landVFX,transform.position - Vector3.up * 0.1f,Quaternion.identity);
-                    Destroy(landVFXInstance,1.5f);
-                 */
-
-                 GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Land,transform.position - Vector3.up * 0.5f,Quaternion.identity);
+                GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.Land, transform.position - Vector3.up * 0.5f, Quaternion.identity);
             }
         }
         else
@@ -225,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float angle = Vector3.Angle(Vector3.up, hit.normal);
 
-        if(angle > slopeAngle)
+        if (angle > slopeAngle)
         {
             Debug.Log(angle);
             //m_playerInput.InputEnabled = false;
@@ -248,7 +264,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (m_allowDash && !m_CameraController.DuringFOVChange)
             {
-                if(OnPlayerDash != null && !m_playerInput.ZoomInput)
+                if (OnPlayerDash != null && !m_playerInput.ZoomInput)
                     OnPlayerDash();
 
                 AudioManager.instance.Play("PlayerDash");
@@ -343,7 +359,7 @@ public class PlayerMovement : MonoBehaviour
             m_smoothFactor = Mathf.SmoothDamp(m_smoothFactor, moveMagnitude, ref m_smoothVelocityRef, smoothTime); // we calculate smoothFactor based on moveMagnitude
         }
 
-        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor * Time.deltaTime; // here we calculate our final moveVector
+        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor /* * Time.deltaTime */ ; // here we calculate our final moveVector // VELocity based movement that we we dont multiply with time.deltatime
 
         //Debug.Log(m_moveVector);
 
@@ -377,11 +393,14 @@ public class PlayerMovement : MonoBehaviour
                 m_isGrounded = false; // we are not on ground anymore
                 m_landed = false;
 
-                m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse); // we add upwards force to make our player jump
+                //m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse); // we add upwards force to make our player jump
+                m_rigid.velocity = new Vector3(m_rigid.velocity.x, jumpPower, m_rigid.velocity.z); // VLocity based movement
             }
         }
         else // if we are in mid-air
         {
+            CheckIfWallCollided();
+
             if (!m_playerInput.HoldingJumpInput) // if we are not holding jump button
             {
                 m_rigid.velocity += Physics.gravity * lowFallMultiplier * Time.deltaTime; // we apply additional gravity to make it fall faster
@@ -415,9 +434,9 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator StepSoundRoutine()
     {
-        while(!m_playerHealth.IsDead())
+        while (!m_playerHealth.IsDead())
         {
-            if(!m_playerInput.NoInput() && m_isGrounded)
+            if (!m_playerInput.NoInput() && m_isGrounded)
             {
                 AudioManager.instance.Play("PlayerStep");
                 yield return yieldStep;
@@ -427,28 +446,76 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    bool wallCollided;
+
+    void CheckIfWallCollided()
+    {
+        if (!m_isGrounded)
+        {
+            Ray ray_forward = new Ray(transform.position, transform.forward);
+            Ray ray_backward = new Ray(transform.position, -transform.forward);
+            Ray ray_right = new Ray(transform.position, transform.right);
+            Ray ray_left = new Ray(transform.position, -transform.right);
+            RaycastHit hit;
+
+            wallCollided = Physics.Raycast(ray_forward, out hit, wallDetectionThreshold, wallLayerMask) || Physics.Raycast(ray_backward, out hit, wallDetectionThreshold, wallLayerMask) || Physics.Raycast(ray_right, out hit, wallDetectionThreshold, wallLayerMask) || Physics.Raycast(ray_left, out hit, wallDetectionThreshold, wallLayerMask);
+
+            if (wallCollided)
+            {
+                m_playerInput.InputEnabled = false; // we disabel player input so we won't push into the wall
+                //m_moveDir /= 10f;
+                //m_lastMoveDir /= 10f;
+            }
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+
+        Gizmos.DrawRay(transform.position, transform.forward * wallDetectionThreshold);
+        Gizmos.DrawRay(transform.position, -transform.forward * wallDetectionThreshold);
+        Gizmos.DrawRay(transform.position, transform.right * wallDetectionThreshold);
+        Gizmos.DrawRay(transform.position, -transform.right * wallDetectionThreshold);
+
+    }
 
 
+    /*
+    
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Wall") && !m_isGrounded) // if we hit wall and we are not grounded
         {
-            Debug.Log("HitEnter");
-            m_playerInput.InputEnabled = false; // we disabel player input so we won't push into the wall
+            float angle = Vector3.Angle(Vector3.up, other.contacts[0].normal);
+
+            if (angle > slopeAngle)
+            {
+                Debug.Log("HitEnter");
+                m_playerInput.InputEnabled = false; // we disabel player input so we won't push into the wall
+            }
+        }
+        else
+        {
+            m_playerInput.InputEnabled = true; // we re-enable input when we are not touching wall anymore
         }
 
     }
 
-    /*
-		void OnCollisionStay(Collision other)
-		{
-			if(other.gameObject.layer == LayerMask.NameToLayer("Wall") && !m_isGrounded)
-			{
-				Debug.Log("HitStay");
-				m_rigid.velocity += Physics.gravity * lowFallMultiplier * 2f * Time.deltaTime;
-			}
-		}
-	*/
+
+    void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Wall") && !m_isGrounded)
+        {
+            float angle = Vector3.Angle(Vector3.up, other.contacts[0].normal);
+
+            if (angle > slopeAngle)
+            {
+                Debug.Log("HitEnter");
+                m_playerInput.InputEnabled = false; // we disabel player input so we won't push into the wall
+            }
+        }
+    }
 
 
     void OnCollisionExit(Collision other)
@@ -459,5 +526,7 @@ public class PlayerMovement : MonoBehaviour
             m_playerInput.InputEnabled = true; // we re-enable input when we are not touching wall anymore
         }
     }
+
+     */
 
 }
