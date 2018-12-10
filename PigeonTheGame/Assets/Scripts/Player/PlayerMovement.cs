@@ -167,9 +167,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (m_playerInput.InputEnabled /* && !wallCollided*/)
         {
-            //m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
-            tempVelocity = (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector); // velocity base movement
-            m_rigid.velocity = new Vector3(tempVelocity.x, m_rigid.velocity.y, tempVelocity.z); // VELocity based movement
+            m_rigid.MovePosition(m_rigid.position + (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector)); // Move our player based on calculated earlier direction
+            //tempVelocity = (m_playerInput.NoInput() && !m_isGrounded ? m_lastMoveDir / 2f : m_moveVector); // velocity base movement
+            //m_rigid.velocity = new Vector3(tempVelocity.x, m_rigid.velocity.y, tempVelocity.z); // VELocity based movement
         }
 
         UpdateRotation();
@@ -183,8 +183,8 @@ public class PlayerMovement : MonoBehaviour
         if (!snapToCamera) // smooth our rotation if bool is false
             desiredRot = Quaternion.Slerp(transform.rotation, desiredRot, smoothRotateSpeed * Time.fixedDeltaTime);
 
-        //m_rigid.MoveRotation(desiredRot); // actually rotate our player
-        transform.rotation = desiredRot; // VELocity based movement
+        m_rigid.MoveRotation(desiredRot); // actually rotate our player
+        //transform.rotation = desiredRot; // VELocity based movement
     }
 
     void CheckIfGrounded()
@@ -359,7 +359,8 @@ public class PlayerMovement : MonoBehaviour
             m_smoothFactor = Mathf.SmoothDamp(m_smoothFactor, moveMagnitude, ref m_smoothVelocityRef, smoothTime); // we calculate smoothFactor based on moveMagnitude
         }
 
-        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor /* * Time.deltaTime */ ; // here we calculate our final moveVector // VELocity based movement that we we dont multiply with time.deltatime
+        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor  * Time.deltaTime  ; // here we calculate our final moveVector // VELocity based movement that we we dont multiply with time.deltatime
+        //m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor   ; // Velocity Based Movement 
 
         //Debug.Log(m_moveVector);
 
@@ -393,8 +394,8 @@ public class PlayerMovement : MonoBehaviour
                 m_isGrounded = false; // we are not on ground anymore
                 m_landed = false;
 
-                //m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse); // we add upwards force to make our player jump
-                m_rigid.velocity = new Vector3(m_rigid.velocity.x, jumpPower, m_rigid.velocity.z); // VLocity based movement
+                m_rigid.AddForce((Vector3.up) * jumpPower, ForceMode.Impulse); // we add upwards force to make our player jump
+                //m_rigid.velocity = new Vector3(m_rigid.velocity.x, jumpPower, m_rigid.velocity.z); // VLocity based movement
             }
         }
         else // if we are in mid-air

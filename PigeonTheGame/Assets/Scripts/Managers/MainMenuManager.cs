@@ -61,16 +61,17 @@ public class MainMenuManager : MonoBehaviour
         menuAudioSource.Play();
     }
 
-    private void Update()
-    {
-        if (SceneManager.GetActiveScene().buildIndex != 0)
-        {
-            if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                Pause();
-            }
-        }
-    }
+    
+    // private void Update()
+    // {
+    //     if (SceneManager.GetActiveScene().buildIndex != 0)
+    //     {
+    //         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+    //         {
+    //             Pause();
+    //         }
+    //     }
+    // }
 
     public void SetMouseInvert(bool invert)
     {
@@ -142,6 +143,7 @@ public class MainMenuManager : MonoBehaviour
 
             //menuAudioSource = GetComponent<AudioSource>();
             menuAudioSource.clip = menuMusic;
+            menuAudioSource.volume = 0.7f;
             menuAudioSource.pitch = 2f;
             menuAudioSource.Play();
 

@@ -34,8 +34,8 @@ public class EnemyBoss : Enemy
     public float waitAtPeak;
     public float waitAtGround;
     public float attackDuration;
-    [Range(0f,1f)]
-    public float  difficulty = 0.55f;
+    [Range(0f, 1f)]
+    public float difficulty = 0.55f;
 
     [Header("Stage Two")]
     [Space]
@@ -44,7 +44,7 @@ public class EnemyBoss : Enemy
 
     public int projectileAmountAtOnce = 5;
     public float spreadAmount;
-    
+
     public float waitTimeBeforeNextShootSeries;
 
 
@@ -61,6 +61,8 @@ public class EnemyBoss : Enemy
     int m_shoot = Animator.StringToHash("Shoot");
     int m_shooting = Animator.StringToHash("Shooting");
     int m_secondStage = Animator.StringToHash("SecondStage");
+
+    int m_playerDeath = Animator.StringToHash("PlayerDeath");
 
     public override void Init()
     {
@@ -91,6 +93,40 @@ public class EnemyBoss : Enemy
         m_collider.enabled = true;
 
     }
+
+    public override void ResetAliveVariables()
+    {
+
+        transform.position = m_spawnPoint.transform.position;
+        transform.rotation = m_spawnPoint.transform.rotation;
+
+        delayWaited = false;
+        delayRoutine = false;
+
+        if (m_agent != null)
+        {
+            m_agent.isStopped = true;
+            m_agent.ResetPath();
+            m_agent.isStopped = false;
+            m_agent.Warp(m_spawnPoint.transform.transform.position);
+        }
+
+        StopAllCoroutines();
+
+        GFX.transform.localPosition = Vector3.zero;
+        m_collider.direction = 1;
+
+        m_anim.SetTrigger(m_playerDeath);
+
+        m_currentStage = BossStage.StageOne;
+        m_duringRoutine = false;
+
+        currentState = State.Idle;
+        m_health.Init();
+
+        m_collider.enabled = true;
+    }
+
 
     public override void UnsubscribeFromPlayer(EnemyHealth enemy)
     {
@@ -124,11 +160,11 @@ public class EnemyBoss : Enemy
                         }
                         break;
 
-                        case BossStage.StageTwo:
+                    case BossStage.StageTwo:
                         {
-                        FaceTarget();
-                        //if (!m_duringRoutine)
-                        //StartCoroutine(ShootSeries());
+                            FaceTarget();
+                            //if (!m_duringRoutine)
+                            //StartCoroutine(ShootSeries());
                         }
                         break;
                 }
@@ -146,7 +182,7 @@ public class EnemyBoss : Enemy
     {
         GameManager.instance.GameIsOver = true;
         GameManager.instance.Boss = transform;
-        
+
         GameManager.instance.InvokeEvent();
     }
 
@@ -157,7 +193,7 @@ public class EnemyBoss : Enemy
         GFX.transform.localPosition = Vector3.zero;
         FaceTarget();
 
-        if(m_currentStage == BossStage.StageOne)
+        if (m_currentStage == BossStage.StageOne)
             m_attackRoutine = true;
         m_duringRoutine = true;
         m_inAir = true;
@@ -168,7 +204,7 @@ public class EnemyBoss : Enemy
         m_anim.SetTrigger(m_rise);
         yield return new WaitForSeconds(0.4f);
 
-        GameObject jumpInstance = VFXPooler.instance.ReuseObject(VFXType.OwlJump,transform.position,Quaternion.identity);
+        GameObject jumpInstance = VFXPooler.instance.ReuseObject(VFXType.OwlJump, transform.position, Quaternion.identity);
 
         Vector3 startPos = transform.position;
         Vector3 desiredPos = startPos + Vector3.up * jumpHeight;
@@ -218,12 +254,12 @@ public class EnemyBoss : Enemy
         float percent = 0f;
         float speed = 1f / attackDuration;
 
-        while (percent < 1f)
+        while (percent < 1f && !m_health.IsDead())
         {
             percent += Time.deltaTime * speed;
             transform.position = Vector3.Lerp(startPos, desiredPos, percent);
 
-            if(percent < difficulty)
+            if (percent < difficulty)
             {
                 FaceTarget();
                 desiredPos = m_playerTransform.position;
@@ -234,11 +270,11 @@ public class EnemyBoss : Enemy
 
         AudioManager.instance.PlayClipAt("OwlHitGround", transform.position);
 
-    /*
-        GameObject vfx = Instantiate(hitGroundVFX, transform.position, Quaternion.identity);
-        Destroy(vfx, 3f);
-     */
-        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.HitGround,transform.position ,Quaternion.identity);
+        /*
+            GameObject vfx = Instantiate(hitGroundVFX, transform.position, Quaternion.identity);
+            Destroy(vfx, 3f);
+         */
+        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.HitGround, transform.position, Quaternion.identity);
 
         yield return new WaitForSeconds(waitAtGround);
 
@@ -277,7 +313,7 @@ public class EnemyBoss : Enemy
 
         int randomShootSeries = Random.Range(shootSeries - 1, shootSeries + 2);
 
-        while (randomShootSeries > 0 && m_playerRested) // while amount to shoot is greater than 0
+        while (randomShootSeries > 0 && m_playerRested && !m_health.IsDead()) // while amount to shoot is greater than 0
         {
             FaceTarget();
             m_anim.SetTrigger(m_shoot);
@@ -289,7 +325,7 @@ public class EnemyBoss : Enemy
             {
                 Vector3 randomPoint;
 
-                if(i == 0)
+                if (i == 0)
                 {
                     randomPoint = m_playerTransform.position;
                 }
@@ -334,13 +370,6 @@ public class EnemyBoss : Enemy
          */
     }
 
-    public override void ResetAliveVariables()
-    {
-        base.ResetAliveVariables();
-
-        GFX.transform.localPosition = Vector3.zero;
-        m_collider.direction = 1;
-    }
 
 
 

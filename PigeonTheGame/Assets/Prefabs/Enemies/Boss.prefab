@@ -1249,7 +1249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdoll: 1
-  startHealth: 20
+  startHealth: 50
   hitVFX: {fileID: 1194393215392672, guid: 8602233fc6cff4548bc2633406795b28, type: 2}
   deathVFX: {fileID: 1030772700552374, guid: 229a895ab42ebf443ab2362cef4f1f37, type: 2}
 --- !u!114 &114276495919407356
@@ -1284,6 +1284,7 @@ MonoBehaviour:
   waitAtPeak: 1
   waitAtGround: 1
   attackDuration: 0.5
+  difficulty: 0.55
   shootSeries: 5
   projectileAmountVariation: 2
   projectileAmountAtOnce: 7

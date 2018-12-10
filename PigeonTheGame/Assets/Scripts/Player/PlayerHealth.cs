@@ -7,6 +7,7 @@ public class PlayerHealth : Health
 {
 
     public bool GodMode;
+    public bool DeathMode;
 
     public GameObject hitVFX;
     public GameObject healVFX;
@@ -167,7 +168,7 @@ public class PlayerHealth : Health
 
     public void Update()
     {
-         if (Input.GetKeyDown(KeyCode.T)) // if we fall below -10f respawn
+         if (Input.GetKeyDown(KeyCode.T) && DeathMode) // if we fall below -10f respawn
          {
             TakeDamage(3);
          }
