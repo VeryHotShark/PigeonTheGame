@@ -150,6 +150,7 @@ public class PlayerHealth : Health
             OnPlayerRespawn();
 
         transform.position = CheckpointManager.instance.m_currentCheckpoint.transform.position; // go to last checkpoint that we were in
+        //transform.rotation = CheckpointManager.instance.m_currentCheckpoint.transform.localRotation;
         m_playerMovement.Rigid.velocity = Vector3.zero; // set velocity to zero
         m_playerMovement.LastMoveVector = Vector3.zero; // and direction to zero so when respawnning player won't keep the speed from before
 
@@ -180,6 +181,15 @@ public class PlayerHealth : Health
             TakeDamage(3);
 
         if (other.gameObject.layer == LayerMask.NameToLayer("SpinningTrap") && !m_justGotHit)
+        {
+            TakeDamage(1);
+            m_justGotHit = true;
+
+            StartCoroutine(ImmuneDuration());
+        }
+
+        
+        if (other.gameObject.layer == LayerMask.NameToLayer("AnchorTrap") && !m_justGotHit)
         {
             TakeDamage(1);
             m_justGotHit = true;
@@ -267,13 +277,6 @@ public class PlayerHealth : Health
             StartCoroutine(ImmuneDuration());
         }
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("AnchorTrap") && !m_justGotHit)
-        {
-            TakeDamage(3);
-            m_justGotHit = true;
-
-            StartCoroutine(ImmuneDuration());
-        }
 
     }
 

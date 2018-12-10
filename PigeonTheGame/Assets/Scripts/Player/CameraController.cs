@@ -324,7 +324,8 @@ public class CameraController : MonoBehaviour
 	void ResetCam()
 	{
 		m_yaw = 0f;
-		m_pitch = 0f;
+		m_pitch = CheckpointManager.instance.m_currentCheckpoint.transform.localEulerAngles.y;
+		//transform.rotation = CheckpointManager.instance.m_currentCheckpoint.transform.localRotation;
 	}
 
 	void ShowDeathMark()

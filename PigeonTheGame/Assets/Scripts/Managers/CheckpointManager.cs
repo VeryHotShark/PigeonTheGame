@@ -11,8 +11,6 @@ public class CheckpointManager : MonoBehaviour
 	public List<Vector3> checkpoints = new List<Vector3>();
 	public RoomTrigger m_currentCheckpoint;
 
-	Vector3 m_position;
-
     // Use this for initialization
     void Awake()
     {

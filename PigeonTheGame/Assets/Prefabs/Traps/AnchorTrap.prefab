@@ -40,7 +40,6 @@ GameObject:
   - component: {fileID: 4880080566748784}
   - component: {fileID: 33745125840681916}
   - component: {fileID: 23537607315289254}
-  - component: {fileID: 65140238887797352}
   - component: {fileID: 114187745325660282}
   m_Layer: 0
   m_Name: AnchorTrap
@@ -69,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1978081817997598}
   m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 7.99, y: 16.18, z: -65.56}
+  m_LocalPosition: {x: 7.99, y: 19.1, z: -65.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4547341047368290}
@@ -175,18 +174,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65140238887797352
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1978081817997598}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65306880900280612
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -194,7 +181,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1245151582165968}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.7827682, y: 3.73, z: 10.628144}
