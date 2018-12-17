@@ -113,8 +113,8 @@ public class EnemyHealth : Health
     {
         if (m_isDead)
         {
-            gameObject.SetActive(false);
             PlayerHealth.OnPlayerRespawn -= Deactivate;
+            gameObject.SetActive(false);
         }
 
     }

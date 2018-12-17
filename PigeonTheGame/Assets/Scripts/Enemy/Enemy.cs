@@ -50,6 +50,8 @@ public abstract class Enemy : MonoBehaviour
     public float waitTimeWhenEnter = 0f;
     public float waitTimeOnWaypoint = 1f;
     public float waitTimeWhenPlayerGetShot = 1f;
+    public float shrinkDuration = 1f;
+    public float shrinkDelay = 1f;
 
     protected bool delayWaited = false;
     protected bool delayRoutine;
@@ -65,6 +67,8 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 m_targetWaypoint;
     protected SpawnPoint m_spawnPoint;
     protected AudioSource m_audioSource;
+    protected Vector3 m_startSize;
+    protected Vector3 m_shrinkSize;
 
     public SpawnPoint spawnPoint { get { return m_spawnPoint; } set { m_spawnPoint = value; } }
 
@@ -77,6 +81,12 @@ public abstract class Enemy : MonoBehaviour
     // Use this for initialization
     public virtual void Init()
     {
+        if(transform.localScale.x == 0f)
+            transform.localScale = m_startSize;
+
+        m_startSize = transform.localScale;
+        m_shrinkSize = m_startSize * 0.5f;
+
         EnemyManager.instance.Enemies.Add(this); // On Start we add this enemy to our EnemyManager.Enemies list
         EnemyManager.instance.EnemyCount++; // and we increment the count of our enemy
 
@@ -85,7 +95,6 @@ public abstract class Enemy : MonoBehaviour
         m_health.OnEnemyDeath += EnemyDied;
 
         m_playerHealth.OnPlayerLoseHealth += yieldForGivenTime;
-        //PlayerHealth.OnPlayerRespawn += ResetVariables;
 
         m_health.Init();
 
@@ -170,6 +179,8 @@ public abstract class Enemy : MonoBehaviour
     {
         if (spawnPoint != null)
         {
+            StartCoroutine(Shrink());
+
             spawnPoint.EnemyAlive = false;
             spawnPoint.MyEnemy = null;
 
@@ -248,5 +259,24 @@ public abstract class Enemy : MonoBehaviour
             
         }
     }
+
+    
+    public virtual IEnumerator Shrink()
+    {
+        yield return new WaitForSeconds(shrinkDelay);
+
+        float percent = 0f;
+        float speed = 1f/ shrinkDuration;
+
+        while( percent < 1f)
+        {
+            percent += Time.deltaTime * speed;
+
+            transform.localScale = Vector3.Lerp(m_startSize, m_shrinkSize, percent);
+
+            yield return null;
+        }
+    }
+
 
 }
