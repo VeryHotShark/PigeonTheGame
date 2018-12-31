@@ -13,7 +13,8 @@ public enum VFXType
     HitProp,
     MuzzleFlash,
     Land,
-    OwlJump
+    OwlJump,
+    CoinPickUp
 }
 
 [System.Serializable]
@@ -83,7 +84,9 @@ public class VFXPooler : MonoBehaviour
 
             objToReuse.gameObject.SetActive(true);
 
-			StartCoroutine(DeactivateVFXRoutine(objToReuse, 3f));
+            VFXPool pool = vfxPools.Find(p => p.VFXtype == vfxType);
+
+			StartCoroutine(DeactivateVFXRoutine(objToReuse, pool.duration));
 
             vfxDictionary[vfxType].Enqueue(objToReuse);
             return objToReuse;

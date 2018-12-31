@@ -12,6 +12,7 @@ public class BasicMover : MonoBehaviour {
 	public float motionMagnitude = 0.1f;
 
 	public bool doSpin = true; 
+	public bool alwaysOnScreen;
 	public bool doMotion = false;
 	// Use this for initialization
 	void Start () {
@@ -53,6 +54,14 @@ public class BasicMover : MonoBehaviour {
 					gameObject.transform.Translate ( Vector3.forward * Mathf.Cos ( Time.timeSinceLevelLoad ) * motionMagnitude ,Space.World) ;	 //and as a result we would get a fucked up moving cube
 					break;
 			}
+		}
+
+		if(alwaysOnScreen)
+		{
+			
+         Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+         transform.position = Camera.main.ViewportToWorldPoint(pos);
+    
 		}
 	}
 }

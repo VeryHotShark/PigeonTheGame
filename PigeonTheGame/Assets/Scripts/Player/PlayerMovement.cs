@@ -7,6 +7,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
+    public Transform[] transforms;
+
     [Header("Player Camera")]
     public bool snapToCamera;
     public float smoothRotateSpeed;
@@ -138,6 +140,21 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            transform.position = transforms[0].position;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            transform.position = transforms[1].position;
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            transform.position = transforms[2].position;
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            transform.position = transforms[3].position;
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            transform.position = transforms[4].position;
+
+
         if (!m_playerHealth.IsDead())
         {
             PlayerDash();
@@ -192,16 +209,16 @@ public class PlayerMovement : MonoBehaviour
         // Cast ray downwards to check if we are on ground
 
         Ray ray = new Ray(transform.position, -transform.up);
-        Ray rayLT = new Ray(transform.position - (transform.right  - transform.forward) / 2f, -transform.up);
-        Ray rayLB = new Ray(transform.position - (transform.right  + transform.forward) / 2f, -transform.up);
-        Ray rayRT = new Ray(transform.position + (transform.right  + transform.forward) / 2f, -transform.up);
-        Ray rayRB = new Ray(transform.position + (transform.right  - transform.forward) / 2f, -transform.up);
+        Ray rayLT = new Ray(transform.position - (transform.right - transform.forward) / 2f, -transform.up);
+        Ray rayLB = new Ray(transform.position - (transform.right + transform.forward) / 2f, -transform.up);
+        Ray rayRT = new Ray(transform.position + (transform.right + transform.forward) / 2f, -transform.up);
+        Ray rayRB = new Ray(transform.position + (transform.right - transform.forward) / 2f, -transform.up);
 
         //Debug.DrawRay(transform.position + (transform.right  + transform.forward) / 2f, -transform.up, Color.cyan, 1f);
 
         RaycastHit hit;
 
-        bool groundCollided = Physics.Raycast(ray, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayLT, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayLB, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayRT, out hit, groundDetecionThreshold, groundLayerMask)|| Physics.Raycast(rayRB, out hit, groundDetecionThreshold, groundLayerMask);
+        bool groundCollided = Physics.Raycast(ray, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayLT, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayLB, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayRT, out hit, groundDetecionThreshold, groundLayerMask) || Physics.Raycast(rayRB, out hit, groundDetecionThreshold, groundLayerMask);
 
         if (groundCollided)
         {
@@ -259,8 +276,11 @@ public class PlayerMovement : MonoBehaviour
     {
         // If player press shift we add force to player
 
-        if (m_playerInput.DashInput && !m_playerInput.NoInput())
+        if (m_playerInput.DashInput)
         {
+
+            //if (!m_playerInput.NoInput())
+            //{
 
             if (m_allowDash && !m_CameraController.DuringFOVChange)
             {
@@ -282,6 +302,7 @@ public class PlayerMovement : MonoBehaviour
                 if (!m_dashing)
                     StartCoroutine(Dash());
             }
+            //}
 
 
             //m_rigid.AddForce(m_moveDir * dashPower, ForceMode.Impulse);
@@ -297,12 +318,25 @@ public class PlayerMovement : MonoBehaviour
         float speed = 1f / dashTime;
 
         Vector3 startPos = transform.position;
-        Vector3 endPos = startPos + m_moveDir.normalized * dashDistance;
+
+        Vector3 endPos;
+        Ray ray;
+        RaycastHit hit;
+
+        if (!m_playerInput.NoInput())
+        {
+            endPos = startPos + m_moveDir.normalized * dashDistance;
+            ray = new Ray(startPos, m_moveDir.normalized);
+        }
+        else
+        {
+            endPos = startPos + transform.forward * dashDistance;
+            ray = new Ray(startPos, transform.forward);
+        }
 
         // CHECK IF THERE SOME OBSTACLE ON OUR WAY
         //Vector3 rayDir = new Vector3(m_moveDir.x, startPos.y,m_moveDir.z).normalized;
-        Ray ray = new Ray(startPos, m_moveDir.normalized);
-        RaycastHit hit;
+        //Ray ray = new Ray(startPos, m_moveDir.normalized);
 
         bool hitSomething = Physics.Raycast(ray, out hit, dashDistance, dashLayerMask, QueryTriggerInteraction.Ignore);
 
@@ -359,7 +393,7 @@ public class PlayerMovement : MonoBehaviour
             m_smoothFactor = Mathf.SmoothDamp(m_smoothFactor, moveMagnitude, ref m_smoothVelocityRef, smoothTime); // we calculate smoothFactor based on moveMagnitude
         }
 
-        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor  * Time.deltaTime  ; // here we calculate our final moveVector // VELocity based movement that we we dont multiply with time.deltatime
+        m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor * Time.deltaTime; // here we calculate our final moveVector // VELocity based movement that we we dont multiply with time.deltatime
         //m_moveVector = m_moveDir * (m_playerInput.ZoomInput ? aimMoveSpeed : moveSpeed) * m_smoothFactor   ; // Velocity Based Movement 
 
         //Debug.Log(m_moveVector);

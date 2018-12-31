@@ -88,6 +88,9 @@ public class EnemyHeavy : Enemy
 
         while (amountToShoot > 0 && m_playerRested) // while amount to shoot is greater than 0
         {
+            if(m_health.IsDead())
+                yield break;
+
             m_anim.SetTrigger(m_shooting);
             m_enemyWeapon.ShootProjectile(m_playerTransform.position); // we spawn projectile
 

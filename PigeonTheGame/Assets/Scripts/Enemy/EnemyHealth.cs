@@ -18,9 +18,13 @@ public class EnemyHealth : Health
 
     protected Collider m_collider;
 
+    protected Vector3 m_startSize;
+
     public override void Init()
     {
         base.Init();
+
+        m_startSize = transform.localScale;
 
         PlayerHealth.OnPlayerRespawn += Deactivate;
     }
@@ -113,6 +117,7 @@ public class EnemyHealth : Health
     {
         if (m_isDead)
         {
+            transform.localScale = m_startSize;
             PlayerHealth.OnPlayerRespawn -= Deactivate;
             gameObject.SetActive(false);
         }

@@ -81,8 +81,8 @@ public abstract class Enemy : MonoBehaviour
     // Use this for initialization
     public virtual void Init()
     {
-        if(transform.localScale.x == 0f)
-            transform.localScale = m_startSize;
+        //if(transform.localScale.x == 0f)
+            //transform.localScale = m_startSize;
 
         m_startSize = transform.localScale;
         m_shrinkSize = m_startSize * 0.5f;

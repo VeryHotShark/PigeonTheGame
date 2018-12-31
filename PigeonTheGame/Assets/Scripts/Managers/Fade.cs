@@ -82,4 +82,9 @@ public class Fade : MonoBehaviour
         yield return Fade.instance.StartCoroutine(Fade.instance.FadeOut());
         MainMenuManager.instance.StartGame();
     }
+
+    public void QuitGame()
+    {
+        MainMenuManager.instance.QuitGame();
+    }
 }
