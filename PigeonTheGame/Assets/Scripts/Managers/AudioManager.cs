@@ -14,7 +14,7 @@ public class SoundClip
     [Range(0f, 1f)]
     public float volume;
 
-    [Range(0f, 1f)]
+    [Range(0f, 3f)]
     public float pitch;
 
     [Range(0f, 1f)]

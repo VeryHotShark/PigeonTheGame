@@ -20,6 +20,8 @@ public class Coin : MonoBehaviour
 	{
 		m_coinManager.RemoveFromList(this);
 
+		AudioManager.instance.PlayClipAt("Coin_01", transform.position);
+
 		GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.CoinPickUp,transform.position, startRot);
 		gameObject.SetActive(false);
 	}
