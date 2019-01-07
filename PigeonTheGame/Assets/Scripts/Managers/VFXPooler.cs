@@ -14,7 +14,8 @@ public enum VFXType
     MuzzleFlash,
     Land,
     OwlJump,
-    CoinPickUp
+    CoinPickUp,
+    MuzzleFlashEnemy
 }
 
 [System.Serializable]

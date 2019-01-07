@@ -18,6 +18,13 @@ public class EnemyWeapon : MonoBehaviour
     {
         //Projectile obj = Instantiate(projectile, spawnPoint.position, Quaternion.identity) as Projectile;
         Projectile obj = BulletPooler.instance.ReuseObject(bulletType,spawnPoint.position,spawnPoint.rotation);
+
+        // Spawn VFX
+        if(bulletType != BulletType.OwlBullet)
+        {
+            VFXPooler.instance.ReuseObject(VFXType.MuzzleFlashEnemy, spawnPoint.position,transform.rotation);
+        }
+
         obj.OnProjectileSpawn((playerPos - spawnPoint.position).normalized, speed, damage, projectileLife, transform.gameObject);
     }
 }
