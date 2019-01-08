@@ -1,0 +1,242 @@
+fileFormatVersion: 2
+guid: cced175edac15d24ba2c152630ddd3d9
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Belly
+    100002: BrandonTheRig
+    100004: Chest1
+    100006: Chest2
+    100008: Foot.L
+    100010: Foot.R
+    100012: foot_roll.L
+    100014: foot_roll.R
+    100016: forearm.L
+    100018: forearm.R
+    100020: GunBone
+    100022: GunBone_end
+    100024: hand.L
+    100026: hand.L_end
+    100028: hand.R
+    100030: hand_ik.L
+    100032: hand_ik.R
+    100034: hand_ikPole.L
+    100036: hand_ikPole.L_end
+    100038: hand_ikPole.R
+    100040: hand_ikPole.R_end
+    100042: Head
+    100044: Head_end
+    100046: Leg-_control.L
+    100048: Leg-_control.R
+    100050: leg._ik.L
+    100052: leg._ik.L_end
+    100054: leg._ik.R
+    100056: leg._ik.R_end
+    100058: leg_pole_target.L
+    100060: leg_pole_target.L_end
+    100062: leg_pole_target.R
+    100064: leg_pole_target.R_end
+    100066: Lower_leg.L
+    100068: Lower_leg.L_end
+    100070: Lower_leg.R
+    100072: Lower_leg.R_end
+    100074: Neck1
+    100076: Neck2
+    100078: PigeonRemap
+    100080: //RootNode
+    100082: shoulder.L
+    100084: shoulder.R
+    100086: spine
+    100088: Tail1
+    100090: Tail1_end
+    100092: Tail2
+    100094: Tail3
+    100096: Toes.L
+    100098: Toes.L_end
+    100100: Toes.R
+    100102: Toes.R_end
+    100104: Toes_control.L
+    100106: Toes_control.L_end
+    100108: Toes_control.R
+    100110: Toes_control.R_end
+    100112: upper_arm.L
+    100114: upper_arm.R
+    100116: Upper_leg.L
+    100118: Upper_leg.R
+    400000: Belly
+    400002: BrandonTheRig
+    400004: Chest1
+    400006: Chest2
+    400008: Foot.L
+    400010: Foot.R
+    400012: foot_roll.L
+    400014: foot_roll.R
+    400016: forearm.L
+    400018: forearm.R
+    400020: GunBone
+    400022: GunBone_end
+    400024: hand.L
+    400026: hand.L_end
+    400028: hand.R
+    400030: hand_ik.L
+    400032: hand_ik.R
+    400034: hand_ikPole.L
+    400036: hand_ikPole.L_end
+    400038: hand_ikPole.R
+    400040: hand_ikPole.R_end
+    400042: Head
+    400044: Head_end
+    400046: Leg-_control.L
+    400048: Leg-_control.R
+    400050: leg._ik.L
+    400052: leg._ik.L_end
+    400054: leg._ik.R
+    400056: leg._ik.R_end
+    400058: leg_pole_target.L
+    400060: leg_pole_target.L_end
+    400062: leg_pole_target.R
+    400064: leg_pole_target.R_end
+    400066: Lower_leg.L
+    400068: Lower_leg.L_end
+    400070: Lower_leg.R
+    400072: Lower_leg.R_end
+    400074: Neck1
+    400076: Neck2
+    400078: PigeonRemap
+    400080: //RootNode
+    400082: shoulder.L
+    400084: shoulder.R
+    400086: spine
+    400088: Tail1
+    400090: Tail1_end
+    400092: Tail2
+    400094: Tail3
+    400096: Toes.L
+    400098: Toes.L_end
+    400100: Toes.R
+    400102: Toes.R_end
+    400104: Toes_control.L
+    400106: Toes_control.L_end
+    400108: Toes_control.R
+    400110: Toes_control.R_end
+    400112: upper_arm.L
+    400114: upper_arm.R
+    400116: Upper_leg.L
+    400118: Upper_leg.R
+    2100000: PigeonBR.001
+    4300000: PigeonRemap
+    7400000: BrandonTheRig|Hit1
+    7400002: BrandonTheRig|Reload_baked
+    9500000: //RootNode
+    13700000: PigeonRemap
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: BrandonTheRig|Reload_baked
+      takeName: BrandonTheRig|Reload_baked
+      firstFrame: 0
+      lastFrame: 12
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

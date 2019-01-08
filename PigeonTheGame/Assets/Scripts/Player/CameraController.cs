@@ -340,7 +340,7 @@ public class CameraController : MonoBehaviour
 	{
 		HitRoutine = GrowHitMarkRoutine();
 
-		if(HitRoutine != null)
+		if(HitRoutine != null && hitMark.activeSelf)
 			StartCoroutine(HitRoutine);
 	}
 	
