@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 114927465461553626}
   m_FixedDuration: 2.983333333332
   m_EditorSettings:
-    m_Framerate: 29.97
+    m_Framerate: 30
   m_DurationMode: 0
   m_Version: 0
 --- !u!74 &74037930044891734
@@ -3336,7 +3336,7 @@ MonoBehaviour:
   - m_Start: 5.566666666666666
     m_ClipIn: 0
     m_Asset: {fileID: 114976685090779968}
-    m_Duration: 4.800000000000001
+    m_Duration: 5.433333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 114038791302667904}
     m_EaseInDuration: 0
@@ -4915,7 +4915,7 @@ MonoBehaviour:
   - m_Start: 5.566666666666666
     m_ClipIn: 0
     m_Asset: {fileID: 114219484980331504}
-    m_Duration: 4.566666682561239
+    m_Duration: 5.433333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 114918142786784886}
     m_EaseInDuration: 0
@@ -5008,7 +5008,7 @@ MonoBehaviour:
   m_Name: Recorder Track
   m_EditorClassIdentifier: 
   m_Locked: 0
-  m_Muted: 1
+  m_Muted: 0
   m_CustomPlayableFullTypename: 
   m_AnimClip: {fileID: 0}
   m_Parent: {fileID: 11400000}
@@ -5017,7 +5017,7 @@ MonoBehaviour:
   - m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 114143640240486464}
-    m_Duration: 10.366666666666667
+    m_Duration: 11
     m_TimeScale: 1
     m_ParentTrack: {fileID: 114927465461553626}
     m_EaseInDuration: 0
@@ -5096,14 +5096,14 @@ MonoBehaviour:
   m_Name: Movie
   m_EditorClassIdentifier: 
   enabled: 1
-  take: 6
+  take: 8
   captureEveryNthFrame: 1
   fileNameGenerator:
     m_Path:
       m_Root: 0
       m_Leaf: Recordings
       m_ForceAssetFolder: 0
-    m_FileName: CharacterShowcase
+    m_FileName: CharacterShowcase30fps
   outputFormat: 0
   videoBitRateMode: 2
   captureAlpha: 0
