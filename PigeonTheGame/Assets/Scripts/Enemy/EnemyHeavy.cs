@@ -52,11 +52,11 @@ public class EnemyHeavy : Enemy
         if (delayWaited == false && delayRoutine == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
-        if (!m_playerHealth.IsDead()&& !m_health.IsDead())
+        if (!m_playerHealth.IsDead()&& !m_health.IsDead() && RoomManager.instance.PlayerCurrentRoom == roomIndex)
         {
             FaceTarget();
 
-            if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom && RoomManager.instance.PlayerCurrentRoom == roomIndex) // if player is outside our attackRange and is in Room
+            if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom ) // if player is outside our attackRange and is in Room
             {
                 m_agent.ResetPath(); // we reset agent path
                 if (currentState != State.Attack && !m_duringRoutine) // if we are not in attack State and not during routine

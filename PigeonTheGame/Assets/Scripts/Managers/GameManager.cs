@@ -28,12 +28,16 @@ public class GameManager : MonoBehaviour
 
 		m_enemyManager = FindObjectOfType<EnemyManager>();
 		m_playerHealth = FindObjectOfType<PlayerHealth>();
-		PlayerHealth.OnPlayerBigDeath += RestartLevel;
+		//PlayerHealth.OnPlayerBigDeath += RestartLevel;
 	}
 
-	void RestartLevel()
+	public void RestartLevel()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+		//SceneManager.LoadScene(0);
+
+		Application.Quit();
 	}
 
 	public void LoadMenu()
@@ -41,6 +45,8 @@ public class GameManager : MonoBehaviour
 		MainMenuManager.instance.GameOver = true;
 		SceneManager.LoadScene(0);
 	}
+
+
 
 	public void InvokeEvent()
 	{

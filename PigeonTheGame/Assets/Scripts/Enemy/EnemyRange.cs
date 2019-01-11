@@ -90,10 +90,10 @@ public class EnemyRange : Enemy
         if (delayWaited == false && delayRoutine == false) // if we haven't waited for some delay when player came into room
             StartCoroutine(WaitTimeCoroutine()); // we call routine to delay our enemy for some delay before being activated 
 
-        if (!m_playerHealth.IsDead() && delayWaited && !m_health.IsDead()) // if player is not dead and we waited some delay
+        if (!m_playerHealth.IsDead() && delayWaited && !m_health.IsDead() && RoomManager.instance.PlayerCurrentRoom == roomIndex) // if player is not dead and we waited some delay
         {
 
-            if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom) // if player is outside attackRange 
+            if (Vector3.Distance(m_playerTransform.position, transform.position) > attackRange && RoomManager.instance.PlayerInRoom ) // if player is outside attackRange 
             {
 
                 m_anim.SetBool(m_moving, true);
@@ -128,7 +128,7 @@ public class EnemyRange : Enemy
 
         while (!m_playerHealth.IsDead())
         {
-            if (currentState == State.Chase && RoomManager.instance.PlayerInRoom) // if we are in room and our state is Chasing
+            if (currentState == State.Chase && RoomManager.instance.PlayerInRoom && RoomManager.instance.PlayerCurrentRoom == roomIndex) // if we are in room and our state is Chasing
             {
                 Vector3 dirToTarget = (m_playerTransform.position - transform.position).normalized; // we calculate the dirToTarget
                 Vector3 targetPosition = m_playerTransform.position - (dirToTarget * stopDistance); // and substract small amount from our playerPosition so our enemy won't go through our Player

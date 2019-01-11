@@ -132,25 +132,28 @@ public class MainMenuManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene == SceneManager.GetSceneByBuildIndex(0) && GameOver)
+        if (scene == SceneManager.GetSceneByBuildIndex(0) )
         {
-            foreach (GameObject child in childrens)
-                child.SetActive(true);
+            if(GameOver)
+            {
+                foreach (GameObject child in childrens)
+                    child.SetActive(true);
 
-            //idleAnim["Idle"].speed = 45f;
-            idleAnim = FindObjectOfType<Animator>();
-            idleAnim.speed = 20f;
+                //idleAnim["Idle"].speed = 45f;
+                idleAnim = FindObjectOfType<Animator>();
+                idleAnim.speed = 20f;
 
-            //menuAudioSource = GetComponent<AudioSource>();
-            menuAudioSource.clip = menuMusic;
-            menuAudioSource.volume = 0.7f;
-            menuAudioSource.pitch = 2f;
-            menuAudioSource.Play();
+                //menuAudioSource = GetComponent<AudioSource>();
+                menuAudioSource.clip = menuMusic;
+                menuAudioSource.volume = 0.7f;
+                menuAudioSource.pitch = 2f;
+                menuAudioSource.Play();
 
-            RoomTrigger.OnPlayerEnterRoom -= ChangeToFightMusic;
-            //RoomTrigger.OnPlayerExitRoom -= ChangeToCorridorMusic;
-            PlayerHealth.OnPlayerRespawn -= ChangeToCorridorMusic;
-            EnemySpawner.OnAllEnemyDeadInRoom -= ChangeToCorridorMusic;
+                RoomTrigger.OnPlayerEnterRoom -= ChangeToFightMusic;
+                //RoomTrigger.OnPlayerExitRoom -= ChangeToCorridorMusic;
+                PlayerHealth.OnPlayerRespawn -= ChangeToCorridorMusic;
+                EnemySpawner.OnAllEnemyDeadInRoom -= ChangeToCorridorMusic;
+            }
         }
         else if (scene == SceneManager.GetSceneByBuildIndex(1))
         {
@@ -165,6 +168,7 @@ public class MainMenuManager : MonoBehaviour
             PlayerHealth.OnPlayerRespawn += ChangeToCorridorMusic;
             EnemySpawner.OnAllEnemyDeadInRoom += ChangeToCorridorMusic;
         }
+        
     }
 
     void ChangeToFightMusic(RoomIndex index)

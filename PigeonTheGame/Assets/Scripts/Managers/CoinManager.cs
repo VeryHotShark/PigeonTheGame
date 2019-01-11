@@ -29,6 +29,8 @@ public class CoinManager : MonoBehaviour
 
 	bool m_duringRoutine;
 
+	float timer = 0;
+
 	// Use this for initialization
 	void Awake ()
 	{
@@ -84,12 +86,13 @@ public class CoinManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
+
 		foreach(Coin coin in coinList)
 		{
 			coin.transform.Rotate(Vector3.up * spinSpeed * Time.deltaTime);
 			//coin.transform.position = new Vector3(coin.transform.position.x,coin.transform.position.y + Mathf.Sin(Time.timeSinceLevelLoad * moveSpeed) * moveRange, coin.transform.position.z);
-			coin.transform.position += Vector3.up * (Mathf.Sin(Time.timeSinceLevelLoad * moveSpeed) * moveRange);
+			coin.transform.position += Vector3.up * (Mathf.Sin(Time.unscaledTime * moveSpeed ) * moveRange) ;
 		}
 	}
+
 }

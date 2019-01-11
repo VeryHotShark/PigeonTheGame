@@ -25,6 +25,7 @@ public class EnemyWeapon : MonoBehaviour
             VFXPooler.instance.ReuseObject(VFXType.MuzzleFlashEnemy, spawnPoint.position,transform.rotation);
         }
 
+        playerPos = playerPos + Vector3.up * 0.1f;
         obj.OnProjectileSpawn((playerPos - spawnPoint.position).normalized, speed, damage, projectileLife, transform.gameObject);
     }
 }

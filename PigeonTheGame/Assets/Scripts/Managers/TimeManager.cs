@@ -26,6 +26,7 @@ public class TimeManager : MonoBehaviour
     {
     
         GameManager.instance.OnGameOver -= Unsubscribe;
+        //EnemyHealth.OnAnyEnemyDeath -= StartSlowDown;
     }
 
     void StartSlowDown()
@@ -54,7 +55,7 @@ public class TimeManager : MonoBehaviour
             percent += Time.unscaledDeltaTime * speed;
             Time.timeScale = Mathf.Lerp(slowTimeScale, 1f, percent);
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
-            Debug.Log(Time.timeScale);
+            //Debug.Log(Time.timeScale);
             yield return null;
         }
 

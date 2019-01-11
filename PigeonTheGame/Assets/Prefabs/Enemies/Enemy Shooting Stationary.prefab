@@ -1365,7 +1365,7 @@ MonoBehaviour:
   moveSpeed: 3
   stopDistance: 1.5
   attackPower: 1
-  attackRange: 70
+  attackRange: 100
   attackRate: 1
   waitTimeWhenEnter: 1
   waitTimeOnWaypoint: 1

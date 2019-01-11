@@ -154,6 +154,8 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha5))
             transform.position = transforms[4].position;
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+            GameManager.instance.RestartLevel();
 
         if (!m_playerHealth.IsDead())
         {

@@ -94,7 +94,7 @@ public class EnemySpawner : MonoBehaviour
     void RespawnDeadEnemies()
     {
         //if(RoomManager.instance.PlayerInCorridor)
-           // return;
+        // return;
 
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
@@ -138,7 +138,7 @@ public class EnemySpawner : MonoBehaviour
         if (poolDictionary.ContainsKey(enemyType))
         {
             Enemy objToReuse = poolDictionary[enemyType].Dequeue();
-            
+
             objToReuse.OnEnemyDie += CheckIfAllDead;
             objToReuse.gameObject.SetActive(true);
 
@@ -178,18 +178,18 @@ public class EnemySpawner : MonoBehaviour
 
         float timer = sp.spawnDelay;
 
-        while(timer > 0)
+        while (timer > 0)
         {
-            if(RoomManager.instance.PlayerInCorridor)
+            if (RoomManager.instance.PlayerInCorridor)
                 yield break;
 
             timer -= Time.deltaTime;
             yield return null;
         }
-      
+
 
         AudioManager.instance.PlayClipAt("Spawn", sp.transform.position);
-        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.AppearSmoke,sp.transform.position,Quaternion.identity);
+        GameObject vfx = VFXPooler.instance.ReuseObject(VFXType.AppearSmoke, sp.transform.position, Quaternion.identity);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -198,6 +198,10 @@ public class EnemySpawner : MonoBehaviour
 
     public bool CheckIfAllEnemiesOnRoomAreDead(RoomIndex index)
     {
+        int sum = 0;
+        int counter = 0;
+
+        /* 
         foreach(SpawnPoint spawnPoint in spawnPoints)
         {
             if(spawnPoint.roomIndex == index)
@@ -208,24 +212,41 @@ public class EnemySpawner : MonoBehaviour
                     return false;
             } 
         }
-        
-        return true;
+        */
+
+        foreach (SpawnPoint spawnPoint in spawnPoints)
+        {
+            if (spawnPoint.roomIndex == index)
+            {
+                sum++;
+
+                if (spawnPoint.EnemyAlive == false)
+                    counter++;
+                else
+                    continue;
+            }
+        }
+
+        if(sum - counter <= 2)
+            return true;
+        else
+            return false;
     }
 
     public void CheckIfAllDead(RoomIndex index)
     {
-        foreach(SpawnPoint spawnPoint in spawnPoints)
+        foreach (SpawnPoint spawnPoint in spawnPoints)
         {
-            if(spawnPoint.roomIndex == index)
+            if (spawnPoint.roomIndex == index)
             {
-                if(spawnPoint.EnemyAlive == false)
+                if (spawnPoint.EnemyAlive == false)
                     continue;
                 else
                     return;
-            } 
+            }
         }
 
-        if(OnAllEnemyDeadInRoom != null)
+        if (OnAllEnemyDeadInRoom != null)
             OnAllEnemyDeadInRoom();
     }
 
