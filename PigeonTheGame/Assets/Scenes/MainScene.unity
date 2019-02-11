@@ -2326,7 +2326,7 @@ MonoBehaviour:
   - bulletType: 2
     projectile: {fileID: 114122693679560738, guid: e7b9d153f5c765f468cee2d6dc9bcb6d,
       type: 2}
-    size: 50
+    size: 100
   - bulletType: 3
     projectile: {fileID: 114371112442506466, guid: f38f5d05cf39f4c4da31cb94bff5c1ed,
       type: 2}
